@@ -1,0 +1,30 @@
+server:
+  servlet:
+    context-path: projecflow
+
+spring:
+  liquibase:
+    change-log: classpath:db/changelog/master-changelog.xml
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:projectflow}
+    user: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:pass}
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:projectflow}?currentShema=${DB_SCHEMA:pf}
+    password: ${DB_PASSWORD:pass}
+    username: ${DB_USERNAME:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 1
+  jpa:
+    show-sql: ${DEBUG:true}
+    properties:
+      hibernate:
+        format_sql: ${DEBUG:true}
+
+logging:
+  level:
+    org:
+      springframework: ${SPRING_LOG_LEVEL:DEBUG}
+      hibernate:
+        SQL: ${HIBERNATE_LOG_LEVEL:DEBUG}
