@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: projecflow
+    context-path: /projecflow
 
 spring:
   liquibase:
