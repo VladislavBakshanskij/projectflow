@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
     id "io.freefair.lombok" version '6.3.0'
+    id 'nu.studer.jooq' version '6.0.1'
     id 'java'
 }
 
@@ -43,6 +44,41 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testImplementation 'org.testcontainers:junit-jupiter'
+
+    jooqGenerator 'org.postgresql:postgresql'
+}
+
+jooq {
+    configurations {
+        main {
+            generationTool {
+                jdbc {
+                    driver = 'org.postgresql.Driver'
+                    url = "jdbc:postgresql://localhost:5432/projectflow"
+                    user = 'postgres'
+                    password = 'pass'
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        inputSchema = 'pf'
+                    }
+                    generate {
+                        deprecated = false
+                        records = false
+                        immutablePojos = true
+                        fluentSetters = true
+                    }
+                    target {
+                        packageName = 'io.amtech.projectflow.jooq'
+                        directory = 'src/generated/java'
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
 }
 
 test {

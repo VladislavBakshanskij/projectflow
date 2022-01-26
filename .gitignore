@@ -37,3 +37,6 @@ out/
 .vscode/
 
 !.idea/codeStyles
+
+**/liquibase.properties
+**/.DS_Store
