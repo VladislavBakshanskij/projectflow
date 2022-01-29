@@ -95,7 +95,7 @@ public class Pf extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.asList(
+        return Arrays.<Table<?>>asList(
             AuthUser.AUTH_USER,
             Direction.DIRECTION,
             Employee.EMPLOYEE,
@@ -104,7 +104,6 @@ public class Pf extends SchemaImpl {
             NotificationHistory.NOTIFICATION_HISTORY,
             Project.PROJECT,
             ProjectComment.PROJECT_COMMENT,
-            ProjectJournal.PROJECT_JOURNAL
-        );
+            ProjectJournal.PROJECT_JOURNAL);
     }
 }

@@ -4,8 +4,8 @@
 package io.amtech.projectflow.jooq.tables;
 
 
-import io.amtech.projectflow.jooq.Keys;
 import io.amtech.projectflow.jooq.Pf;
+import io.amtech.projectflow.jooq.enums.ProjectStatus;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Schema;
@@ -22,6 +21,8 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.EnumConverter;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -78,13 +79,9 @@ public class Project extends TableImpl<Record> {
     public final TableField<Record, OffsetDateTime> CREATE_DATE = createField(DSL.name("create_date"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * The column <code>pf.project.status</code>.
      */
-    @Deprecated
-    public final TableField<Record, Object> STATUS = createField(DSL.name("status"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"project_status\"").nullable(false), this, "");
+    public final TableField<Record, io.amtech.projectflow.model.ProjectStatus> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(io.amtech.projectflow.jooq.enums.ProjectStatus.class), this, "", new EnumConverter<ProjectStatus, io.amtech.projectflow.model.ProjectStatus>(ProjectStatus.class, io.amtech.projectflow.model.ProjectStatus.class));
 
     private Project(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
@@ -115,40 +112,21 @@ public class Project extends TableImpl<Record> {
         this(DSL.name("project"), null);
     }
 
-    public <O extends Record> Project(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, PROJECT);
-    }
-
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Pf.PF;
+        return Pf.PF;
     }
 
     @Override
     public UniqueKey<Record> getPrimaryKey() {
-        return Keys.PROJECT_PKEY;
+        return Internal.createUniqueKey(Project.PROJECT, DSL.name("project_pkey"), new TableField[] { Project.PROJECT.ID }, true);
     }
 
     @Override
-    public List<ForeignKey<Record, ?>> getReferences() {
-        return Arrays.asList(Keys.PROJECT__PROJECT_HAS_PROJECT_LEAD_FK, Keys.PROJECT__PROJECT_HAS_DIRECTION_FK);
-    }
-
-    private transient Employee _employee;
-    private transient Direction _direction;
-
-    public Employee employee() {
-        if (_employee == null)
-            _employee = new Employee(this, Keys.PROJECT__PROJECT_HAS_PROJECT_LEAD_FK);
-
-        return _employee;
-    }
-
-    public Direction direction() {
-        if (_direction == null)
-            _direction = new Direction(this, Keys.PROJECT__PROJECT_HAS_DIRECTION_FK);
-
-        return _direction;
+    public List<UniqueKey<Record>> getKeys() {
+        return Arrays.<UniqueKey<Record>>asList(
+              Internal.createUniqueKey(Project.PROJECT, DSL.name("project_pkey"), new TableField[] { Project.PROJECT.ID }, true)
+        );
     }
 
     @Override

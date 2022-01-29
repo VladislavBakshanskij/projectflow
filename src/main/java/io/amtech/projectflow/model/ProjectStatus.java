@@ -1,10 +1,24 @@
 package io.amtech.projectflow.model;
 
-public enum ProjectStatus {
+import lombok.NonNull;
+import org.jooq.EnumType;
+
+public enum ProjectStatus implements EnumType {
     UNAPPROVED,
     ON_PL_PLANNING,
     ON_DL_APPROVING,
     ON_DIRECTOR_APPROVING,
     DIRECTOR_APPROVED,
-    DONE
+    DONE;
+
+    @Override
+    @NonNull
+    public String getLiteral() {
+        return this.name();
+    }
+
+    @Override
+    public String getName() {
+        return "project_status";
+    }
 }

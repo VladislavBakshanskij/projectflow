@@ -4,7 +4,6 @@
 package io.amtech.projectflow.jooq.tables;
 
 
-import io.amtech.projectflow.jooq.Keys;
 import io.amtech.projectflow.jooq.Pf;
 
 import java.time.OffsetDateTime;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Schema;
@@ -22,6 +20,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -96,32 +95,21 @@ public class NotificationHistory extends TableImpl<Record> {
         this(DSL.name("notification_history"), null);
     }
 
-    public <O extends Record> NotificationHistory(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, NOTIFICATION_HISTORY);
-    }
-
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Pf.PF;
+        return Pf.PF;
     }
 
     @Override
     public UniqueKey<Record> getPrimaryKey() {
-        return Keys.NOTIFICATION_HISTORY_PKEY;
+        return Internal.createUniqueKey(NotificationHistory.NOTIFICATION_HISTORY, DSL.name("notification_history_pkey"), new TableField[] { NotificationHistory.NOTIFICATION_HISTORY.ID }, true);
     }
 
     @Override
-    public List<ForeignKey<Record, ?>> getReferences() {
-        return Arrays.asList(Keys.NOTIFICATION_HISTORY__NOTIFICATION_HISTORY_HAS_NOTIFICATION_FK);
-    }
-
-    private transient Notification _notification;
-
-    public Notification notification() {
-        if (_notification == null)
-            _notification = new Notification(this, Keys.NOTIFICATION_HISTORY__NOTIFICATION_HISTORY_HAS_NOTIFICATION_FK);
-
-        return _notification;
+    public List<UniqueKey<Record>> getKeys() {
+        return Arrays.<UniqueKey<Record>>asList(
+              Internal.createUniqueKey(NotificationHistory.NOTIFICATION_HISTORY, DSL.name("notification_history_pkey"), new TableField[] { NotificationHistory.NOTIFICATION_HISTORY.ID }, true)
+        );
     }
 
     @Override

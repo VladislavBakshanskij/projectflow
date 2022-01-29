@@ -4,7 +4,6 @@
 package io.amtech.projectflow.jooq.tables;
 
 
-import io.amtech.projectflow.jooq.Keys;
 import io.amtech.projectflow.jooq.Pf;
 
 import java.util.Arrays;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Schema;
@@ -21,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -90,32 +89,21 @@ public class Direction extends TableImpl<Record> {
         this(DSL.name("direction"), null);
     }
 
-    public <O extends Record> Direction(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, DIRECTION);
-    }
-
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Pf.PF;
+        return Pf.PF;
     }
 
     @Override
     public UniqueKey<Record> getPrimaryKey() {
-        return Keys.DIRECTION_PKEY;
+        return Internal.createUniqueKey(Direction.DIRECTION, DSL.name("direction_pkey"), new TableField[] { Direction.DIRECTION.ID }, true);
     }
 
     @Override
-    public List<ForeignKey<Record, ?>> getReferences() {
-        return Arrays.asList(Keys.DIRECTION__DIRECTION_HAS_LEAD_FK);
-    }
-
-    private transient Employee _employee;
-
-    public Employee employee() {
-        if (_employee == null)
-            _employee = new Employee(this, Keys.DIRECTION__DIRECTION_HAS_LEAD_FK);
-
-        return _employee;
+    public List<UniqueKey<Record>> getKeys() {
+        return Arrays.<UniqueKey<Record>>asList(
+              Internal.createUniqueKey(Direction.DIRECTION, DSL.name("direction_pkey"), new TableField[] { Direction.DIRECTION.ID }, true)
+        );
     }
 
     @Override

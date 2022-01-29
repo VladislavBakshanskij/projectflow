@@ -26,5 +26,4 @@ logging:
   level:
     org:
       springframework: ${SPRING_LOG_LEVEL:DEBUG}
-      hibernate:
-        SQL: ${HIBERNATE_LOG_LEVEL:DEBUG}
+      jooq: ${JOOQ_LOG_LEVEL:DEBUG}

@@ -1,13 +1,13 @@
 create schema if not exists pf;
 
-create type user_position as enum
+create type pf.user_position as enum
 (
     'PROJECT_LEAD',
     'DIRECTION_LEAD',
     'DIRECTOR'
 );
 
-create type project_status as enum
+create type pf.project_status as enum
 (
     'UNAPPROVED',
     'ON_PL_PLANNING',
@@ -23,7 +23,7 @@ create table pf.employee
     name     varchar(255)                                                                 not null,
     email    varchar(50) check (email ~ $$^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$$) not null,
     phone    varchar(50),
-    position user_position                                                                not null,
+    position pf.user_position                                                                not null,
     is_fired boolean                                                                      not null default false
 );
 
@@ -54,7 +54,7 @@ create table pf.project
     direction_id    uuid           not null,
     description     varchar(2048),
     create_date     timestamptz    not null,
-    status          project_status not null,
+    status          pf.project_status not null,
 
     constraint project_has_project_lead_fk foreign key (project_lead_id) references pf.employee (id) on delete restrict on update cascade,
     constraint project_has_direction_fk foreign key (direction_id) references pf.direction (id) on delete restrict on update cascade

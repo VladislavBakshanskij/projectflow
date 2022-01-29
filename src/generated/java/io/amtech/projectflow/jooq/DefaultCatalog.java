@@ -38,8 +38,7 @@ public class DefaultCatalog extends CatalogImpl {
 
     @Override
     public final List<Schema> getSchemas() {
-        return Arrays.asList(
-            Pf.PF
-        );
+        return Arrays.<Schema>asList(
+            Pf.PF);
     }
 }

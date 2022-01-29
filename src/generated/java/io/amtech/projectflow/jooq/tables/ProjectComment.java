@@ -4,7 +4,6 @@
 package io.amtech.projectflow.jooq.tables;
 
 
-import io.amtech.projectflow.jooq.Keys;
 import io.amtech.projectflow.jooq.Pf;
 
 import java.time.OffsetDateTime;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Schema;
@@ -22,6 +20,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -101,32 +100,21 @@ public class ProjectComment extends TableImpl<Record> {
         this(DSL.name("project_comment"), null);
     }
 
-    public <O extends Record> ProjectComment(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, PROJECT_COMMENT);
-    }
-
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Pf.PF;
+        return Pf.PF;
     }
 
     @Override
     public UniqueKey<Record> getPrimaryKey() {
-        return Keys.PROJECT_COMMENT_PKEY;
+        return Internal.createUniqueKey(ProjectComment.PROJECT_COMMENT, DSL.name("project_comment_pkey"), new TableField[] { ProjectComment.PROJECT_COMMENT.ID }, true);
     }
 
     @Override
-    public List<ForeignKey<Record, ?>> getReferences() {
-        return Arrays.asList(Keys.PROJECT_COMMENT__PROJECT_COMMENT_HAS_PROJECT_FK);
-    }
-
-    private transient Project _project;
-
-    public Project project() {
-        if (_project == null)
-            _project = new Project(this, Keys.PROJECT_COMMENT__PROJECT_COMMENT_HAS_PROJECT_FK);
-
-        return _project;
+    public List<UniqueKey<Record>> getKeys() {
+        return Arrays.<UniqueKey<Record>>asList(
+              Internal.createUniqueKey(ProjectComment.PROJECT_COMMENT, DSL.name("project_comment_pkey"), new TableField[] { ProjectComment.PROJECT_COMMENT.ID }, true)
+        );
     }
 
     @Override

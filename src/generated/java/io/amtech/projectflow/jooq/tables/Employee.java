@@ -4,8 +4,8 @@
 package io.amtech.projectflow.jooq.tables;
 
 
-import io.amtech.projectflow.jooq.Keys;
 import io.amtech.projectflow.jooq.Pf;
+import io.amtech.projectflow.jooq.enums.UserPosition;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +13,6 @@ import java.util.UUID;
 
 import org.jooq.Check;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Schema;
@@ -22,6 +21,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.EnumConverter;
 import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -69,13 +69,9 @@ public class Employee extends TableImpl<Record> {
     public final TableField<Record, String> PHONE = createField(DSL.name("phone"), SQLDataType.VARCHAR(50), this, "");
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * The column <code>pf.employee.position</code>.
      */
-    @Deprecated
-    public final TableField<Record, Object> POSITION = createField(DSL.name("position"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"user_position\"").nullable(false), this, "");
+    public final TableField<Record, io.amtech.projectflow.model.UserPosition> POSITION = createField(DSL.name("position"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(io.amtech.projectflow.jooq.enums.UserPosition.class), this, "", new EnumConverter<UserPosition, io.amtech.projectflow.model.UserPosition>(UserPosition.class, io.amtech.projectflow.model.UserPosition.class));
 
     /**
      * The column <code>pf.employee.is_fired</code>.
@@ -111,24 +107,27 @@ public class Employee extends TableImpl<Record> {
         this(DSL.name("employee"), null);
     }
 
-    public <O extends Record> Employee(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, EMPLOYEE);
-    }
-
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Pf.PF;
+        return Pf.PF;
     }
 
     @Override
     public UniqueKey<Record> getPrimaryKey() {
-        return Keys.EMPLOYEE_PKEY;
+        return Internal.createUniqueKey(Employee.EMPLOYEE, DSL.name("employee_pkey"), new TableField[] { Employee.EMPLOYEE.ID }, true);
+    }
+
+    @Override
+    public List<UniqueKey<Record>> getKeys() {
+        return Arrays.<UniqueKey<Record>>asList(
+              Internal.createUniqueKey(Employee.EMPLOYEE, DSL.name("employee_pkey"), new TableField[] { Employee.EMPLOYEE.ID }, true)
+        );
     }
 
     @Override
     public List<Check<Record>> getChecks() {
-        return Arrays.asList(
-            Internal.createCheck(this, DSL.name("employee_email_check"), "(((email)::text ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+'::text))", true)
+        return Arrays.<Check<Record>>asList(
+              Internal.createCheck(this, DSL.name("employee_email_check"), "(((email)::text ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+'::text))", true)
         );
     }
 

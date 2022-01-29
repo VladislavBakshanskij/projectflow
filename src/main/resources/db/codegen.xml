@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.0.xsd"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.jooq.org/xsd/jooq-codegen-3.16.0.xsd">
+    <jdbc>
+        <driver>org.postgresql.Driver</driver>
+        <url>jdbc:postgresql://localhost:5432/projectflow</url>
+        <user>postgres</user>
+        <password>pass</password>
+    </jdbc>
+
+    <generator>
+        <name>org.jooq.codegen.JavaGenerator</name>
+        <database>
+            <name>org.jooq.meta.postgres.PostgresDatabase</name>
+            <includes>.*</includes>
+            <inputSchema>pf</inputSchema>
+            <forcedTypes>
+                <forcedType>
+                    <userType>io.amtech.projectflow.model.UserPosition</userType>
+                    <enumConverter>true</enumConverter>
+                    <includeExpression>position</includeExpression>
+                    <includeTypes>user_position</includeTypes>
+                </forcedType>
+                <forcedType>
+                    <userType>io.amtech.projectflow.model.ProjectStatus</userType>
+                    <enumConverter>true</enumConverter>
+                    <includeExpression>status</includeExpression>
+                    <includeTypes>project_status</includeTypes>
+                </forcedType>
+            </forcedTypes>
+        </database>
+
+        <generate>
+            <deprecated>false</deprecated>
+            <records>false</records>
+            <keys>false</keys>
+        </generate>
+
+        <target>
+            <packageName>io.amtech.projectflow.jooq</packageName>
+            <directory>/Users/vladislavbakshanskij/Code/patent/project-flow/src/generated/java</directory>
+        </target>
+    </generator>
+</configuration>

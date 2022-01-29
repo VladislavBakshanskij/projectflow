@@ -4,7 +4,6 @@
 package io.amtech.projectflow.jooq.tables;
 
 
-import io.amtech.projectflow.jooq.Keys;
 import io.amtech.projectflow.jooq.Pf;
 
 import java.time.OffsetDateTime;
@@ -14,7 +13,6 @@ import java.util.UUID;
 
 import org.jooq.Check;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Schema;
@@ -108,25 +106,28 @@ public class Notification extends TableImpl<Record> {
         this(DSL.name("notification"), null);
     }
 
-    public <O extends Record> Notification(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, NOTIFICATION);
-    }
-
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Pf.PF;
+        return Pf.PF;
     }
 
     @Override
     public UniqueKey<Record> getPrimaryKey() {
-        return Keys.NOTIFICATION_PKEY;
+        return Internal.createUniqueKey(Notification.NOTIFICATION, DSL.name("notification_pkey"), new TableField[] { Notification.NOTIFICATION.ID }, true);
+    }
+
+    @Override
+    public List<UniqueKey<Record>> getKeys() {
+        return Arrays.<UniqueKey<Record>>asList(
+              Internal.createUniqueKey(Notification.NOTIFICATION, DSL.name("notification_pkey"), new TableField[] { Notification.NOTIFICATION.ID }, true)
+        );
     }
 
     @Override
     public List<Check<Record>> getChecks() {
-        return Arrays.asList(
-            Internal.createCheck(this, DSL.name("notification_recepient_check"), "(((recepient)::text ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+'::text))", true),
-            Internal.createCheck(this, DSL.name("notification_sender_check"), "(((sender)::text ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+'::text))", true)
+        return Arrays.<Check<Record>>asList(
+              Internal.createCheck(this, DSL.name("notification_recepient_check"), "(((recepient)::text ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+'::text))", true)
+            , Internal.createCheck(this, DSL.name("notification_sender_check"), "(((sender)::text ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+'::text))", true)
         );
     }
 

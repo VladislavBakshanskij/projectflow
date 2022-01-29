@@ -4,7 +4,6 @@
 package io.amtech.projectflow.jooq.tables;
 
 
-import io.amtech.projectflow.jooq.Keys;
 import io.amtech.projectflow.jooq.Pf;
 
 import java.time.OffsetDateTime;
@@ -14,7 +13,6 @@ import java.util.UUID;
 
 import org.jooq.Check;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Schema;
@@ -123,38 +121,27 @@ public class Milestone extends TableImpl<Record> {
         this(DSL.name("milestone"), null);
     }
 
-    public <O extends Record> Milestone(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, MILESTONE);
-    }
-
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Pf.PF;
+        return Pf.PF;
     }
 
     @Override
     public UniqueKey<Record> getPrimaryKey() {
-        return Keys.MILESTONE_PKEY;
+        return Internal.createUniqueKey(Milestone.MILESTONE, DSL.name("milestone_pkey"), new TableField[] { Milestone.MILESTONE.ID }, true);
     }
 
     @Override
-    public List<ForeignKey<Record, ?>> getReferences() {
-        return Arrays.asList(Keys.MILESTONE__MILESTONE_HAS_PROJECT_FK);
-    }
-
-    private transient Project _project;
-
-    public Project project() {
-        if (_project == null)
-            _project = new Project(this, Keys.MILESTONE__MILESTONE_HAS_PROJECT_FK);
-
-        return _project;
+    public List<UniqueKey<Record>> getKeys() {
+        return Arrays.<UniqueKey<Record>>asList(
+              Internal.createUniqueKey(Milestone.MILESTONE, DSL.name("milestone_pkey"), new TableField[] { Milestone.MILESTONE.ID }, true)
+        );
     }
 
     @Override
     public List<Check<Record>> getChecks() {
-        return Arrays.asList(
-            Internal.createCheck(this, DSL.name("milestone_progress_percent_check"), "(((progress_percent >= 0) AND (progress_percent <= 100)))", true)
+        return Arrays.<Check<Record>>asList(
+              Internal.createCheck(this, DSL.name("milestone_progress_percent_check"), "(((progress_percent >= 0) AND (progress_percent <= 100)))", true)
         );
     }
 

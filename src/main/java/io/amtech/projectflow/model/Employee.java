@@ -13,5 +13,5 @@ public class Employee {
     private String email;
     private String phone;
     private UserPosition userPosition;
-    private boolean isFired;
+    private boolean isFired = false;
 }

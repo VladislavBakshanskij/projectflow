@@ -1,0 +1,7 @@
+{
+  "code": 400,
+  "message": "Validation error",
+  "errors": {
+    "name": "must not be blank"
+  }
+}
