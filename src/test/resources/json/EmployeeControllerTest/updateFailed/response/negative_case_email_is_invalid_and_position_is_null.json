@@ -2,7 +2,7 @@
   "code": 400,
   "message": "Validation error",
   "errors": {
-    "userPosition": "must not be null",
+    "position": "must not be null",
     "email": "must be a well-formed email address"
   }
 }

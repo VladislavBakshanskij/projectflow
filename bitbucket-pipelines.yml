@@ -1,0 +1,25 @@
+image: evilsith/evildind:ojdk11-libcrypto
+
+definitions:
+  services:
+    docker:
+      memory: 2048
+
+pipelines:
+  default:
+    - step:
+        name: Run tests
+        services:
+          - docker
+        script:
+          - export GRADLE_USER_HOME=`pwd`/gradle
+          - export TESTCONTAINERS_RYUK_DISABLED=true
+          - sh ./gradlew clean test -i
+  branches:
+    main:
+      - step:
+          name: Deploy to heroku
+          image: ruby:2.7.5
+          script:
+            - gem install dpl
+            - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY

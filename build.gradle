@@ -2,7 +2,6 @@ plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
     id "io.freefair.lombok" version '6.3.0'
-    id 'nu.studer.jooq' version '6.0.1'
     id 'java'
 }
 
@@ -29,12 +28,14 @@ dependencyManagement {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jooq'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-web' // todo replace into webflux
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
     implementation 'org.apache.commons:commons-lang3'
     implementation 'commons-collections:commons-collections:3.2.2'
 
     implementation 'org.liquibase:liquibase-core'
+    runtimeOnly 'org.jooq:jooq-codegen'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     runtimeOnly 'org.postgresql:postgresql'
@@ -46,41 +47,56 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:testcontainers'
     testImplementation 'org.testcontainers:postgresql'
-
-    jooqGenerator 'org.postgresql:postgresql'
 }
 
-jooq {
-    configurations {
-        main {
-            generationTool {
-                jdbc {
-                    driver = 'org.postgresql.Driver'
-                    url = "jdbc:postgresql://localhost:5432/projectflow"
-                    user = 'postgres'
-                    password = 'pass'
-                }
-                generator {
-                    name = 'org.jooq.codegen.DefaultGenerator'
-                    database {
-                        name = 'org.jooq.meta.postgres.PostgresDatabase'
-                        inputSchema = 'pf'
-                    }
-                    generate {
-                        deprecated = false
-                        records = false
-                        immutablePojos = true
-                        fluentSetters = true
-                    }
-                    target {
-                        packageName = 'io.amtech.projectflow.jooq'
-                        directory = 'src/generated/java'
-                    }
-                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
-                }
-            }
-        }
+project.ext.set("postgres", "postgres")
+project.ext.set("liquibase", "liquibase")
+
+task startDbContainer(type: Exec) {
+    doFirst {
+        stopContainers()
     }
+    commandLine "docker", "run",
+            "--name", "${project.postgres}",
+            "--rm", "-dp", "5432:5432",
+            "-e", "POSTGRES_DB=projectflow",
+            "-e", "POSTGRES_PASSWORD=pass",
+            "postgres:alpine"
+}
+
+task startLiquibaseMigrationInContainer(type: Exec, dependsOn: [startDbContainer]) {
+    commandLine "docker", "run",
+            "--name", "${project.liquibase}",
+            "--link", "${project.postgres}:postgres",
+            "--rm", "-v", "${file("src/main/resources/db/changelog").absolutePath}:/liquibase/changelog",
+            "liquibase/liquibase", "update", "--changelog-file", "master-changelog.xml",
+            "--url", "jdbc:postgresql://postgres:5432/projectflow",
+            "--username", "postgres",
+            "--password", "pass"
+}
+
+task gen(type: Exec, dependsOn: [startLiquibaseMigrationInContainer]) {
+    commandLine "java", "-cp", sourceSets.main.runtimeClasspath.getAsPath(),
+            "org.jooq.codegen.GenerationTool", "src/main/resources/db/codegen.xml"
+}
+
+sourceSets.main.java.srcDirs = [
+        'src/generated/java',
+        'src/main/java'
+]
+
+def stopContainers() {
+    try {
+        [project.postgres, project.liquibase].each {
+            logger.quiet("Try stop runned docker containers: ${"docker stop $it".execute().text}")
+        }
+    } catch (Exception e) {
+        logger.log(LogLevel.ERROR, "Error on stop containers", e)
+    }
+}
+
+jar {
+    enabled = false
 }
 
 test {
