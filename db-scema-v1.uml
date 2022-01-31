@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>f156443d-b914-48a4-8602-b5e0bae7929e.SCHEMA:d5cods22c9g90.pf</OriginalElement>
+  <nodes>
+    <node x="0.0" y="1113.0">f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.notification_history</node>
+    <node x="520.75" y="216.0">f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.auth_user</node>
+    <node x="328.5" y="388.0">f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.project</node>
+    <node x="414.75" y="0.0">f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.employee</node>
+    <node x="0.0" y="668.0">f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.project_journal</node>
+    <node x="0.0" y="899.0">f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.notification</node>
+    <node x="300.0" y="624.0">f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.milestone</node>
+    <node x="653.0" y="668.0">f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.project_comment</node>
+    <node x="345.75" y="227.0">f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.direction</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.project" target="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.employee" relationship="REFERENCES">
+      <point x="-138.0" y="0.0" />
+      <point x="272.5" y="481.0" />
+      <point x="272.5" y="82.0" />
+      <point x="-95.5" y="0.0" />
+    </edge>
+    <edge source="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.milestone" target="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.project" relationship="REFERENCES">
+      <point x="0.0" y="-115.0" />
+      <point x="0.0" y="93.0" />
+    </edge>
+    <edge source="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.notification_history" target="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.notification" relationship="REFERENCES">
+      <point x="0.0" y="-60.0" />
+      <point x="0.0" y="82.0" />
+    </edge>
+    <edge source="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.project_comment" target="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.project" relationship="REFERENCES">
+      <point x="0.0" y="-71.0" />
+      <point x="791.0" y="599.0" />
+      <point x="466.5" y="599.0" />
+      <point x="0.0" y="93.0" />
+    </edge>
+    <edge source="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.project" target="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.direction" relationship="REFERENCES">
+      <point x="-43.75" y="-93.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.auth_user" target="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.employee" relationship="REFERENCES">
+      <point x="-13.5" y="-60.0" />
+      <point x="88.0" y="82.0" />
+    </edge>
+    <edge source="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.direction" target="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.employee" relationship="REFERENCES">
+      <point x="0.0" y="-49.0" />
+      <point x="-87.5" y="82.0" />
+    </edge>
+    <edge source="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.project_journal" target="f156443d-b914-48a4-8602-b5e0bae7929e.TABLE:d5cods22c9g90.pf.project" relationship="REFERENCES">
+      <point x="0.0" y="-71.0" />
+      <point x="140.0" y="599.0" />
+      <point x="466.5" y="599.0" />
+      <point x="0.0" y="93.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.6185155626496409" showDependencies="false" x="464.5" y="616.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Comments</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+
