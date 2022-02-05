@@ -20,8 +20,6 @@ pipelines:
       - step:
           name: deploy
           image: ruby:2.7.5
-          deployment: staging
-          trigger: manual
           script:
             - gem install dpl
             - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
