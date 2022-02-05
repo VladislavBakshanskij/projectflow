@@ -20,7 +20,7 @@ pipelines:
       - step:
           name: deploy
           image: ruby:2.7.5
-          deployment: heroku
+          deployment: staging
           trigger: manual
           script:
             - gem install dpl
