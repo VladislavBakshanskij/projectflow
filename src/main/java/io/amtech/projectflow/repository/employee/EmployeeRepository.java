@@ -16,4 +16,6 @@ public interface EmployeeRepository {
     void delete(UUID id);
 
     PagedData<Employee> search(SearchCriteria searchCriteria);
+
+    void checkOnExists(UUID id);
 }

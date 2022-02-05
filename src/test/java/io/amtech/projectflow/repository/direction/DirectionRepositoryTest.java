@@ -48,7 +48,7 @@ class DirectionRepositoryTest extends AbstractIntegrationTest {
                 });
 
         Assertions.assertThat(transactionalUtil.txRun(() -> dsl.fetchCount(DIRECTION)))
-                .isEqualTo(2);
+                .isEqualTo(3);
     }
 
     @Test

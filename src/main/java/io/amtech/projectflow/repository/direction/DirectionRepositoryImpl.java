@@ -3,6 +3,7 @@ package io.amtech.projectflow.repository.direction;
 import io.amtech.projectflow.error.DataNotFoundException;
 import io.amtech.projectflow.model.Direction;
 import io.amtech.projectflow.model.DirectionWithLeadName;
+import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -29,10 +30,13 @@ public class DirectionRepositoryImpl implements DirectionRepository {
                     .setLeadName(record.get(DIRECTION_LEAD_NAME_FIELD));
 
     private final DSLContext dsl;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public DirectionWithLeadName save(final Direction direction) {
         final UUID id = UUID.randomUUID();
+        employeeRepository.checkOnExists(direction.getLeadId());
+
         dsl.insertInto(DIRECTION)
                 .set(DIRECTION.ID, id)
                 .set(DIRECTION.NAME, direction.getName())
@@ -50,11 +54,13 @@ public class DirectionRepositoryImpl implements DirectionRepository {
                 .where(DIRECTION.ID.eq(id))
                 .fetchOptional()
                 .map(mapper::map)
-                .orElseThrow(() -> new DataNotFoundException("Направление " + id + " не найдено"));
+                .orElseThrow(() -> new DataNotFoundException("Направление не найдено"));
     }
 
     @Override
     public void update(final UUID id, final Direction direction) {
+        employeeRepository.checkOnExists(direction.getLeadId());
+
         dsl.update(DIRECTION)
                 .set(DIRECTION.NAME, direction.getName())
                 .set(DIRECTION.LEAD_ID, direction.getLeadId())
