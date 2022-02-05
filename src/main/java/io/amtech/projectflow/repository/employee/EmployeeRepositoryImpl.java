@@ -99,6 +99,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 .setData(employees);
     }
 
+    @Override
+    public void checkOnExists(UUID id) {
+        if (!dsl.fetchExists(EMPLOYEE, EMPLOYEE.ID.eq(id))) {
+            throw new DataNotFoundException("Сотрудник не найден!");
+        }
+    }
+
     private Condition getConditionFromCriteria(final SearchCriteria criteria,
                                                final String criteriaName,
                                                final Function<String, Condition> toCondition) {

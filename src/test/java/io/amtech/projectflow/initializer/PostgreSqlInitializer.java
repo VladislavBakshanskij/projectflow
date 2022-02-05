@@ -10,6 +10,9 @@ import org.testcontainers.utility.DockerImageName;
 public class PostgreSqlInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     private static final JdbcDatabaseContainer<?> POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>(DockerImageName.parse("postgres:alpine"));
 
+    private static final String DATASOURCE_PREFIX = "spring.datasource";
+    private static final String LIQUIBASE_PREFIX = "spring.liquibase";
+
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         POSTGRE_SQL_CONTAINER.start();
@@ -18,12 +21,12 @@ public class PostgreSqlInitializer implements ApplicationContextInitializer<Conf
         final String username = POSTGRE_SQL_CONTAINER.getUsername();
         final String password = POSTGRE_SQL_CONTAINER.getPassword();
 
-        TestPropertyValues.of("spring.datasource.url=" + jdbcUrl + "?currentSchema=pf",
-                              "spring.datasource.username=" + username,
-                              "spring.datasource.password=" + password,
-                              "spring.liquibase.url=" + jdbcUrl,
-                              "spring.liquibase.user=" + username,
-                              "spring.liquibase.password=" + password)
+        TestPropertyValues.of(DATASOURCE_PREFIX + ".url=" + jdbcUrl + "?currentSchema=pf",
+                        DATASOURCE_PREFIX + ".username=" + username,
+                        DATASOURCE_PREFIX + ".password=" + password,
+                        LIQUIBASE_PREFIX + ".url=" + jdbcUrl,
+                        LIQUIBASE_PREFIX + ".user=" + username,
+                        LIQUIBASE_PREFIX + ".password=" + password)
                 .applyTo(applicationContext);
     }
 }

@@ -1,9 +1,17 @@
 server:
   port: ${SERVER_PORT:8080}
-  servlet:
-    context-path: /projectflow
+
+app:
+  redis:
+    access-token-time-to-live: ${ACCESS_TOKEN_TIME_TO_LIVE:120000}
+    refresh-token-time-to-live: ${REFRESH_TOKEN_TIME_TO_LIVE:86400000}
 
 spring:
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    database: ${REDIS_DATABASE:0}
+    password: ${REDIS_PASSWORD:}
   liquibase:
     change-log: classpath:db/changelog/master-changelog.xml
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:projectflow}

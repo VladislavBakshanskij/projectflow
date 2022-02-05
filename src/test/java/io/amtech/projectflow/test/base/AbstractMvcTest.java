@@ -21,15 +21,18 @@ public class AbstractMvcTest extends AbstractIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        DefaultMockMvcBuilder mockMvcBuilder = MockMvcBuilders.webAppContextSetup(context)
+        mvc = getMockMvcBuilder().build();
+        authMvc = getMockMvcBuilder()
+                .apply(springSecurity())
+                .build();
+    }
+
+    private DefaultMockMvcBuilder getMockMvcBuilder() {
+        return MockMvcBuilders.webAppContextSetup(context)
                 .alwaysDo(print())
                 .addFilter((request, response, chain) -> {
                     request.setCharacterEncoding(StandardCharsets.UTF_8.name());
                     chain.doFilter(request, response);
                 });
-        mvc = mockMvcBuilder.build();
-        authMvc = mockMvcBuilder
-                .apply(springSecurity())
-                .build();
     }
 }
