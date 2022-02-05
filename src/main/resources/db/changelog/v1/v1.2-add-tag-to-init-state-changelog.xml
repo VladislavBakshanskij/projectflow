@@ -4,6 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
-    <include file="v1/v1.1-init-changelog.xml" relativeToChangelogFile="true"/>
-    <include file="v1/v1.2-add-tag-to-init-state-changelog.xml" relativeToChangelogFile="true"/>
+    <changeSet id="projectflow/v1.2-add-tag-to-init-state" author="vlad.bakshanskij@gmail.com">
+        <tagDatabase tag="v1.1-init"/>
+    </changeSet>
 </databaseChangeLog>
