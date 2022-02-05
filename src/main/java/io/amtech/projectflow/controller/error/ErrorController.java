@@ -23,7 +23,7 @@ public class ErrorController {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorResponse onMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+    public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         ErrorResponse error = new ErrorResponse()
                 .setCode(HttpStatus.BAD_REQUEST.value())
                 .setMessage("Validation error");
