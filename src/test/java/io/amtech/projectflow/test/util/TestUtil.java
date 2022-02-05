@@ -1,5 +1,8 @@
 package io.amtech.projectflow.test.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -10,9 +13,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestUtil {
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
+            .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
     public static MockHttpServletRequestBuilder get(final String url) {
         return MockMvcRequestBuilders.get(url)
                 .characterEncoding(StandardCharsets.UTF_8);
@@ -41,5 +48,11 @@ public class TestUtil {
     @SneakyThrows
     public static byte[] readAllBytesFromClassPathResource(final String path) {
         return Files.readAllBytes(Paths.get(new ClassPathResource(path).getURI()));
+    }
+
+    @SneakyThrows
+    public static <K, V> Map<K, V> convertJsonToMap(final String json) {
+        return OBJECT_MAPPER.readValue(json, new TypeReference<>() {
+        });
     }
 }
