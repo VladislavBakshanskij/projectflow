@@ -5,6 +5,7 @@ import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
 import io.amtech.projectflow.service.project.ProjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,13 +18,9 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ProjectDto create(@RequestBody @Valid ProjectCreateDto dto) {
         return projectService.create(dto);
-    }
-
-    @PutMapping("{id}")
-    public void update(@PathVariable UUID id, @RequestBody @Valid ProjectUpdateDto dto) {
-        projectService.update(id, dto);
     }
 
     @GetMapping("{id}")
@@ -31,7 +28,14 @@ public class ProjectController {
         return projectService.get(id);
     }
 
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable UUID id, @RequestBody @Valid ProjectUpdateDto dto) {
+        projectService.update(id, dto);
+    }
+
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id) {
         projectService.delete(id);
     }

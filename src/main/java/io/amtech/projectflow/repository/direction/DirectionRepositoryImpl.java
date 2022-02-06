@@ -30,12 +30,10 @@ public class DirectionRepositoryImpl implements DirectionRepository {
                     .setLeadName(record.get(DIRECTION_LEAD_NAME_FIELD));
 
     private final DSLContext dsl;
-    private final EmployeeRepository employeeRepository;
 
     @Override
     public DirectionWithLeadName save(final Direction direction) {
         final UUID id = UUID.randomUUID();
-        employeeRepository.checkOnExists(direction.getLeadId());
 
         dsl.insertInto(DIRECTION)
                 .set(DIRECTION.ID, id)
@@ -59,8 +57,6 @@ public class DirectionRepositoryImpl implements DirectionRepository {
 
     @Override
     public void update(final UUID id, final Direction direction) {
-        employeeRepository.checkOnExists(direction.getLeadId());
-
         dsl.update(DIRECTION)
                 .set(DIRECTION.NAME, direction.getName())
                 .set(DIRECTION.LEAD_ID, direction.getLeadId())
@@ -73,5 +69,12 @@ public class DirectionRepositoryImpl implements DirectionRepository {
         dsl.deleteFrom(DIRECTION)
                 .where(DIRECTION.ID.eq(id))
                 .execute();
+    }
+
+    @Override
+    public void checkOnExists(final UUID id) {
+        if (!dsl.fetchExists(DIRECTION, DIRECTION.ID.eq(id))) {
+            throw new DataNotFoundException("Направление не найдено");
+        }
     }
 }

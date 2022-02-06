@@ -6,6 +6,7 @@ import io.amtech.projectflow.dto.response.direction.DirectionDto;
 import io.amtech.projectflow.model.Direction;
 import io.amtech.projectflow.repository.direction.DirectionRepository;
 import io.amtech.projectflow.model.DirectionWithLeadName;
+import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +18,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DirectionServiceImpl implements DirectionService {
     private final DirectionRepository directionRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public DirectionDto create(final DirectionCreateDto dto) {
+        employeeRepository.checkOnExists(dto.getLeadId());
         final Direction directionToSave = new Direction()
                 .setName(dto.getName())
                 .setLeadId(dto.getLeadId());
@@ -43,6 +46,8 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     public void update(final UUID id, final DirectionUpdateDto dto) {
+        employeeRepository.checkOnExists(dto.getLeadId());
+
         final Direction direction = new Direction()
                 .setName(dto.getName())
                 .setLeadId(dto.getLeadId());

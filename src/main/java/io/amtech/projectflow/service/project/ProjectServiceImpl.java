@@ -4,6 +4,8 @@ import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
 import io.amtech.projectflow.model.Project;
+import io.amtech.projectflow.repository.direction.DirectionRepository;
+import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import io.amtech.projectflow.repository.project.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
+    private final DirectionRepository directionRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public void delete(final UUID id) {
@@ -37,6 +41,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void update(final UUID id, final ProjectUpdateDto dto) {
+        employeeRepository.checkOnExists(dto.getProjectLeadId());
+        directionRepository.checkOnExists(dto.getDirectionId());
+
         Project project = new Project()
                 .setName(dto.getName())
                 .setDescription(dto.getDescription())
@@ -47,6 +54,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDto create(final ProjectCreateDto dto) {
+        employeeRepository.checkOnExists(dto.getProjectLeadId());
+        directionRepository.checkOnExists(dto.getDirectionId());
+
         Project projectToSave = new Project()
                 .setName(dto.getName())
                 .setProjectLeadId(dto.getProjectLeadId())

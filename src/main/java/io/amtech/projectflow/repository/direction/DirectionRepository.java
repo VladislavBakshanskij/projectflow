@@ -13,4 +13,6 @@ public interface DirectionRepository {
     void update(UUID id, Direction direction);
 
     void delete(UUID id);
+
+    void checkOnExists(UUID id);
 }
