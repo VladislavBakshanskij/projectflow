@@ -37,10 +37,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/auth/login", "/auth/refresh").permitAll()
+                .antMatchers("/auth/login", "/auth/refresh", "/auth/logout").permitAll()
                 .anyRequest().authenticated()
             .and()
-                .addFilterBefore(new TokenFilter(authenticationManagerBean(), mapper, "/auth/login", "/auth/refresh"),
+                .addFilterBefore(new TokenFilter(authenticationManagerBean(), mapper, "/auth/login", "/auth/refresh", "/auth/logout"),
                         UsernamePasswordAuthenticationFilter.class);
     }
 

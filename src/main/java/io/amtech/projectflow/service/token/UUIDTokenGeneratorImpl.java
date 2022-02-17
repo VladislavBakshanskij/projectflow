@@ -55,6 +55,8 @@ public class UUIDTokenGeneratorImpl implements TokenGenerator {
 
     @Override
     public void remove(final String token) {
-        tokenService.remove(StringUtils.replaceIgnoreCase(token, "bearer", StringUtils.EMPTY));
+        final String access = StringUtils.replaceIgnoreCase(token, "bearer", StringUtils.EMPTY)
+                .replace(StringUtils.SPACE, StringUtils.EMPTY);
+        tokenService.remove(access);
     }
 }
