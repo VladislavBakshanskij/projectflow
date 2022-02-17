@@ -1,5 +1,6 @@
 package io.amtech.projectflow.controller.error;
 
+import io.amtech.projectflow.error.AuthException;
 import io.amtech.projectflow.error.DataNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -22,7 +23,6 @@ public class ErrorController {
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
     public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         ErrorResponse error = new ErrorResponse()
                 .setCode(HttpStatus.BAD_REQUEST.value())
@@ -31,6 +31,14 @@ public class ErrorController {
             error.getErrors().put(er.getField(), er.getDefaultMessage());
         }
         return error;
+    }
+
+    @ExceptionHandler({AuthException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleAuthException(final AuthException e) {
+        return new ErrorResponse()
+                .setMessage(e.getMessage())
+                .setCode(HttpStatus.UNAUTHORIZED.value());
     }
 
     @ExceptionHandler({Exception.class})

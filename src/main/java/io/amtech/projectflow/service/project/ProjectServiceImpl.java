@@ -23,6 +23,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void delete(final UUID id) {
+        projectRepository.checkOnExists(id);
         projectRepository.delete(id);
     }
 
@@ -41,6 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void update(final UUID id, final ProjectUpdateDto dto) {
+        projectRepository.checkOnExists(id);
         employeeRepository.checkOnExists(dto.getProjectLeadId());
         directionRepository.checkOnExists(dto.getDirectionId());
 

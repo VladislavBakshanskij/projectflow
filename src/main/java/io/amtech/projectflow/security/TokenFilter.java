@@ -1,6 +1,7 @@
 package io.amtech.projectflow.security;
 
-import org.jooq.tools.StringUtils;
+import io.amtech.projectflow.error.AuthException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,7 +13,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class TokenFilter extends AbstractAuthenticationProcessingFilter {
     public TokenFilter(final AuthenticationManager authenticationManager, final String... allowedUrls) {
@@ -23,9 +23,12 @@ public class TokenFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String authHeader = Objects.requireNonNull(request.getHeader(HttpHeaders.AUTHORIZATION),
-                "Пользователь не авторизован");
-        String token = authHeader.toLowerCase().replace("bearer ", StringUtils.EMPTY);
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (StringUtils.isBlank(authHeader)) {
+            throw new AuthException("Пользователь не авторизован");
+        }
+
+        final String token = authHeader.toLowerCase().replace("bearer ", StringUtils.EMPTY);
         Authentication authenticate = super.getAuthenticationManager()
                 .authenticate(new UsernamePasswordAuthenticationToken(token, null));
         SecurityContextHolder.getContext().setAuthentication(authenticate);

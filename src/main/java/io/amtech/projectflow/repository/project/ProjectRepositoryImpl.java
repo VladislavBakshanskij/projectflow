@@ -37,6 +37,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
+    public void checkOnExists(UUID id) {
+        final boolean exists = dsl.fetchExists(PROJECT, PROJECT.ID.eq(id));
+        if (!exists) {
+            throw new DataNotFoundException("Проект не найден");
+        }
+    }
+
+    @Override
     public Project findById(final UUID id) {
         return dsl.selectFrom(PROJECT)
                 .where(PROJECT.ID.eq(id))

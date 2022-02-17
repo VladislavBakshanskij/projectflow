@@ -7,6 +7,8 @@ import java.util.UUID;
 public interface ProjectRepository {
     void delete(UUID id);
 
+    void checkOnExists(UUID id);
+
     Project findById(UUID id);
 
     void update(UUID id, Project project);
