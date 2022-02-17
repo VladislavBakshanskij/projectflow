@@ -1,5 +1,6 @@
 package io.amtech.projectflow.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.amtech.projectflow.security.TokenAuthenticationManager;
 import io.amtech.projectflow.security.TokenFilter;
 import io.amtech.projectflow.service.token.TokenService;
@@ -25,6 +26,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final TokenService tokenService;
+    private final ObjectMapper mapper;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -38,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/login", "/auth/refresh").permitAll()
                 .anyRequest().authenticated()
             .and()
-                .addFilterBefore(new TokenFilter(authenticationManagerBean(), "/auth/login", "/auth/refresh"),
+                .addFilterBefore(new TokenFilter(authenticationManagerBean(), mapper, "/auth/login", "/auth/refresh"),
                         UsernamePasswordAuthenticationFilter.class);
     }
 
