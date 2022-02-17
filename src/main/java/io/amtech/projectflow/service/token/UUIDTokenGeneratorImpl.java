@@ -1,6 +1,7 @@
 package io.amtech.projectflow.service.token;
 
 import io.amtech.projectflow.dto.response.token.TokenDto;
+import io.amtech.projectflow.error.AuthException;
 import io.amtech.projectflow.model.Token;
 import io.amtech.projectflow.model.UserWithEmployee;
 import io.amtech.projectflow.repository.auth.user.AuthUserRepository;
@@ -20,16 +21,21 @@ public class UUIDTokenGeneratorImpl implements TokenGenerator {
 
     @Override
     public TokenDto generate(final String username) {
-        final UUID accessToken = UUID.randomUUID();
-        final UUID refreshToken = UUID.randomUUID();
-        final UserWithEmployee user = authUserRepository.findByLogin(username);
-        tokenService.store(new Token()
-                .setAccess(accessToken.toString())
-                .setRefresh(refreshToken.toString())
-                .setUser(user));
-        return new TokenDto()
-                .setAccess(accessToken)
-                .setRefresh(refreshToken);
+        try {
+            final UUID accessToken = UUID.randomUUID();
+            final UUID refreshToken = UUID.randomUUID();
+            final UserWithEmployee user = authUserRepository.findByLogin(username);
+            tokenService.store(new Token()
+                    .setAccess(accessToken.toString())
+                    .setRefresh(refreshToken.toString())
+                    .setUser(user));
+            return new TokenDto()
+                    .setAccess(accessToken)
+                    .setRefresh(refreshToken);
+
+        } catch (Exception e) {
+            throw new AuthException("Неверное имя пользователя");
+        }
     }
 
     @Override

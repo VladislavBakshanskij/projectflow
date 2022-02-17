@@ -31,10 +31,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable()
                 .csrf().disable()
+                .cors().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/auth/login", "/auth/refresh").permitAll()
+                .antMatchers("/auth/login", "/auth/refresh").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .addFilterBefore(new TokenFilter(authenticationManagerBean(), "/auth/login", "/auth/refresh"),
