@@ -22,7 +22,7 @@ import org.springframework.test.context.jdbc.SqlMergeMode;
                 RedisInitializer.class
         }
 )
-public class AbstractIntegrationTest {
+public abstract class AbstractIntegrationTest {
     @Autowired
     protected TransactionalUtil transactionalUtil;
 }

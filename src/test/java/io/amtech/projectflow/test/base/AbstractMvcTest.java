@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-public class AbstractMvcTest extends AbstractIntegrationTest {
+public abstract class AbstractMvcTest extends AbstractIntegrationTest {
     @Autowired
     private WebApplicationContext context;
 
@@ -27,7 +27,7 @@ public class AbstractMvcTest extends AbstractIntegrationTest {
                 .build();
     }
 
-    private DefaultMockMvcBuilder getMockMvcBuilder() {
+    protected DefaultMockMvcBuilder getMockMvcBuilder() {
         return MockMvcBuilders.webAppContextSetup(context)
                 .alwaysDo(print())
                 .addFilter((request, response, chain) -> {

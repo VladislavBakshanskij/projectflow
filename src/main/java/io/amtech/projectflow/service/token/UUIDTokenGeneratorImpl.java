@@ -32,7 +32,6 @@ public class UUIDTokenGeneratorImpl implements TokenGenerator {
             return new TokenDto()
                     .setAccess(accessToken)
                     .setRefresh(refreshToken);
-
         } catch (Exception e) {
             throw new AuthException("Неверное имя пользователя");
         }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>61725d8a-9483-48ce-a0ba-efb6c79241d0.SCHEMA:projectflow.pf</OriginalElement>
+  <nodes>
+    <node x="353.0" y="388.0">61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.project</node>
+    <node x="0.0" y="624.0">61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.milestone</node>
+    <node x="649.0" y="668.0">61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.project_journal</node>
+    <node x="558.75" y="227.0">61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.direction</node>
+    <node x="353.0" y="668.0">61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.project_comment</node>
+    <node x="352.25" y="0.0">61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.employee</node>
+    <node x="356.75" y="216.0">61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.auth_user</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.milestone" target="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.project" relationship="REFERENCES">
+      <point x="0.0" y="-115.0" />
+      <point x="166.5" y="599.0" />
+      <point x="491.0" y="599.0" />
+      <point x="0.0" y="93.0" />
+    </edge>
+    <edge source="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.project" target="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.direction" relationship="REFERENCES">
+      <point x="69.0" y="-93.0" />
+      <point x="560.0" y="362.0" />
+      <point x="635.75" y="362.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.project_journal" target="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.project" relationship="REFERENCES">
+      <point x="0.0" y="-71.0" />
+      <point x="789.0" y="599.0" />
+      <point x="491.0" y="599.0" />
+      <point x="0.0" y="93.0" />
+    </edge>
+    <edge source="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.auth_user" target="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.employee" relationship="REFERENCES">
+      <point x="0.0" y="-60.0" />
+      <point x="0.0" y="82.0" />
+    </edge>
+    <edge source="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.project" target="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.employee" relationship="REFERENCES">
+      <point x="-69.0" y="-93.0" />
+      <point x="422.0" y="362.0" />
+      <point x="346.25" y="362.0" />
+      <point x="346.25" y="190.0" />
+      <point x="384.08333333333337" y="190.0" />
+      <point x="-63.666666666666664" y="82.0" />
+    </edge>
+    <edge source="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.direction" target="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.employee" relationship="REFERENCES">
+      <point x="0.0" y="-49.0" />
+      <point x="635.75" y="190.0" />
+      <point x="511.4166666666667" y="190.0" />
+      <point x="63.66666666666666" y="82.0" />
+    </edge>
+    <edge source="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.project_comment" target="61725d8a-9483-48ce-a0ba-efb6c79241d0.TABLE:projectflow.pf.project" relationship="REFERENCES">
+      <point x="0.0" y="-71.0" />
+      <point x="0.0" y="93.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.5015806111696522" showDependencies="false" x="464.5" y="427.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Comments</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+

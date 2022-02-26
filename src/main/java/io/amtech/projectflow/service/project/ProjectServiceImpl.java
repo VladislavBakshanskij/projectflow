@@ -3,15 +3,19 @@ package io.amtech.projectflow.service.project;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
+import io.amtech.projectflow.listener.event.JournalEvent;
 import io.amtech.projectflow.model.project.Project;
 import io.amtech.projectflow.repository.direction.DirectionRepository;
 import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import io.amtech.projectflow.repository.project.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
+import static io.amtech.projectflow.listener.event.JournalEventType.PROJECT;
 
 @Service
 @Transactional
@@ -20,6 +24,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final DirectionRepository directionRepository;
     private final EmployeeRepository employeeRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public void delete(final UUID id) {
@@ -46,12 +51,14 @@ public class ProjectServiceImpl implements ProjectService {
         employeeRepository.checkOnExists(dto.getProjectLeadId());
         directionRepository.checkOnExists(dto.getDirectionId());
 
-        Project project = new Project()
+        final Project project = new Project()
                 .setName(dto.getName())
                 .setDescription(dto.getDescription())
                 .setProjectLeadId(dto.getProjectLeadId())
                 .setDirectionId(dto.getDirectionId());
         projectRepository.update(id, project);
+        applicationEventPublisher.publishEvent(new JournalEvent<>(PROJECT, project
+                .setId(id)));
     }
 
     @Override
@@ -59,12 +66,13 @@ public class ProjectServiceImpl implements ProjectService {
         employeeRepository.checkOnExists(dto.getProjectLeadId());
         directionRepository.checkOnExists(dto.getDirectionId());
 
-        Project projectToSave = new Project()
+        final Project projectToSave = new Project()
                 .setName(dto.getName())
                 .setProjectLeadId(dto.getProjectLeadId())
                 .setDirectionId(dto.getDirectionId())
                 .setDescription(dto.getDescription());
-        Project project = projectRepository.save(projectToSave);
+        final Project project = projectRepository.save(projectToSave);
+        applicationEventPublisher.publishEvent(new JournalEvent<>(PROJECT, project));
         return new ProjectDto()
                 .setId(project.getId())
                 .setName(project.getName())

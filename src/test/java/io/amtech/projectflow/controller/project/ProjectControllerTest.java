@@ -1,12 +1,12 @@
 package io.amtech.projectflow.controller.project;
 
-import io.amtech.projectflow.test.base.AbstractMvcTest;
 import lombok.SneakyThrows;
 import org.jooq.DSLContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
@@ -19,7 +19,7 @@ import static io.amtech.projectflow.test.util.TestUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class ProjectControllerTest extends AbstractMvcTest {
+class ProjectControllerTest extends AbstractProjectMvcTest {
     private static final String BASE_URL = "/projects/";
     private static final String BASE_ID_URL = BASE_URL + "%s";
 
@@ -38,10 +38,14 @@ class ProjectControllerTest extends AbstractMvcTest {
     @ParameterizedTest
     @MethodSource("createSuccessArgs")
     @SneakyThrows
-    @Sql(scripts = "classpath:db/project/data.sql")
+    @Sql(scripts = {
+            "classpath:db/auth/users.sql",
+            "classpath:db/project/data.sql"
+    })
     void createSuccess(final String request, final String response) {
-        mvc.perform(post(BASE_URL)
+        authMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                         .content(request))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
@@ -79,10 +83,14 @@ class ProjectControllerTest extends AbstractMvcTest {
     @ParameterizedTest
     @MethodSource("createFailedArgs")
     @SneakyThrows
-    @Sql(scripts = "classpath:db/project/data.sql")
+    @Sql(scripts = {
+            "classpath:db/auth/users.sql",
+            "classpath:db/project/data.sql"
+    })
     void createFailed(final String request, final String response, final HttpStatus status) {
-        mvc.perform(post(BASE_URL)
+        authMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                         .content(request))
                 .andExpect(status().is(status.value()))
                 .andExpect(content().json(response, true));
@@ -98,12 +106,16 @@ class ProjectControllerTest extends AbstractMvcTest {
     @ParameterizedTest
     @MethodSource("updateSuccessArgs")
     @SneakyThrows
-    @Sql(scripts = "classpath:db/project/data.sql")
+    @Sql(scripts = {
+            "classpath:db/auth/users.sql",
+            "classpath:db/project/data.sql"
+    })
     void updateSuccess(final String id, final String request) {
-        mvc.perform(put(String.format(BASE_ID_URL, id))
+        authMvc.perform(put(String.format(BASE_ID_URL, id))
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                         .content(request))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isFound());
     }
 
     static Stream<Arguments> updateFailedArgs() {
@@ -137,10 +149,14 @@ class ProjectControllerTest extends AbstractMvcTest {
     @ParameterizedTest
     @MethodSource("updateFailedArgs")
     @SneakyThrows
-    @Sql(scripts = "classpath:db/project/data.sql")
+    @Sql(scripts = {
+            "classpath:db/auth/users.sql",
+            "classpath:db/project/data.sql"
+    })
     void updateFailTest(final String id, final String request, final String response, final HttpStatus status) {
-        mvc.perform(put(String.format(BASE_ID_URL, id))
+        authMvc.perform(put(String.format(BASE_ID_URL, id))
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                         .content(request))
                 .andExpect(status().is(status.value()))
                 .andExpect(content().json(response, true));
@@ -182,7 +198,7 @@ class ProjectControllerTest extends AbstractMvcTest {
                 .andExpect(content().json(response, true));
     }
 
-    static Stream<Arguments> getSuccessTestArgs() {
+    static Stream<Arguments> getSuccessArgs() {
         return Stream.of(
                 Arguments.arguments("4e7efeef-553f-4996-bc03-1c0925d56946",
                         readJson("getSuccess/response/positive_case.json"),
@@ -191,26 +207,26 @@ class ProjectControllerTest extends AbstractMvcTest {
     }
 
     @ParameterizedTest
-    @MethodSource("getSuccessTestArgs")
+    @MethodSource("getSuccessArgs")
     @SneakyThrows
     @Sql(scripts = "classpath:db/project/data.sql")
-    void getSuccessTest(final String id, final String response, final HttpStatus status) {
+    void getSuccess(final String id, final String response, final HttpStatus status) {
         mvc.perform(get(String.format(BASE_ID_URL, id)))
                 .andExpect(status().is(status.value()))
                 .andExpect(content().json(response, true));
     }
 
-    static Stream<Arguments> getFailTestArgs() {
+    static Stream<Arguments> getFailedArgs() {
         return Stream.of(
                 Arguments.arguments("0e551e6b-af6c-4999-a0ef-5997902b1474",
                         readJson("getFailed/response/project_not_found.json")));
     }
 
     @ParameterizedTest
-    @MethodSource("getFailTestArgs")
+    @MethodSource("getFailedArgs")
     @SneakyThrows
     @Sql(scripts = "classpath:db/project/data.sql")
-    void getFailTest(final String id, final String response) {
+    void getFailed(final String id, final String response) {
         mvc.perform(get(String.format(BASE_ID_URL, id)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(response, true));
