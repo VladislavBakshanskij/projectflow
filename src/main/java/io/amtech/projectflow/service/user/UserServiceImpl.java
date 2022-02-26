@@ -1,6 +1,6 @@
 package io.amtech.projectflow.service.user;
 
-import io.amtech.projectflow.model.User;
+import io.amtech.projectflow.model.auth.User;
 import io.amtech.projectflow.repository.auth.user.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

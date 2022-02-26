@@ -1,7 +1,7 @@
 package io.amtech.projectflow.repository.project;
 
-import io.amtech.projectflow.model.Project;
-import io.amtech.projectflow.model.ProjectStatus;
+import io.amtech.projectflow.model.project.Project;
+import io.amtech.projectflow.model.project.ProjectStatus;
 import io.amtech.projectflow.test.base.AbstractIntegrationTest;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;

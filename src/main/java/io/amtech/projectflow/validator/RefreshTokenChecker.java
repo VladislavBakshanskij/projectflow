@@ -1,7 +1,7 @@
 package io.amtech.projectflow.validator;
 
 import io.amtech.projectflow.dto.request.token.TokenRefreshDto;
-import io.amtech.projectflow.model.Token;
+import io.amtech.projectflow.model.auth.Token;
 import io.amtech.projectflow.service.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
 package io.amtech.projectflow.dto.response.project;
 
-import io.amtech.projectflow.model.ProjectStatus;
+import io.amtech.projectflow.model.project.ProjectStatus;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

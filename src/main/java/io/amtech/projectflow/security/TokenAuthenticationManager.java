@@ -1,6 +1,6 @@
 package io.amtech.projectflow.security;
 
-import io.amtech.projectflow.model.Token;
+import io.amtech.projectflow.model.auth.Token;
 import io.amtech.projectflow.service.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;

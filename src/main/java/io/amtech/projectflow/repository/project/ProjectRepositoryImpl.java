@@ -1,8 +1,8 @@
 package io.amtech.projectflow.repository.project;
 
 import io.amtech.projectflow.error.DataNotFoundException;
-import io.amtech.projectflow.model.Project;
-import io.amtech.projectflow.model.ProjectStatus;
+import io.amtech.projectflow.model.project.Project;
+import io.amtech.projectflow.model.project.ProjectStatus;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.Record;

@@ -1,9 +1,8 @@
 package io.amtech.projectflow.repository.direction;
 
 import io.amtech.projectflow.error.DataNotFoundException;
-import io.amtech.projectflow.model.Direction;
-import io.amtech.projectflow.model.DirectionWithLeadName;
-import io.amtech.projectflow.repository.employee.EmployeeRepository;
+import io.amtech.projectflow.model.direction.Direction;
+import io.amtech.projectflow.model.direction.DirectionWithLeadName;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.Field;

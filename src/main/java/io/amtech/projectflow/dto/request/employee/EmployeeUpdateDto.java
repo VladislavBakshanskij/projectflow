@@ -1,6 +1,6 @@
 package io.amtech.projectflow.dto.request.employee;
 
-import io.amtech.projectflow.model.UserPosition;
+import io.amtech.projectflow.model.employee.UserPosition;
 import lombok.Data;
 
 import javax.validation.constraints.Email;

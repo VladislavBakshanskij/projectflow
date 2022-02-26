@@ -1,6 +1,6 @@
 package io.amtech.projectflow.repository.direction;
 
-import io.amtech.projectflow.model.Direction;
+import io.amtech.projectflow.model.direction.Direction;
 import io.amtech.projectflow.test.base.AbstractIntegrationTest;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;

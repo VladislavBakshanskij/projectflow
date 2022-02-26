@@ -5,7 +5,7 @@ import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.dto.request.employee.EmployeeCreateDto;
 import io.amtech.projectflow.dto.request.employee.EmployeeUpdateDto;
 import io.amtech.projectflow.dto.response.employee.EmployeeDto;
-import io.amtech.projectflow.model.Employee;
+import io.amtech.projectflow.model.employee.Employee;
 import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -37,6 +38,11 @@ public class TestUtil {
 
     public static MockHttpServletRequestBuilder put(final String url) {
         return MockMvcRequestBuilders.put(url)
+                .characterEncoding(StandardCharsets.UTF_8);
+    }
+
+    public static MockHttpServletRequestBuilder patch(final String url) {
+        return MockMvcRequestBuilders.patch(url)
                 .characterEncoding(StandardCharsets.UTF_8);
     }
 

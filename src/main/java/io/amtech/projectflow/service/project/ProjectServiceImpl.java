@@ -3,7 +3,7 @@ package io.amtech.projectflow.service.project;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
-import io.amtech.projectflow.model.Project;
+import io.amtech.projectflow.model.project.Project;
 import io.amtech.projectflow.repository.direction.DirectionRepository;
 import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import io.amtech.projectflow.repository.project.ProjectRepository;

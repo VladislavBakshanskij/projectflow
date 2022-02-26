@@ -71,7 +71,7 @@ public class Employee extends TableImpl<Record> {
     /**
      * The column <code>pf.employee.position</code>.
      */
-    public final TableField<Record, io.amtech.projectflow.model.UserPosition> POSITION = createField(DSL.name("position"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(io.amtech.projectflow.jooq.enums.UserPosition.class), this, "", new EnumConverter<UserPosition, io.amtech.projectflow.model.UserPosition>(UserPosition.class, io.amtech.projectflow.model.UserPosition.class));
+    public final TableField<Record, io.amtech.projectflow.model.employee.UserPosition> POSITION = createField(DSL.name("position"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(io.amtech.projectflow.jooq.enums.UserPosition.class), this, "", new EnumConverter<UserPosition, io.amtech.projectflow.model.employee.UserPosition>(UserPosition.class, io.amtech.projectflow.model.employee.UserPosition.class));
 
     /**
      * The column <code>pf.employee.is_fired</code>.

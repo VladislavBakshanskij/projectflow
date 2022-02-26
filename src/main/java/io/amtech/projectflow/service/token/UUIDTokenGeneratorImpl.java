@@ -2,8 +2,8 @@ package io.amtech.projectflow.service.token;
 
 import io.amtech.projectflow.dto.response.token.TokenDto;
 import io.amtech.projectflow.error.AuthException;
-import io.amtech.projectflow.model.Token;
-import io.amtech.projectflow.model.UserWithEmployee;
+import io.amtech.projectflow.model.auth.Token;
+import io.amtech.projectflow.model.auth.UserWithEmployee;
 import io.amtech.projectflow.repository.auth.user.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;

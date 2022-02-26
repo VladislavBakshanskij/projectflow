@@ -3,7 +3,7 @@ package io.amtech.projectflow.repository.employee;
 import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.error.DataNotFoundException;
-import io.amtech.projectflow.model.Employee;
+import io.amtech.projectflow.model.employee.Employee;
 import lombok.RequiredArgsConstructor;
 import org.jooq.Condition;
 import org.jooq.DSLContext;

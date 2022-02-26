@@ -1,6 +1,6 @@
 package io.amtech.projectflow.repository.project;
 
-import io.amtech.projectflow.model.Project;
+import io.amtech.projectflow.model.project.Project;
 
 import java.util.UUID;
 

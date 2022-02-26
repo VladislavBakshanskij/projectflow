@@ -1,6 +1,6 @@
 package io.amtech.projectflow.controller.employee;
 
-import io.amtech.projectflow.model.Employee;
+import io.amtech.projectflow.model.employee.Employee;
 import io.amtech.projectflow.test.base.AbstractMvcTest;
 import io.amtech.projectflow.test.util.TestUtil;
 import lombok.SneakyThrows;

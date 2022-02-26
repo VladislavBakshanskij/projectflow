@@ -1,7 +1,7 @@
 package io.amtech.projectflow.repository.employee;
 
-import io.amtech.projectflow.model.Employee;
-import io.amtech.projectflow.model.UserPosition;
+import io.amtech.projectflow.model.employee.Employee;
+import io.amtech.projectflow.model.employee.UserPosition;
 import io.amtech.projectflow.test.base.AbstractIntegrationTest;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;

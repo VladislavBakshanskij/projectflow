@@ -81,7 +81,7 @@ public class Project extends TableImpl<Record> {
     /**
      * The column <code>pf.project.status</code>.
      */
-    public final TableField<Record, io.amtech.projectflow.model.ProjectStatus> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(io.amtech.projectflow.jooq.enums.ProjectStatus.class), this, "", new EnumConverter<ProjectStatus, io.amtech.projectflow.model.ProjectStatus>(ProjectStatus.class, io.amtech.projectflow.model.ProjectStatus.class));
+    public final TableField<Record, io.amtech.projectflow.model.project.ProjectStatus> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(io.amtech.projectflow.jooq.enums.ProjectStatus.class), this, "", new EnumConverter<ProjectStatus, io.amtech.projectflow.model.project.ProjectStatus>(ProjectStatus.class, io.amtech.projectflow.model.project.ProjectStatus.class));
 
     private Project(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);

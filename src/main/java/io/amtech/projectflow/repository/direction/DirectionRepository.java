@@ -1,7 +1,7 @@
 package io.amtech.projectflow.repository.direction;
 
-import io.amtech.projectflow.model.Direction;
-import io.amtech.projectflow.model.DirectionWithLeadName;
+import io.amtech.projectflow.model.direction.Direction;
+import io.amtech.projectflow.model.direction.DirectionWithLeadName;
 
 import java.util.UUID;
 

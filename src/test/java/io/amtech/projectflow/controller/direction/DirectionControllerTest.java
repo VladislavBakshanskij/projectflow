@@ -1,7 +1,7 @@
 package io.amtech.projectflow.controller.direction;
 
-import io.amtech.projectflow.model.Direction;
-import io.amtech.projectflow.model.DirectionWithLeadName;
+import io.amtech.projectflow.model.direction.Direction;
+import io.amtech.projectflow.model.direction.DirectionWithLeadName;
 import io.amtech.projectflow.repository.direction.DirectionRepository;
 import io.amtech.projectflow.test.base.AbstractMvcTest;
 import io.amtech.projectflow.test.util.TestUtil;

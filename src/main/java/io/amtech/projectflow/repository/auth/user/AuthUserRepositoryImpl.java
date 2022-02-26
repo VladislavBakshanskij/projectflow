@@ -1,8 +1,8 @@
 package io.amtech.projectflow.repository.auth.user;
 
 import io.amtech.projectflow.error.DataNotFoundException;
-import io.amtech.projectflow.model.User;
-import io.amtech.projectflow.model.UserWithEmployee;
+import io.amtech.projectflow.model.auth.User;
+import io.amtech.projectflow.model.auth.UserWithEmployee;
 import io.amtech.projectflow.repository.employee.EmployeeRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;

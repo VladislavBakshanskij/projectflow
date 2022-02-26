@@ -1,7 +1,7 @@
 package io.amtech.projectflow.service.token;
 
 import io.amtech.projectflow.config.TokenProperty;
-import io.amtech.projectflow.model.Token;
+import io.amtech.projectflow.model.auth.Token;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

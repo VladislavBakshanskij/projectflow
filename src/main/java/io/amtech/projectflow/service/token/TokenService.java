@@ -1,6 +1,6 @@
 package io.amtech.projectflow.service.token;
 
-import io.amtech.projectflow.model.Token;
+import io.amtech.projectflow.model.auth.Token;
 
 public interface TokenService {
     Token getByAccess(String access);

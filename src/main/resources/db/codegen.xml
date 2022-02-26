@@ -17,13 +17,13 @@
             <inputSchema>pf</inputSchema>
             <forcedTypes>
                 <forcedType>
-                    <userType>io.amtech.projectflow.model.UserPosition</userType>
+                    <userType>io.amtech.projectflow.model.employee.UserPosition</userType>
                     <enumConverter>true</enumConverter>
                     <includeExpression>position</includeExpression>
                     <includeTypes>user_position</includeTypes>
                 </forcedType>
                 <forcedType>
-                    <userType>io.amtech.projectflow.model.ProjectStatus</userType>
+                    <userType>io.amtech.projectflow.model.project.ProjectStatus</userType>
                     <enumConverter>true</enumConverter>
                     <includeExpression>status</includeExpression>
                     <includeTypes>project_status</includeTypes>
