@@ -8,8 +8,6 @@ import io.amtech.projectflow.jooq.tables.AuthUser;
 import io.amtech.projectflow.jooq.tables.Direction;
 import io.amtech.projectflow.jooq.tables.Employee;
 import io.amtech.projectflow.jooq.tables.Milestone;
-import io.amtech.projectflow.jooq.tables.Notification;
-import io.amtech.projectflow.jooq.tables.NotificationHistory;
 import io.amtech.projectflow.jooq.tables.Project;
 import io.amtech.projectflow.jooq.tables.ProjectComment;
 import io.amtech.projectflow.jooq.tables.ProjectJournal;
@@ -40,16 +38,6 @@ public class Tables {
      * The table <code>pf.milestone</code>.
      */
     public static final Milestone MILESTONE = Milestone.MILESTONE;
-
-    /**
-     * The table <code>pf.notification</code>.
-     */
-    public static final Notification NOTIFICATION = Notification.NOTIFICATION;
-
-    /**
-     * The table <code>pf.notification_history</code>.
-     */
-    public static final NotificationHistory NOTIFICATION_HISTORY = NotificationHistory.NOTIFICATION_HISTORY;
 
     /**
      * The table <code>pf.project</code>.

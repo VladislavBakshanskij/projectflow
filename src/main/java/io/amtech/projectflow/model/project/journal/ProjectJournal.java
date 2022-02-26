@@ -1,4 +1,4 @@
-package io.amtech.projectflow.model.project;
+package io.amtech.projectflow.model.project.journal;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

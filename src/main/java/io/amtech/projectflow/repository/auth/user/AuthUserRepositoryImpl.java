@@ -51,12 +51,15 @@ public class AuthUserRepositoryImpl implements AuthUserRepository {
 
     @Override
     public UserWithEmployee findByLogin(final String username) {
-        return dsl.select(AUTH_USER.EMPLOYEE_ID, AUTH_USER.LOGIN, AUTH_USER.PASSWORD, AUTH_USER.IS_LOCKED)
+        return dsl.select(AUTH_USER.EMPLOYEE_ID, AUTH_USER.LOGIN, AUTH_USER.PASSWORD, AUTH_USER.IS_LOCKED,
+                        EMPLOYEE.ID, EMPLOYEE.EMAIL, EMPLOYEE.IS_FIRED, EMPLOYEE.NAME, EMPLOYEE.PHONE, EMPLOYEE.POSITION)
                 .from(AUTH_USER)
                     .leftJoin(EMPLOYEE).on(EMPLOYEE.ID.eq(AUTH_USER.EMPLOYEE_ID))
                 .where(AUTH_USER.LOGIN.eq(username))
                 .fetchOptional()
-                .map(record -> new UserWithEmployee())
+                .map(record -> new UserWithEmployee()
+                        .setUser(mapper.map(record))
+                        .setEmployee(EmployeeRepositoryImpl.mapper.map(record)))
                 .orElseThrow(() -> new DataNotFoundException("Сотрудник " + username + " не найден"));
     }
 
