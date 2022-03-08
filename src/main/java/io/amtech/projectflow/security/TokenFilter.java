@@ -16,14 +16,13 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 
 @Slf4j
 public class TokenFilter extends AbstractAuthenticationProcessingFilter {
     private final ObjectMapper mapper;
 
-    public TokenFilter(final AuthenticationManager authenticationManager, final ObjectMapper mapper, final String... allowedUrls) {
-        super(request -> Arrays.stream(allowedUrls).noneMatch(allowedUrl -> request.getRequestURI().endsWith(allowedUrl)));
+    public TokenFilter(final AuthenticationManager authenticationManager, final ObjectMapper mapper) {
+        super("/**");
         super.setAuthenticationManager(authenticationManager);
         super.setContinueChainBeforeSuccessfulAuthentication(true);
         this.mapper = mapper;

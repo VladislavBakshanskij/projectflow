@@ -1,0 +1,14 @@
+{
+  "limit": 1,
+  "offset": 0,
+  "data": [
+    {
+      "id": "b366503a-182d-4e61-b4ed-45a25c43fe83",
+      "name": "Босс Геннадий Семенович",
+      "email": "boss@example.com",
+      "phone": null,
+      "position": "DIRECTOR",
+      "fired": false
+    }
+  ]
+}

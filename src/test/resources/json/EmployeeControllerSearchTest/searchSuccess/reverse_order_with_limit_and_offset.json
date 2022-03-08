@@ -1,0 +1,30 @@
+{
+  "limit": 3,
+  "offset": 2,
+  "data": [
+    {
+      "id": "edae9a20-9b0a-45d2-b0ed-447088d39f1b",
+      "name": "Саппортер Зинаида Михайловна",
+      "email": "vasya3@example.com",
+      "phone": null,
+      "position": "PROJECT_LEAD",
+      "fired": false
+    },
+    {
+      "id": "0b84357e-2085-4b5f-80a6-29b4f4a0554c",
+      "name": "Мышь Петр Петрович",
+      "email": "mouse@example.com",
+      "phone": null,
+      "position": "DIRECTION_LEAD",
+      "fired": true
+    },
+    {
+      "id": "d5b1efbe-aa97-44d8-9a03-8c6af9751a81",
+      "name": "Копающий Василий Андреевич",
+      "email": "vasya1@example.com",
+      "phone": null,
+      "position": "PROJECT_LEAD",
+      "fired": false
+    }
+  ]
+}
