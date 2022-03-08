@@ -1,11 +1,13 @@
 package io.amtech.projectflow.service.direction;
 
+import io.amtech.projectflow.app.PagedData;
+import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.dto.request.direction.DirectionCreateDto;
 import io.amtech.projectflow.dto.request.direction.DirectionUpdateDto;
 import io.amtech.projectflow.dto.response.direction.DirectionDto;
 import io.amtech.projectflow.model.direction.Direction;
-import io.amtech.projectflow.repository.direction.DirectionRepository;
 import io.amtech.projectflow.model.direction.DirectionWithLeadName;
+import io.amtech.projectflow.repository.direction.DirectionRepository;
 import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,5 +59,15 @@ public class DirectionServiceImpl implements DirectionService {
     @Override
     public void delete(final UUID id) {
         directionRepository.delete(id);
+    }
+
+    @Override
+    public PagedData<DirectionDto> search(final SearchCriteria criteria) {
+        return directionRepository.search(criteria)
+                .map(direction -> new DirectionDto()
+                        .setId(direction.getId())
+                        .setName(direction.getName())
+                        .setLeadId(direction.getLeadId())
+                        .setLeadName(direction.getLeadName()));
     }
 }

@@ -38,7 +38,7 @@ class EmployeeControllerSearchTest extends AbstractMvcTest {
     @MethodSource("searchSuccessArgs")
     @SneakyThrows
     @Sql(scripts = {
-            "classpath:db/EmployeeControllerSearchTest/search/data.sql"
+            "classpath:db/employee/search/data.sql"
     })
     void searchSuccess(final String url, final String response) {
         // setup
@@ -57,7 +57,7 @@ class EmployeeControllerSearchTest extends AbstractMvcTest {
     @MethodSource("searchFailArgs")
     @SneakyThrows
     @Sql(scripts = {
-            "classpath:db/EmployeeControllerSearchTest/search/data.sql"
+            "classpath:db/employee/search/data.sql"
     })
     void searchFail(final String url, final String response, int status) {
         // setup

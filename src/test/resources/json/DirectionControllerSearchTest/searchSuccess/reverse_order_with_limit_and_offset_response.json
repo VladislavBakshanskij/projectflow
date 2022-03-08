@@ -1,0 +1,24 @@
+{
+  "limit": 3,
+  "offset": 1,
+  "data": [
+    {
+      "id": "70291277-bf83-4652-8f6c-31e4740b8084",
+      "leadId": "5f31594f-0755-4222-9ba2-29e90f569b6b",
+      "name": "sales",
+      "leadName": "Пётр Петров"
+    },
+    {
+      "id": "ef5a0c98-5444-4b97-b6cf-e8e616fb99b2",
+      "leadId": "7618d39e-6c73-476d-a9fd-df5fddb86c60",
+      "name": "Water",
+      "leadName": "Евгения Евгеньева"
+    },
+    {
+      "id": "8baff1e9-bc05-4091-a639-3877050138fc",
+      "leadId": "7618d39e-6c73-476d-a9fd-df5fddb86c60",
+      "name": "Rubbish",
+      "leadName": "Евгения Евгеньева"
+    }
+  ]
+}

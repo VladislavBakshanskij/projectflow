@@ -1,5 +1,7 @@
 package io.amtech.projectflow.service.direction;
 
+import io.amtech.projectflow.app.PagedData;
+import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.dto.request.direction.DirectionCreateDto;
 import io.amtech.projectflow.dto.request.direction.DirectionUpdateDto;
 import io.amtech.projectflow.dto.response.direction.DirectionDto;
@@ -14,4 +16,6 @@ public interface DirectionService {
     void update(UUID id, DirectionUpdateDto dto);
 
     void delete(UUID id);
+
+    PagedData<DirectionDto> search(SearchCriteria criteria);
 }

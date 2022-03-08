@@ -2,6 +2,7 @@ package io.amtech.projectflow.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.jooq.Field;
 import org.jooq.OrderField;
 import org.jooq.Record;
@@ -12,8 +13,9 @@ public class JooqFieldUtil {
     public static OrderField<?> findOrderFieldInTableOrDefault(final TableImpl<Record> table,
                                                                final String order,
                                                                final Field<?> defaultField) {
-        final boolean desc = order.startsWith("-");
-        final String orderFieldName = order.substring(1);
+        final String orderField = StringUtils.defaultIfBlank(order, StringUtils.EMPTY);
+        final String orderFieldName = orderField.equals(StringUtils.EMPTY) ? orderField : orderField.substring(1);
+        final boolean desc = orderField.startsWith("-");
         return table.fieldStream()
                 .filter(field -> JooqFieldUtil.getFieldName(field).equals(orderFieldName))
                 .findFirst()
