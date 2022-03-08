@@ -30,7 +30,9 @@ class EmployeeControllerSearchTest extends AbstractMvcTest {
                 Arguments.arguments("?phone=9&limit=50",
                                     readJson("searchSuccess/phone_contain_9.json")),
                 Arguments.arguments("?position=director&limit=1",
-                                    readJson("searchSuccess/position_director.json"))
+                                    readJson("searchSuccess/position_director.json")),
+                Arguments.arguments("?fired=true",
+                                    readJson("searchSuccess/fired_employees.json"))
         );
     }
 

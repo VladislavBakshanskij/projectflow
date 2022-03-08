@@ -63,7 +63,7 @@ public class EmployeeController {
                 .filter("position", position)
                 .filter("fired", Optional.ofNullable(fired)
                         .map(Object::toString)
-                        .orElse(Boolean.FALSE.toString()))
+                        .orElse(null))
                 .order(orders)
                 .build();
 
