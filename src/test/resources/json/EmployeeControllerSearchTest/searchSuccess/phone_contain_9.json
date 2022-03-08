@@ -1,0 +1,14 @@
+{
+  "limit": 50,
+  "offset": 0,
+  "data": [
+    {
+      "id": "c13d6e8a-e6be-4a7e-aaa7-b1cfa2e53818",
+      "name": "Человейкина Марина Антоновна",
+      "email": "chel@example.com",
+      "phone": "+7 (928) 213-12-12",
+      "position": "DIRECTION_LEAD",
+      "fired": false
+    }
+  ]
+}

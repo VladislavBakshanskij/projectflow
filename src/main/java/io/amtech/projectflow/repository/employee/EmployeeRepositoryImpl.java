@@ -4,6 +4,8 @@ import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.error.DataNotFoundException;
 import io.amtech.projectflow.model.employee.Employee;
+import io.amtech.projectflow.model.employee.UserPosition;
+import io.amtech.projectflow.util.JooqFieldUtil;
 import lombok.RequiredArgsConstructor;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
@@ -85,9 +87,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                                                 value -> EMPLOYEE.PHONE.like("%" + value + "%")));
         conditions.add(getConditionFromCriteria(searchCriteria, "email",
                                                 value -> EMPLOYEE.EMAIL.like("%" + value + "%")));
+        conditions.add(getConditionFromCriteria(searchCriteria, "position",
+                                                value -> EMPLOYEE.POSITION.eq(UserPosition.from(value))));
 
         List<Employee> employees = dsl.selectFrom(EMPLOYEE)
                 .where(conditions)
+                .orderBy(JooqFieldUtil.findOrderFieldInTableOrDefault(EMPLOYEE, searchCriteria.getOrder(), EMPLOYEE.ID))
                 .limit(searchCriteria.getLimit())
                 .offset(searchCriteria.getOffset())
                 .fetch()

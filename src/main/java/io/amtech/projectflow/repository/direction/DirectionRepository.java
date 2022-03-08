@@ -1,5 +1,7 @@
 package io.amtech.projectflow.repository.direction;
 
+import io.amtech.projectflow.app.PagedData;
+import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.model.direction.Direction;
 import io.amtech.projectflow.model.direction.DirectionWithLeadName;
 
@@ -9,6 +11,8 @@ public interface DirectionRepository {
     DirectionWithLeadName save(Direction direction);
 
     DirectionWithLeadName findById(UUID id);
+
+    PagedData<DirectionWithLeadName> search(SearchCriteria searchCriteria);
 
     void update(UUID id, Direction direction);
 

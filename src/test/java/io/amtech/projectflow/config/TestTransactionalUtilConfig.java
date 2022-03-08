@@ -3,9 +3,9 @@ package io.amtech.projectflow.config;
 import io.amtech.projectflow.test.util.TransactionalUtil;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.Profile;
 
-@ActiveProfiles("test")
+@Profile("test")
 @TestConfiguration
 public class TestTransactionalUtilConfig {
     @Bean

@@ -1,17 +1,20 @@
 package io.amtech.projectflow.repository.direction;
 
+import io.amtech.projectflow.app.PagedData;
+import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.error.DataNotFoundException;
 import io.amtech.projectflow.model.direction.Direction;
 import io.amtech.projectflow.model.direction.DirectionWithLeadName;
+import io.amtech.projectflow.util.JooqFieldUtil;
 import lombok.RequiredArgsConstructor;
-import org.jooq.DSLContext;
-import org.jooq.Field;
-import org.jooq.Record;
-import org.jooq.RecordMapper;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 import static io.amtech.projectflow.jooq.tables.Direction.DIRECTION;
 import static io.amtech.projectflow.jooq.tables.Employee.EMPLOYEE;
@@ -52,6 +55,46 @@ public class DirectionRepositoryImpl implements DirectionRepository {
                 .fetchOptional()
                 .map(mapper::map)
                 .orElseThrow(() -> new DataNotFoundException("Направление не найдено"));
+    }
+
+    @Override
+    public PagedData<DirectionWithLeadName> search(final SearchCriteria searchCriteria) {
+        List<Condition> conditions = new ArrayList<>();
+
+        conditions.add(getConditionFromCriteria(searchCriteria,
+                                                "name",
+                                                value -> DIRECTION.NAME.like("%" + value + "%")));
+        conditions.add(getConditionFromCriteria(searchCriteria,
+                                                "leadId",
+                                                value -> DIRECTION.LEAD_ID.eq(UUID.fromString(value))));
+        conditions.add(getConditionFromCriteria(searchCriteria,
+                                                "leadName",
+                                                value -> DIRECTION_LEAD_NAME_FIELD.like("%" + value + "%")));
+
+        List<DirectionWithLeadName> directions = dsl.select(DIRECTION.ID, DIRECTION.LEAD_ID, DIRECTION.NAME,
+                                                     EMPLOYEE.NAME.as(DIRECTION_LEAD_NAME_FIELD))
+                .from(DIRECTION)
+                    .leftJoin(EMPLOYEE).on(EMPLOYEE.ID.eq(DIRECTION.LEAD_ID))
+                .where(conditions)
+                .orderBy(JooqFieldUtil.findOrderFieldInTableOrDefault(DIRECTION, searchCriteria.getOrder(), DIRECTION.NAME))
+                .limit(searchCriteria.getLimit())
+                .offset(searchCriteria.getOffset())
+                .fetch()
+                .map(mapper);
+
+        return new PagedData<DirectionWithLeadName>()
+                .setLimit(searchCriteria.getLimit())
+                .setOffset(searchCriteria.getOffset())
+                .setData(directions);
+    }
+
+
+    private Condition getConditionFromCriteria(final SearchCriteria criteria,
+                                               final String criteriaName,
+                                               final Function<String, Condition> toCondition) {
+        return criteria.getCriteriaValue(criteriaName)
+                .map(toCondition)
+                .orElse(DSL.trueCondition());
     }
 
     @Override

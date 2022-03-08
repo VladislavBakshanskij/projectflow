@@ -1,0 +1,12 @@
+{
+  "limit": 100,
+  "offset": 0,
+  "data": [
+    {
+      "id": "ef5a0c98-5444-4b97-b6cf-e8e616fb99b2",
+      "leadId": "7618d39e-6c73-476d-a9fd-df5fddb86c60",
+      "name": "Water",
+      "leadName": "Евгения Евгеньева"
+    }
+  ]
+}

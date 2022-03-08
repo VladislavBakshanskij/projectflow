@@ -1,5 +1,7 @@
 package io.amtech.projectflow.service.project;
 
+import io.amtech.projectflow.app.PagedData;
+import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
@@ -81,5 +83,18 @@ public class ProjectServiceImpl implements ProjectService {
                 .setCreateDate(project.getCreateDate())
                 .setProjectLeadId(project.getProjectLeadId())
                 .setDirectionId(project.getDirectionId());
+    }
+
+    @Override
+    public PagedData<ProjectDto> search(final SearchCriteria criteria) {
+        return projectRepository.search(criteria)
+                .map(project -> new ProjectDto()
+                        .setId(project.getId())
+                        .setName(project.getName())
+                        .setDescription(project.getDescription())
+                        .setProjectStatus(project.getStatus())
+                        .setCreateDate(project.getCreateDate())
+                        .setProjectLeadId(project.getProjectLeadId())
+                        .setDirectionId(project.getDirectionId()));
     }
 }

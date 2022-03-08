@@ -1,5 +1,7 @@
 package io.amtech.projectflow.service.project;
 
+import io.amtech.projectflow.app.PagedData;
+import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
@@ -14,4 +16,6 @@ public interface ProjectService {
     void update(UUID id, ProjectUpdateDto dto);
 
     ProjectDto create(ProjectCreateDto dto);
+
+    PagedData<ProjectDto> search(SearchCriteria criteria);
 }
