@@ -81,7 +81,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
         conditions.add(getConditionFromCriteria(searchCriteria, "name",
                                                 value -> EMPLOYEE.NAME.like("%" + value + "%")));
-        conditions.add(getConditionFromCriteria(searchCriteria, "isFired",
+        conditions.add(getConditionFromCriteria(searchCriteria, "fired",
                                                 value -> EMPLOYEE.IS_FIRED.eq(Boolean.valueOf(value))));
         conditions.add(getConditionFromCriteria(searchCriteria, "phone",
                                                 value -> EMPLOYEE.PHONE.like("%" + value + "%")));
