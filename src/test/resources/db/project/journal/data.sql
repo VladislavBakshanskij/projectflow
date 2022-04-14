@@ -14,7 +14,8 @@ values ('ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f', 'One', 'fc9632a7-66b4-4627-846c-
         'caaad756-f11a-4635-898d-2861071ec38d', 'message 1', '2021-06-09T11:49:03.839234Z', 'UNAPPROVED');
 
 insert into pf.project_journal(id, project_id, login, update_date, current_state)
-values ('b0dccdfd-7cd6-47d0-a5c5-6aa0379fb394', 'ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f', 'Igor', '2021-06-09T11:49:05.839234Z',
+values ('b0dccdfd-7cd6-47d0-a5c5-6aa0379fb394', 'ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f', 'Igor',
+        '2021-06-09T11:49:05.839234Z',
         '{
           "id": "ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
           "name": "One",

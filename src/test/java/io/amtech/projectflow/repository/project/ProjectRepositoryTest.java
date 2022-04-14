@@ -2,6 +2,7 @@ package io.amtech.projectflow.repository.project;
 
 import io.amtech.projectflow.model.project.Project;
 import io.amtech.projectflow.model.project.ProjectStatus;
+import io.amtech.projectflow.model.project.ProjectWithEmployeeDirection;
 import io.amtech.projectflow.test.base.AbstractIntegrationTest;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
@@ -73,14 +74,18 @@ class ProjectRepositoryTest extends AbstractIntegrationTest {
     @Sql(scripts = "classpath:db/project/data.sql")
     void getSuccess() {
         final UUID id = UUID.fromString("4e7efeef-553f-4996-bc03-1c0925d56946");
-        final Project project = new Project()
+        final ProjectWithEmployeeDirection project = new ProjectWithEmployeeDirection()
                 .setId(id)
                 .setName("Three")
                 .setDescription("message")
                 .setStatus(ProjectStatus.ON_PL_PLANNING)
                 .setCreateDate(Instant.parse("2021-07-09T11:49:03.839234Z"))
-                .setProjectLeadId(UUID.fromString("fc9632a7-66b4-4627-846c-a0e65533637c"))
-                .setDirectionId(UUID.fromString("211ed887-adc4-41bb-a8c4-e41393bd8e69"));
+                .setDirection(new ProjectWithEmployeeDirection.Direction()
+                                      .setId(UUID.fromString("211ed887-adc4-41bb-a8c4-e41393bd8e69"))
+                                      .setName("Nat"))
+                .setLead(new ProjectWithEmployeeDirection.Lead()
+                                 .setId(UUID.fromString("fc9632a7-66b4-4627-846c-a0e65533637c"))
+                                 .setName("Oliblib"));
 
         Assertions.assertThat(transactionalUtil.txRun(() -> projectRepository.findById(id)))
                 .isNotNull()

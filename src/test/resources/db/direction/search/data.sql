@@ -1,10 +1,13 @@
 insert into pf.employee(id, name, email, phone, position, is_fired)
-values  ('1e1fc94f-e93d-4c2f-a5e2-a328c1db8b26', 'Иван Иванов', 'ivan@gmail.com', '111111111', 'DIRECTOR', false),
-        ('5f31594f-0755-4222-9ba2-29e90f569b6b', 'Пётр Петров', 'petr@gmail.com', '222222222', 'DIRECTION_LEAD', false),
-        ('45d35aeb-5c23-4cbc-81bf-24ac8ca554a2', 'Сидор Сидоров', 'sidor@gmail.com', '333333333', 'PROJECT_LEAD', false),
-        ('9b79d3a1-63a8-48a3-8974-487b515121a8', 'Фёдор Фёдоров', 'fedor@gmail.com', '444444444', 'DIRECTION_LEAD', false),
-        ('e8c44d68-2255-4cc1-b08e-1eda0eef0dec', 'Николай Николаев', 'nik@gmail.com', '555555555', 'PROJECT_LEAD', false),
-        ('7618d39e-6c73-476d-a9fd-df5fddb86c60', 'Евгения Евгеньева', 'eva@gmail.com', '666666666', 'PROJECT_LEAD', false);
+values ('1e1fc94f-e93d-4c2f-a5e2-a328c1db8b26', 'Иван Иванов', 'ivan@gmail.com', '111111111', 'DIRECTOR', false),
+       ('5f31594f-0755-4222-9ba2-29e90f569b6b', 'Пётр Петров', 'petr@gmail.com', '222222222', 'DIRECTION_LEAD', false),
+       ('45d35aeb-5c23-4cbc-81bf-24ac8ca554a2', 'Сидор Сидоров', 'sidor@gmail.com', '333333333', 'PROJECT_LEAD', false),
+       ('9b79d3a1-63a8-48a3-8974-487b515121a8', 'Фёдор Фёдоров', 'fedor@gmail.com', '444444444', 'DIRECTION_LEAD',
+        false),
+       ('e8c44d68-2255-4cc1-b08e-1eda0eef0dec', 'Николай Николаев', 'nik@gmail.com', '555555555', 'PROJECT_LEAD',
+        false),
+       ('7618d39e-6c73-476d-a9fd-df5fddb86c60', 'Евгения Евгеньева', 'eva@gmail.com', '666666666', 'PROJECT_LEAD',
+        false);
 
 insert into pf.direction(id, lead_id, name)
 values ('6e2d2246-04ca-45c7-aaf1-0e11df7a35bb', '1e1fc94f-e93d-4c2f-a5e2-a328c1db8b26', 'Основной Direction'),

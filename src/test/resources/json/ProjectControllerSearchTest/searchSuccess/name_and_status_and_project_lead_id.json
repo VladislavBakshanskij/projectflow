@@ -1,15 +1,24 @@
 {
-  "limit": 100,
-  "offset": 0,
+  "meta": {
+    "limit": 100,
+    "offset": 0,
+    "totalPages": 0
+  },
   "data": [
     {
       "id": "7073f1e1-3e6c-4008-a41b-acdf42add3e5",
       "name": "Two",
-      "projectLeadId": "7a1d3076-6d80-4a66-b50e-2ed5c9ee056c",
-      "directionId": "2f7c06e7-006a-4ca6-98e9-2ba13a0af6c7",
       "description": "message 2",
       "createDate": "2021-08-09T11:49:03.839234Z",
-      "projectStatus": "UNAPPROVED"
+      "projectStatus": "UNAPPROVED",
+      "lead": {
+        "id": "7a1d3076-6d80-4a66-b50e-2ed5c9ee056c",
+        "name": "Oxa"
+      },
+      "direction": {
+        "id": "2f7c06e7-006a-4ca6-98e9-2ba13a0af6c7",
+        "name": "Vasya"
+      }
     }
   ]
 }

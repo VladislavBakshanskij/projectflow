@@ -1,5 +1,6 @@
 package io.amtech.projectflow.repository.employee;
 
+import io.amtech.projectflow.app.Meta;
 import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.error.DataNotFoundException;
@@ -80,13 +81,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         List<Condition> conditions = new ArrayList<>();
 
         conditions.add(getConditionFromCriteria(searchCriteria, "name",
-                                                value -> EMPLOYEE.NAME.like("%" + value + "%")));
+                                                value -> DSL.lower(EMPLOYEE.NAME).like(("%" + value + "%").toLowerCase())));
         conditions.add(getConditionFromCriteria(searchCriteria, "fired",
                                                 value -> EMPLOYEE.IS_FIRED.eq(Boolean.valueOf(value))));
         conditions.add(getConditionFromCriteria(searchCriteria, "phone",
                                                 value -> EMPLOYEE.PHONE.like("%" + value + "%")));
         conditions.add(getConditionFromCriteria(searchCriteria, "email",
-                                                value -> EMPLOYEE.EMAIL.like("%" + value + "%")));
+                                                value -> DSL.lower(EMPLOYEE.EMAIL).like(("%" + value + "%").toLowerCase())));
         conditions.add(getConditionFromCriteria(searchCriteria, "position",
                                                 value -> EMPLOYEE.POSITION.eq(UserPosition.from(value))));
 
@@ -98,9 +99,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 .fetch()
                 .map(mapper);
 
+        final long totalPages = dsl.fetchCount(EMPLOYEE, conditions) / searchCriteria.getLimit();
+
         return new PagedData<Employee>()
-                .setOffset(searchCriteria.getOffset())
-                .setLimit(searchCriteria.getLimit())
+                .setMeta(new Meta()
+                                 .setOffset(searchCriteria.getOffset())
+                                 .setLimit(searchCriteria.getLimit())
+                                 .setTotalPages(totalPages))
                 .setData(employees);
     }
 

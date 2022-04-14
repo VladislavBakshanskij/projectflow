@@ -1,6 +1,5 @@
-package io.amtech.projectflow.dto.response.project;
+package io.amtech.projectflow.model.project;
 
-import io.amtech.projectflow.model.project.ProjectStatus;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -9,25 +8,25 @@ import java.util.UUID;
 
 @Data
 @Accessors(chain = true)
-public class ProjectDto {
+public class ProjectWithEmployeeDirection {
     private UUID id;
     private String name;
-    private String description;
     private Instant createDate;
-    private ProjectStatus projectStatus;
-    private LeadDto lead;
-    private DirectionDto direction;
+    private ProjectStatus status;
+    private String description;
+    private Lead lead;
+    private Direction direction;
 
     @Data
     @Accessors(chain = true)
-    public static class LeadDto {
+    public static class Lead {
         private UUID id;
         private String name;
     }
 
     @Data
     @Accessors(chain = true)
-    public static class DirectionDto {
+    public static class Direction {
         private UUID id;
         private String name;
     }

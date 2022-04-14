@@ -1,5 +1,65 @@
 {
-  "limit": 100,
-  "offset": 0,
-  "data": []
+  "meta": {
+    "limit": 100,
+    "offset": 0,
+    "totalPages": 0
+  },
+  "data": [
+    {
+      "id": "0b84357e-2085-4b5f-80a6-29b4f4a0554c",
+      "name": "Мышь Петр Петрович",
+      "email": "mouse@example.com",
+      "phone": null,
+      "position": "DIRECTION_LEAD",
+      "fired": true
+    },
+    {
+      "id": "b366503a-182d-4e61-b4ed-45a25c43fe83",
+      "name": "Босс Геннадий Семенович",
+      "email": "boss@example.com",
+      "phone": null,
+      "position": "DIRECTOR",
+      "fired": false
+    },
+    {
+      "id": "c13d6e8a-e6be-4a7e-aaa7-b1cfa2e53818",
+      "name": "Человейкина Марина Антоновна",
+      "email": "chel@example.com",
+      "phone": "+7 (928) 213-12-12",
+      "position": "DIRECTION_LEAD",
+      "fired": false
+    },
+    {
+      "id": "d397e832-e465-401d-b1a5-778aed2a7102",
+      "name": "Безопасный Степан Сергеевич",
+      "email": "safe@example.com",
+      "phone": "82312122121",
+      "position": "DIRECTION_LEAD",
+      "fired": false
+    },
+    {
+      "id": "d5b1efbe-aa97-44d8-9a03-8c6af9751a81",
+      "name": "Копающий Василий Андреевич",
+      "email": "vasya1@example.com",
+      "phone": null,
+      "position": "PROJECT_LEAD",
+      "fired": false
+    },
+    {
+      "id": "edae9a20-9b0a-45d2-b0ed-447088d39f1b",
+      "name": "Саппортер Зинаида Михайловна",
+      "email": "vasya3@example.com",
+      "phone": null,
+      "position": "PROJECT_LEAD",
+      "fired": false
+    },
+    {
+      "id": "fee72d17-8d05-4faa-986c-7f90546e8940",
+      "name": "Увольняшкин Ираклий Иванович",
+      "email": "uvolnyashkin@example.com",
+      "phone": null,
+      "position": "DIRECTOR",
+      "fired": true
+    }
+  ]
 }

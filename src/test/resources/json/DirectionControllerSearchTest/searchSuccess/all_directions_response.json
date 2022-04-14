@@ -1,6 +1,9 @@
 {
-  "limit": 100,
-  "offset": 0,
+  "meta": {
+    "limit": 100,
+    "offset": 0,
+    "totalPages": 0
+  },
   "data": [
     {
       "id": "2a8cd165-28bb-4ff0-b069-4ca0e589fd26",

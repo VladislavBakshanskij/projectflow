@@ -1,5 +1,6 @@
 package io.amtech.projectflow.repository.direction;
 
+import io.amtech.projectflow.app.Meta;
 import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.error.DataNotFoundException;
@@ -63,28 +64,34 @@ public class DirectionRepositoryImpl implements DirectionRepository {
 
         conditions.add(getConditionFromCriteria(searchCriteria,
                                                 "name",
-                                                value -> DIRECTION.NAME.like("%" + value + "%")));
+                                                value -> DSL.lower(DIRECTION.NAME).like(("%" + value + "%").toLowerCase())));
         conditions.add(getConditionFromCriteria(searchCriteria,
                                                 "leadId",
                                                 value -> DIRECTION.LEAD_ID.eq(UUID.fromString(value))));
         conditions.add(getConditionFromCriteria(searchCriteria,
                                                 "leadName",
-                                                value -> DIRECTION_LEAD_NAME_FIELD.like("%" + value + "%")));
+                                                value -> DSL.lower(DIRECTION_LEAD_NAME_FIELD).like(("%" + value + "%").toLowerCase())));
 
-        List<DirectionWithLeadName> directions = dsl.select(DIRECTION.ID, DIRECTION.LEAD_ID, DIRECTION.NAME,
-                                                     EMPLOYEE.NAME.as(DIRECTION_LEAD_NAME_FIELD))
-                .from(DIRECTION)
-                    .leftJoin(EMPLOYEE).on(EMPLOYEE.ID.eq(DIRECTION.LEAD_ID))
-                .where(conditions)
+        final SelectConditionStep<Record4<UUID, UUID, String, String>> directionSelectQuery =
+                dsl.select(DIRECTION.ID, DIRECTION.LEAD_ID, DIRECTION.NAME,
+                           EMPLOYEE.NAME.as(DIRECTION_LEAD_NAME_FIELD))
+                        .from(DIRECTION)
+                        .leftJoin(EMPLOYEE).on(EMPLOYEE.ID.eq(DIRECTION.LEAD_ID))
+                        .where(conditions);
+        List<DirectionWithLeadName> directions = directionSelectQuery
                 .orderBy(JooqFieldUtil.findOrderFieldInTableOrDefault(DIRECTION, searchCriteria.getOrder(), DIRECTION.NAME))
                 .limit(searchCriteria.getLimit())
                 .offset(searchCriteria.getOffset())
                 .fetch()
                 .map(mapper);
 
+        final long totalPages = dsl.fetchCount(directionSelectQuery) / searchCriteria.getLimit();
+
         return new PagedData<DirectionWithLeadName>()
-                .setLimit(searchCriteria.getLimit())
-                .setOffset(searchCriteria.getOffset())
+                .setMeta(new Meta()
+                                 .setLimit(searchCriteria.getLimit())
+                                 .setOffset(searchCriteria.getOffset())
+                                 .setTotalPages(totalPages))
                 .setData(directions);
     }
 

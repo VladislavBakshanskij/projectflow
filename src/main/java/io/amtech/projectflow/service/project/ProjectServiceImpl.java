@@ -4,9 +4,11 @@ import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
+import io.amtech.projectflow.dto.response.ProjectSavedDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
 import io.amtech.projectflow.listener.event.JournalEvent;
 import io.amtech.projectflow.model.project.Project;
+import io.amtech.projectflow.model.project.ProjectWithEmployeeDirection;
 import io.amtech.projectflow.repository.direction.DirectionRepository;
 import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import io.amtech.projectflow.repository.project.ProjectRepository;
@@ -36,15 +38,19 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDto get(final UUID id) {
-        final Project project = projectRepository.findById(id);
+        final ProjectWithEmployeeDirection project = projectRepository.findById(id);
         return new ProjectDto()
                 .setId(project.getId())
                 .setName(project.getName())
                 .setDescription(project.getDescription())
                 .setProjectStatus(project.getStatus())
                 .setCreateDate(project.getCreateDate())
-                .setProjectLeadId(project.getProjectLeadId())
-                .setDirectionId(project.getDirectionId());
+                .setLead(new ProjectDto.LeadDto()
+                                 .setId(project.getLead().getId())
+                                 .setName(project.getLead().getName()))
+                .setDirection(new ProjectDto.DirectionDto()
+                                      .setId(project.getDirection().getId())
+                                      .setName(project.getDirection().getName()));
     }
 
     @Override
@@ -64,7 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto create(final ProjectCreateDto dto) {
+    public ProjectSavedDto create(final ProjectCreateDto dto) {
         employeeRepository.checkOnExists(dto.getProjectLeadId());
         directionRepository.checkOnExists(dto.getDirectionId());
 
@@ -75,7 +81,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .setDescription(dto.getDescription());
         final Project project = projectRepository.save(projectToSave);
         applicationEventPublisher.publishEvent(new JournalEvent<>(PROJECT, project));
-        return new ProjectDto()
+        return new ProjectSavedDto()
                 .setId(project.getId())
                 .setName(project.getName())
                 .setDescription(project.getDescription())
@@ -94,7 +100,11 @@ public class ProjectServiceImpl implements ProjectService {
                         .setDescription(project.getDescription())
                         .setProjectStatus(project.getStatus())
                         .setCreateDate(project.getCreateDate())
-                        .setProjectLeadId(project.getProjectLeadId())
-                        .setDirectionId(project.getDirectionId()));
+                        .setLead(new ProjectDto.LeadDto()
+                                         .setId(project.getLead().getId())
+                                         .setName(project.getLead().getName()))
+                        .setDirection(new ProjectDto.DirectionDto()
+                                              .setId(project.getDirection().getId())
+                                              .setName(project.getDirection().getName())));
     }
 }
