@@ -1,0 +1,10 @@
+{
+  "user": {
+    "id": "1d97755d-d424-4128-8b78-ca5cb7b015c9",
+    "username": "user"
+  },
+  "employee": {
+    "id": "1d97755d-d424-4128-8b78-ca5cb7b015c9",
+    "position": "PROJECT_LEAD"
+  }
+}

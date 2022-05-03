@@ -7,13 +7,12 @@ import io.amtech.projectflow.service.token.TokenGenerator;
 import io.amtech.projectflow.validator.PasswordChecker;
 import io.amtech.projectflow.validator.RefreshTokenChecker;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 @RestController
 @RequestMapping("auth")
@@ -35,16 +34,16 @@ public class AuthController {
 
     @PostMapping("login")
     public TokenDto login(@Valid @RequestBody TokenLoginDto tokenLoginDto) {
-        return tokenGenerator.generate(tokenLoginDto.getUsername());
+        return tokenGenerator.generate(tokenLoginDto);
     }
 
     @PostMapping("refresh")
     public TokenDto refresh(@Valid @RequestBody TokenRefreshDto tokenRefreshDto) {
-        return tokenGenerator.refresh(tokenRefreshDto.getRefreshToken());
+        return tokenGenerator.refresh(tokenRefreshDto);
     }
 
     @PostMapping("logout")
-    public void logout(@NotBlank @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public void logout(@AuthenticationPrincipal String token) {
         tokenGenerator.remove(token);
         SecurityContextHolder.getContext().setAuthentication(null);
     }

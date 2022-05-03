@@ -24,8 +24,8 @@ public class TokenAuthenticationManager implements AuthenticationManager {
         if (StringUtils.isBlank(userToken)) {
             throw new BadCredentialsException("Пользователь не авторизован");
         }
-        Token token = tokenService.getByAccess(userToken);
+        final Token token = tokenService.getByAccess(userToken);
         return new UsernamePasswordAuthenticationToken(userToken, token,
-                Collections.singletonList(new SimpleGrantedAuthority("USER")));
+                                                       Collections.singletonList(new SimpleGrantedAuthority("USER")));
     }
 }

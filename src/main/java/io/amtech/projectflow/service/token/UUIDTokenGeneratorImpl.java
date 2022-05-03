@@ -1,12 +1,13 @@
 package io.amtech.projectflow.service.token;
 
+import io.amtech.projectflow.dto.request.token.TokenLoginDto;
+import io.amtech.projectflow.dto.request.token.TokenRefreshDto;
 import io.amtech.projectflow.dto.response.token.TokenDto;
 import io.amtech.projectflow.error.AuthException;
 import io.amtech.projectflow.model.auth.Token;
 import io.amtech.projectflow.model.auth.UserWithEmployee;
 import io.amtech.projectflow.repository.auth.user.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +21,15 @@ public class UUIDTokenGeneratorImpl implements TokenGenerator {
     private final AuthUserRepository authUserRepository;
 
     @Override
-    public TokenDto generate(final String username) {
+    public TokenDto generate(final TokenLoginDto dto) {
         try {
             final UUID accessToken = UUID.randomUUID();
             final UUID refreshToken = UUID.randomUUID();
-            final UserWithEmployee user = authUserRepository.findByLogin(username);
+            final UserWithEmployee user = authUserRepository.findByLogin(dto.getUsername());
             tokenService.store(new Token()
-                    .setAccess(accessToken.toString())
-                    .setRefresh(refreshToken.toString())
-                    .setUser(user));
+                                       .setAccess(accessToken.toString())
+                                       .setRefresh(refreshToken.toString())
+                                       .setUser(user));
             return new TokenDto()
                     .setAccess(accessToken)
                     .setRefresh(refreshToken);
@@ -38,14 +39,14 @@ public class UUIDTokenGeneratorImpl implements TokenGenerator {
     }
 
     @Override
-    public TokenDto refresh(final String refreshToken) {
-        Token token = tokenService.getByRefresh(refreshToken);
+    public TokenDto refresh(final TokenRefreshDto dto) {
+        Token token = tokenService.getByRefresh(dto.getRefreshToken());
         final UUID newAccessToken = UUID.randomUUID();
         final UUID newRefreshToken = UUID.randomUUID();
         tokenService.store(new Token()
-                .setAccess(newAccessToken.toString())
-                .setRefresh(newRefreshToken.toString())
-                .setUser(token.getUser()));
+                                   .setAccess(newAccessToken.toString())
+                                   .setRefresh(newRefreshToken.toString())
+                                   .setUser(token.getUser()));
         tokenService.remove(token);
         return new TokenDto()
                 .setAccess(newAccessToken)
@@ -54,8 +55,6 @@ public class UUIDTokenGeneratorImpl implements TokenGenerator {
 
     @Override
     public void remove(final String token) {
-        final String access = StringUtils.replaceIgnoreCase(token, "bearer", StringUtils.EMPTY)
-                .replace(StringUtils.SPACE, StringUtils.EMPTY);
-        tokenService.remove(access);
+        tokenService.remove(token);
     }
 }

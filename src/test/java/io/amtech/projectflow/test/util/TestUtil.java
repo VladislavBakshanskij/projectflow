@@ -3,10 +3,13 @@ package io.amtech.projectflow.test.util;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.amtech.projectflow.dto.request.token.TokenLoginDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -18,8 +21,10 @@ import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestUtil {
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
-            .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    private static final ObjectMapper OBJECT_MAPPER = Jackson2ObjectMapperBuilder.json()
+            .modules(new JavaTimeModule())
+            .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .build();
 
     public static MockHttpServletRequestBuilder get(final String url) {
         return MockMvcRequestBuilders.get(url)
@@ -60,5 +65,10 @@ public class TestUtil {
     public static <K, V> Map<K, V> convertJsonToMap(final String json) {
         return OBJECT_MAPPER.readValue(json, new TypeReference<>() {
         });
+    }
+
+    @SneakyThrows
+    public static <T> T convertJsonToClass(final String json, final Class<T> clazz) {
+        return OBJECT_MAPPER.readValue(json, clazz);
     }
 }

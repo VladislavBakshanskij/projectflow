@@ -26,8 +26,8 @@ import java.util.Collections;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final TokenService tokenService;
     private final ObjectMapper mapper;
+    private final TokenService tokenService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,13 +36,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .cors().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/auth/login", "/auth/refresh", "/auth/logout").permitAll()
                 .anyRequest().authenticated()
-            .and()
+                .and()
                 .addFilterBefore(new TokenFilter(authenticationManagerBean(), mapper),
-                        UsernamePasswordAuthenticationFilter.class);
+                                 UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
