@@ -4,7 +4,7 @@ import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
-import io.amtech.projectflow.dto.response.ProjectSavedDto;
+import io.amtech.projectflow.dto.response.project.ProjectSavedDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
 
 import java.util.UUID;
