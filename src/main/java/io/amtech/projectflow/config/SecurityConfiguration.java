@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.amtech.projectflow.security.TokenAuthenticationManager;
 import io.amtech.projectflow.security.TokenFilter;
 import io.amtech.projectflow.service.token.TokenService;
+import io.amtech.projectflow.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ import java.util.Collections;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final ObjectMapper mapper;
     private final TokenService tokenService;
+    private final UserService userService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -35,13 +37,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .csrf().disable()
                 .cors().disable()
+                .userDetailsService(userService)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/login", "/auth/refresh", "/auth/logout").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(new TokenFilter(authenticationManagerBean(), mapper),
+                .addFilterBefore(new TokenFilter(new TokenAuthenticationManager(tokenService), mapper),
                                  UsernamePasswordAuthenticationFilter.class);
     }
 
@@ -73,9 +76,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(12);
     }
 
-    @Override
     @Bean
-    public AuthenticationManager authenticationManagerBean() {
-        return new TokenAuthenticationManager(tokenService);
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

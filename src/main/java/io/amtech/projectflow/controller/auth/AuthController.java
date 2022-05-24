@@ -4,7 +4,7 @@ import io.amtech.projectflow.dto.request.token.TokenLoginDto;
 import io.amtech.projectflow.dto.request.token.TokenRefreshDto;
 import io.amtech.projectflow.dto.response.token.TokenDto;
 import io.amtech.projectflow.service.token.TokenGenerator;
-import io.amtech.projectflow.validator.PasswordChecker;
+import io.amtech.projectflow.validator.LoginChecker;
 import io.amtech.projectflow.validator.RefreshTokenChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,12 +19,12 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AuthController {
     private final TokenGenerator tokenGenerator;
-    private final PasswordChecker passwordChecker;
+    private final LoginChecker loginChecker;
     private final RefreshTokenChecker refreshTokenChecker;
 
     @InitBinder("tokenLoginDto")
     public void bindValidationPassword(final WebDataBinder binder) {
-        binder.addValidators(passwordChecker);
+        binder.addValidators(loginChecker);
     }
 
     @InitBinder("tokenRefreshDto")

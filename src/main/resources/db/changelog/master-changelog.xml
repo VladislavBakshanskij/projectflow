@@ -7,4 +7,6 @@
     <include file="v1/v1.1-init-changelog.xml" relativeToChangelogFile="true"/>
     <include file="v1/v1.2-add-tag-to-init-state-changelog.xml" relativeToChangelogFile="true"/>
     <include file="v1/v1.3-drop-notification-tables.xml" relativeToChangelogFile="true"/>
+    <include file="v1/v1.4-add-simple-employee-role.xml" relativeToChangelogFile="true"/>
+    <include file="v1/v1.5-add-tag-for-add-new-role.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

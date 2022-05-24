@@ -17,13 +17,13 @@ public class JooqFieldUtil {
         final String orderFieldName = orderField.equals(StringUtils.EMPTY) ? orderField : orderField.substring(1);
         final boolean desc = orderField.startsWith("-");
         return table.fieldStream()
-                .filter(field -> JooqFieldUtil.getFieldName(field).equals(orderFieldName))
+                .filter(field -> getFieldName(field).equals(orderFieldName))
                 .findFirst()
                 .map(field -> desc ? field.desc() : field)
                 .orElse(defaultField);
     }
 
-    public static String getFieldName(Field<?> field) {
+    private static String getFieldName(Field<?> field) {
         return field.getQualifiedName().getName()[1];
     }
 }

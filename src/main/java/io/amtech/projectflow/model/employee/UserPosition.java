@@ -16,7 +16,8 @@ import static io.amtech.projectflow.jooq.Pf.PF;
 public enum UserPosition implements EnumType {
     PROJECT_LEAD,
     DIRECTION_LEAD,
-    DIRECTOR;
+    DIRECTOR,
+    EMPLOYEE;
 
     private static final Map<String, UserPosition> positions = Arrays.stream(values())
             .collect(Collectors.toMap(UserPosition::name, Function.identity()));

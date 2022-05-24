@@ -1,7 +1,6 @@
 package io.amtech.projectflow.service.user;
 
-import io.amtech.projectflow.model.auth.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService {
-    User findByLogin(String username);
+public interface UserService extends UserDetailsService {
 }

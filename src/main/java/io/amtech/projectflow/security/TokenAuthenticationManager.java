@@ -10,9 +10,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class TokenAuthenticationManager implements AuthenticationManager {
@@ -26,6 +25,6 @@ public class TokenAuthenticationManager implements AuthenticationManager {
         }
         final Token token = tokenService.getByAccess(userToken);
         return new UsernamePasswordAuthenticationToken(userToken, token,
-                                                       Collections.singletonList(new SimpleGrantedAuthority("USER")));
+                                                       List.of(new UserPositionGrantedAuthority(token.getUser().getEmployee().getUserPosition())));
     }
 }

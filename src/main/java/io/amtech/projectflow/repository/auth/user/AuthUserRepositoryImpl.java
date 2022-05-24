@@ -25,9 +25,9 @@ public class AuthUserRepositoryImpl implements AuthUserRepository {
     private final DSLContext dsl;
 
     @Override
-    public UserWithEmployee findByLogin(final String username) {
+    public UserWithEmployee findByUsername(final String username) {
         return dsl.select(AUTH_USER.EMPLOYEE_ID, AUTH_USER.LOGIN, AUTH_USER.PASSWORD, AUTH_USER.IS_LOCKED,
-                        EMPLOYEE.ID, EMPLOYEE.EMAIL, EMPLOYEE.IS_FIRED, EMPLOYEE.NAME, EMPLOYEE.PHONE, EMPLOYEE.POSITION)
+                          EMPLOYEE.ID, EMPLOYEE.EMAIL, EMPLOYEE.IS_FIRED, EMPLOYEE.NAME, EMPLOYEE.PHONE, EMPLOYEE.POSITION)
                 .from(AUTH_USER)
                     .leftJoin(EMPLOYEE).on(EMPLOYEE.ID.eq(AUTH_USER.EMPLOYEE_ID))
                 .where(AUTH_USER.LOGIN.eq(username))
@@ -35,15 +35,6 @@ public class AuthUserRepositoryImpl implements AuthUserRepository {
                 .map(record -> new UserWithEmployee()
                         .setUser(mapper.map(record))
                         .setEmployee(EmployeeRepositoryImpl.mapper.map(record)))
-                .orElseThrow(() -> new DataNotFoundException("Сотрудник " + username + " не найден"));
-    }
-
-    @Override
-    public User findByUsername(String username) {
-        return dsl.selectFrom(AUTH_USER)
-                .where(AUTH_USER.LOGIN.eq(username))
-                .fetchOptional()
-                .map(mapper::map)
                 .orElseThrow(() -> new DataNotFoundException("Сотрудник " + username + " не найден"));
     }
 }
