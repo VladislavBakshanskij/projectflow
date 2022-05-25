@@ -4,7 +4,6 @@ import io.amtech.projectflow.dto.request.token.TokenRefreshDto;
 import io.amtech.projectflow.model.auth.Token;
 import io.amtech.projectflow.service.token.TokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -26,7 +25,7 @@ public class RefreshTokenChecker implements Validator {
         final TokenRefreshDto tokenRefreshDto = (TokenRefreshDto) target;
         final Token refreshToken = tokenService.getByRefresh(tokenRefreshDto.getRefreshToken());
         if (Objects.isNull(refreshToken)) {
-            errors.reject(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Неверный токен");
+            errors.reject("refreshToken", "Неверный токен");
         }
     }
 }

@@ -3,6 +3,7 @@ package io.amtech.projectflow.controller.error;
 import io.amtech.projectflow.error.AuthException;
 import io.amtech.projectflow.error.DataNotFoundException;
 import io.amtech.projectflow.error.ProcessingException;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
@@ -32,8 +33,10 @@ public class ErrorController {
         for (FieldError er : e.getFieldErrors()) {
             error.getErrors().put(er.getField(), er.getDefaultMessage());
         }
-        for (ObjectError er : e.getAllErrors()) {
-            error.getErrors().put(er.getObjectName(), er.getDefaultMessage());
+        if (MapUtils.isEmpty(error.getErrors())) {
+            for (ObjectError er : e.getAllErrors()) {
+                error.getErrors().put(er.getCode(), er.getDefaultMessage());
+            }
         }
         return error;
     }

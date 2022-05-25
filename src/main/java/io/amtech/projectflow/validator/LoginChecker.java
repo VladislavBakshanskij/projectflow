@@ -30,7 +30,8 @@ public class LoginChecker implements Validator {
                                                                                        loginDto.getPassword()));
         } catch (AuthenticationException e) {
             log.error("Error on try auth user :: {}", target, e);
-            errors.reject(String.valueOf(HttpStatus.BAD_REQUEST.value()), e.getMessage());
+            errors.reject("username", e.getMessage());
+            errors.reject("password", e.getMessage());
         }
     }
 }
