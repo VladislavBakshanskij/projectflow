@@ -1,5 +1,6 @@
 package io.amtech.projectflow;
 
+import io.amtech.projectflow.config.properties.SwaggerProperties;
 import io.amtech.projectflow.config.properties.TokenProperty;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,7 +11,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
         R2dbcAutoConfiguration.class
 })
 @EnableConfigurationProperties({
-        TokenProperty.class
+        TokenProperty.class,
+        SwaggerProperties.class
 })
 public class ProjectFlowApplication {
 

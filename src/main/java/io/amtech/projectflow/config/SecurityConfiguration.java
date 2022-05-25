@@ -41,7 +41,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/login", "/auth/refresh", "/auth/logout").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new TokenFilter(new TokenAuthenticationManager(tokenService), mapper),
@@ -52,7 +51,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers(HttpMethod.OPTIONS)
-                .antMatchers("/auth/login", "/auth/refresh", "/auth/logout");
+                .antMatchers("/auth/login", "/auth/refresh", "/auth/logout",
+                             "/**/api-docs/**",
+                             "/swagger-resources/**",
+                             "/configuration/ui",
+                             "/swagger-resources",
+                             "/configuration/security",
+                             "/swagger-ui",
+                             "/swagger**",
+                             "/swagger-ui/**",
+                             "/webjars/**",
+                             "/actuator/**");
     }
 
     @Bean
