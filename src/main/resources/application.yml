@@ -13,6 +13,7 @@ app:
   swagger:
     enabled: "${SWAGGER_ENABLED:true}"
     protocols: "${SWAGGER_PROTOCOLS:http,https}"
+    not-secured-urls: "${SWAGGER_ALLOWED_URLS:login,refresh}"
 
 springfox:
   documentation:
