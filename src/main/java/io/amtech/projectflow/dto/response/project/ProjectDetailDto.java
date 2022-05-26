@@ -21,6 +21,15 @@ public class ProjectDetailDto {
     private ProjectDirectionDto direction;
     private List<ShortMilestoneDto> milestones = new ArrayList<>();
     private List<HistoryItemDto> history = new ArrayList<>();
+    private List<CommentDto> comments = new ArrayList<>();
+
+    @Data
+    @Accessors(chain = true)
+    public static class CommentDto {
+        private String message;
+        private String login;
+        private Instant createDate;
+    }
 
     @Data
     @Accessors(chain = true)

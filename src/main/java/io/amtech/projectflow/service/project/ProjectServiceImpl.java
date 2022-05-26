@@ -6,13 +6,16 @@ import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
 import io.amtech.projectflow.dto.response.project.*;
 import io.amtech.projectflow.listener.event.JournalEvent;
+import io.amtech.projectflow.listener.event.ProjectJournalData;
 import io.amtech.projectflow.model.project.Project;
+import io.amtech.projectflow.model.project.ProjectComment;
 import io.amtech.projectflow.model.project.ProjectWithEmployeeDirection;
 import io.amtech.projectflow.model.project.journal.ProjectJournal;
 import io.amtech.projectflow.model.project.milestone.Milestone;
 import io.amtech.projectflow.repository.direction.DirectionRepository;
 import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import io.amtech.projectflow.repository.project.ProjectRepository;
+import io.amtech.projectflow.repository.project.comment.ProjectCommentRepository;
 import io.amtech.projectflow.repository.project.journal.ProjectJournalRepository;
 import io.amtech.projectflow.repository.project.milesone.MilestoneRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final EmployeeRepository employeeRepository;
     private final DirectionRepository directionRepository;
     private final MilestoneRepository milestoneRepository;
+    private final ProjectCommentRepository projectCommentRepository;
     private final ProjectJournalRepository projectJournalRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -66,14 +70,18 @@ public class ProjectServiceImpl implements ProjectService {
         employeeRepository.checkOnExists(dto.getProjectLeadId());
         directionRepository.checkOnExists(dto.getDirectionId());
 
+        final ProjectWithEmployeeDirection oldStateProject = projectRepository.findById(id);
         final Project project = new Project()
                 .setName(dto.getName())
                 .setDescription(dto.getDescription())
                 .setProjectLeadId(dto.getProjectLeadId())
                 .setDirectionId(dto.getDirectionId());
         projectRepository.update(id, project);
-        applicationEventPublisher.publishEvent(new JournalEvent<>(PROJECT, project
-                .setId(id)));
+        applicationEventPublisher.publishEvent(new JournalEvent<>(PROJECT, new ProjectJournalData()
+                .setProject(oldStateProject)
+                .setMilestones(milestoneRepository.findByProjectId(id))
+                .setHistory(projectJournalRepository.findByProjectId(id))
+                .setComments(projectCommentRepository.findByProjectId(id))));
     }
 
     @Override
@@ -87,7 +95,8 @@ public class ProjectServiceImpl implements ProjectService {
                 .setDirectionId(dto.getDirectionId())
                 .setDescription(dto.getDescription());
         final Project project = projectRepository.save(projectToSave);
-        applicationEventPublisher.publishEvent(new JournalEvent<>(PROJECT, project));
+        final ProjectJournalData journalData = new ProjectJournalData().setProject(projectRepository.findById(project.getId()));
+        applicationEventPublisher.publishEvent(new JournalEvent<>(PROJECT, journalData));
         return new ProjectSavedDto()
                 .setId(project.getId())
                 .setName(project.getName())
@@ -120,6 +129,7 @@ public class ProjectServiceImpl implements ProjectService {
         final ProjectWithEmployeeDirection project = projectRepository.findById(id);
         final List<Milestone> milestones = milestoneRepository.findByProjectId(id);
         final List<ProjectJournal> projectJournals = projectJournalRepository.findByProjectId(id);
+        final List<ProjectComment> comments = projectCommentRepository.findByProjectId(id);
         return new ProjectDetailDto()
                 .setId(project.getId())
                 .setName(project.getName())
@@ -133,7 +143,17 @@ public class ProjectServiceImpl implements ProjectService {
                                       .setId(project.getDirection().getId())
                                       .setName(project.getDirection().getName()))
                 .setMilestones(buildShortMilestoneDto(milestones))
-                .setHistory(buildHistory(projectJournals));
+                .setHistory(buildHistory(projectJournals))
+                .setComments(buildProjectCommentDto(comments));
+    }
+
+    private List<ProjectDetailDto.CommentDto> buildProjectCommentDto(List<ProjectComment> comments) {
+        return comments.stream()
+                .map(comment -> new ProjectDetailDto.CommentDto()
+                        .setMessage(comment.getMessage())
+                        .setLogin(comment.getLogin())
+                        .setCreateDate(comment.getCreateDate()))
+                .collect(Collectors.toList());
     }
 
     private List<ProjectDetailDto.HistoryItemDto> buildHistory(final List<ProjectJournal> projectJournals) {

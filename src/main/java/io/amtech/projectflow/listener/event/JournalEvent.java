@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JournalEvent<T> {
+public class JournalEvent<T extends JournalEventData> {
     private JournalEventType type;
     private T data;
 }

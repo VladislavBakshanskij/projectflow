@@ -1,6 +1,7 @@
 package io.amtech.projectflow.listener;
 
 import io.amtech.projectflow.listener.event.JournalEvent;
+import io.amtech.projectflow.listener.event.JournalEventData;
 import io.amtech.projectflow.listener.event.JournalEventType;
 import io.amtech.projectflow.service.project.journal.AuditService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class JournalListener {
 
     @EventListener(JournalEvent.class)
     @Async
-    public <T> void onJournal(final JournalEvent<T> event) {
+    public <T extends JournalEventData> void onJournal(final JournalEvent<T> event) {
         AuditService auditService = auditServices.get(event.getType());
         if (Objects.isNull(auditService)) {
             log.warn("Неподдерживаемое событие :: {}", event.getType());
