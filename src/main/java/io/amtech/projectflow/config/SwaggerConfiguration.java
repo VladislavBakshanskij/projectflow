@@ -24,7 +24,7 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 @RequiredArgsConstructor
-public class SwaggerConfig {
+public class SwaggerConfiguration {
     private final SwaggerProperties swaggerProperties;
 
     @Bean

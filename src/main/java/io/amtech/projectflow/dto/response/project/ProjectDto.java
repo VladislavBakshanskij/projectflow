@@ -16,19 +16,5 @@ public class ProjectDto {
     private Instant createDate;
     private ProjectStatus projectStatus;
     private LeadDto lead;
-    private DirectionDto direction;
-
-    @Data
-    @Accessors(chain = true)
-    public static class LeadDto {
-        private UUID id;
-        private String name;
-    }
-
-    @Data
-    @Accessors(chain = true)
-    public static class DirectionDto {
-        private UUID id;
-        private String name;
-    }
+    private ProjectDirectionDto direction;
 }

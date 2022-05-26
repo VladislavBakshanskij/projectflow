@@ -2,6 +2,7 @@ package io.amtech.projectflow.service.token;
 
 import io.amtech.projectflow.dto.request.token.TokenLoginDto;
 import io.amtech.projectflow.dto.request.token.TokenRefreshDto;
+import io.amtech.projectflow.dto.response.token.LogoutDto;
 import io.amtech.projectflow.dto.response.token.TokenDto;
 
 public interface TokenGenerator {
@@ -9,5 +10,5 @@ public interface TokenGenerator {
 
     TokenDto refresh(TokenRefreshDto dto);
 
-    void remove(String token);
+    LogoutDto remove(String token);
 }

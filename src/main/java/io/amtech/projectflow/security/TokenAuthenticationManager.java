@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class TokenAuthenticationManager implements AuthenticationManager {
@@ -24,7 +25,13 @@ public class TokenAuthenticationManager implements AuthenticationManager {
             throw new BadCredentialsException("Пользователь не авторизован");
         }
         final Token token = tokenService.getByAccess(userToken);
-        return new UsernamePasswordAuthenticationToken(userToken, token,
-                                                       List.of(new UserPositionGrantedAuthority(token.getUser().getEmployee().getUserPosition())));
+        return Optional.ofNullable(token)
+                .map(t -> createAuth(userToken, token))
+                .orElseThrow(() -> new BadCredentialsException("Не удалось авторизовать пользователя"));
+    }
+
+    private UsernamePasswordAuthenticationToken createAuth(String userToken, Token token) {
+        List<UserPositionGrantedAuthority> authorities = List.of(new UserPositionGrantedAuthority(token.getUser().getEmployee().getUserPosition()));
+        return new UsernamePasswordAuthenticationToken(userToken, token, authorities);
     }
 }

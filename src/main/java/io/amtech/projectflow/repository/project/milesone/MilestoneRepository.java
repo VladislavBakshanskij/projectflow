@@ -2,6 +2,7 @@ package io.amtech.projectflow.repository.project.milesone;
 
 import io.amtech.projectflow.model.project.milestone.Milestone;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface MilestoneRepository {
@@ -16,4 +17,6 @@ public interface MilestoneRepository {
     void delete(UUID id);
 
     void updateProgress(UUID id, short progress);
+
+    List<Milestone> findByProjectId(UUID projectId);
 }

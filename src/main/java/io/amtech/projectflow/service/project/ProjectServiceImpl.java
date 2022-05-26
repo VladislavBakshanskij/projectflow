@@ -4,20 +4,25 @@ import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
-import io.amtech.projectflow.dto.response.project.ProjectSavedDto;
-import io.amtech.projectflow.dto.response.project.ProjectDto;
+import io.amtech.projectflow.dto.response.project.*;
 import io.amtech.projectflow.listener.event.JournalEvent;
 import io.amtech.projectflow.model.project.Project;
 import io.amtech.projectflow.model.project.ProjectWithEmployeeDirection;
+import io.amtech.projectflow.model.project.journal.ProjectJournal;
+import io.amtech.projectflow.model.project.milestone.Milestone;
 import io.amtech.projectflow.repository.direction.DirectionRepository;
 import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import io.amtech.projectflow.repository.project.ProjectRepository;
+import io.amtech.projectflow.repository.project.journal.ProjectJournalRepository;
+import io.amtech.projectflow.repository.project.milesone.MilestoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static io.amtech.projectflow.listener.event.JournalEventType.PROJECT;
 
@@ -26,8 +31,10 @@ import static io.amtech.projectflow.listener.event.JournalEventType.PROJECT;
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
-    private final DirectionRepository directionRepository;
     private final EmployeeRepository employeeRepository;
+    private final DirectionRepository directionRepository;
+    private final MilestoneRepository milestoneRepository;
+    private final ProjectJournalRepository projectJournalRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
@@ -45,10 +52,10 @@ public class ProjectServiceImpl implements ProjectService {
                 .setDescription(project.getDescription())
                 .setProjectStatus(project.getStatus())
                 .setCreateDate(project.getCreateDate())
-                .setLead(new ProjectDto.LeadDto()
+                .setLead(new LeadDto()
                                  .setId(project.getLead().getId())
                                  .setName(project.getLead().getName()))
-                .setDirection(new ProjectDto.DirectionDto()
+                .setDirection(new ProjectDirectionDto()
                                       .setId(project.getDirection().getId())
                                       .setName(project.getDirection().getName()));
     }
@@ -100,11 +107,52 @@ public class ProjectServiceImpl implements ProjectService {
                         .setDescription(project.getDescription())
                         .setProjectStatus(project.getStatus())
                         .setCreateDate(project.getCreateDate())
-                        .setLead(new ProjectDto.LeadDto()
+                        .setLead(new LeadDto()
                                          .setId(project.getLead().getId())
                                          .setName(project.getLead().getName()))
-                        .setDirection(new ProjectDto.DirectionDto()
+                        .setDirection(new ProjectDirectionDto()
                                               .setId(project.getDirection().getId())
                                               .setName(project.getDirection().getName())));
+    }
+
+    @Override
+    public ProjectDetailDto getDetail(final UUID id) {
+        final ProjectWithEmployeeDirection project = projectRepository.findById(id);
+        final List<Milestone> milestones = milestoneRepository.findByProjectId(id);
+        final List<ProjectJournal> projectJournals = projectJournalRepository.findByProjectId(id);
+        return new ProjectDetailDto()
+                .setId(project.getId())
+                .setName(project.getName())
+                .setStatus(project.getStatus())
+                .setCreateDate(project.getCreateDate())
+                .setDescription(project.getDescription())
+                .setLead(new LeadDto()
+                                 .setId(project.getLead().getId())
+                                 .setName(project.getLead().getName()))
+                .setDirection(new ProjectDirectionDto()
+                                      .setId(project.getDirection().getId())
+                                      .setName(project.getDirection().getName()))
+                .setMilestones(buildShortMilestoneDto(milestones))
+                .setHistory(buildHistory(projectJournals));
+    }
+
+    private List<ProjectDetailDto.HistoryItemDto> buildHistory(final List<ProjectJournal> projectJournals) {
+        return projectJournals.stream()
+                .map(projectJournal -> new ProjectDetailDto.HistoryItemDto()
+                        .setId(projectJournal.getId())
+                        .setLogin(projectJournal.getLogin())
+                        .setUpdateDate(projectJournal.getUpdateDate()))
+                .collect(Collectors.toList());
+    }
+
+    private List<ProjectDetailDto.ShortMilestoneDto> buildShortMilestoneDto(final List<Milestone> milestones) {
+        return milestones
+                .stream()
+                .map(milestone -> new ProjectDetailDto.ShortMilestoneDto()
+                        .setId(milestone.getId())
+                        .setName(milestone.getName())
+                        .setDescription(milestone.getDescription())
+                        .setProgress(milestone.getProgressPercent()))
+                .collect(Collectors.toList());
     }
 }

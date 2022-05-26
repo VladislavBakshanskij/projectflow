@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -118,5 +119,14 @@ public class MilestoneRepositoryImpl implements MilestoneRepository {
                 .set(MILESTONE.PROGRESS_PERCENT, progress)
                 .where(MILESTONE.ID.eq(id))
                 .execute();
+    }
+
+    @Override
+    public List<Milestone> findByProjectId(final UUID projectId) {
+        return dsl.selectFrom(MILESTONE)
+                .where(MILESTONE.PROJECT_ID.eq(projectId))
+                .orderBy(MILESTONE.PROGRESS_PERCENT.desc())
+                .fetch()
+                .map(mapper);
     }
 }

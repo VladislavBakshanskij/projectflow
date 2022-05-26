@@ -1,0 +1,30 @@
+{
+  "id": "ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
+  "name": "One",
+  "description": "message 1",
+  "createDate": "2021-06-09T11:49:03.839234Z",
+  "status": "UNAPPROVED",
+  "lead": {
+    "id": "fc9632a7-66b4-4627-846c-a0e65533637c",
+    "name": "Oliblib"
+  },
+  "direction": {
+    "id": "caaad756-f11a-4635-898d-2861071ec38d",
+    "name": "Vasya"
+  },
+  "milestones": [
+    {
+      "id": "35b4b5f0-31ac-4cad-83fc-4d996c586fe3",
+      "name": "do super feature",
+      "description": "do super feature on java",
+      "progress": 0
+    },
+    {
+      "id": "026ae239-66c5-4ac5-b37b-cf6ba3d3b10c",
+      "name": "do super feature",
+      "description": null,
+      "progress": 0
+    }
+  ],
+  "history": []
+}

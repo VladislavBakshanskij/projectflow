@@ -2,6 +2,7 @@ package io.amtech.projectflow.service.token;
 
 import io.amtech.projectflow.dto.request.token.TokenLoginDto;
 import io.amtech.projectflow.dto.request.token.TokenRefreshDto;
+import io.amtech.projectflow.dto.response.token.LogoutDto;
 import io.amtech.projectflow.dto.response.token.TokenDto;
 import io.amtech.projectflow.error.AuthException;
 import io.amtech.projectflow.model.auth.Token;
@@ -9,6 +10,7 @@ import io.amtech.projectflow.model.auth.UserWithEmployee;
 import io.amtech.projectflow.repository.auth.user.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,8 +67,9 @@ public class UUIDTokenGeneratorImpl implements TokenGenerator {
     }
 
     @Override
-    public void remove(final String token) {
+    public LogoutDto remove(final String token) {
         log.debug("Start remove token :: {}", token);
         tokenService.remove(token);
+        return new LogoutDto().setStatus(HttpStatus.OK.name());
     }
 }

@@ -4,6 +4,7 @@ import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
+import io.amtech.projectflow.dto.response.project.ProjectDetailDto;
 import io.amtech.projectflow.dto.response.project.ProjectSavedDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
 
@@ -19,4 +20,6 @@ public interface ProjectService {
     ProjectSavedDto create(ProjectCreateDto dto);
 
     PagedData<ProjectDto> search(SearchCriteria criteria);
+
+    ProjectDetailDto getDetail(UUID id);
 }

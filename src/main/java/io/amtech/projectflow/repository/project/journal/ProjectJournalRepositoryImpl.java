@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.UUID;
 
 import static io.amtech.projectflow.jooq.tables.ProjectJournal.PROJECT_JOURNAL;
@@ -48,10 +49,19 @@ public class ProjectJournalRepositoryImpl implements ProjectJournalRepository {
                     .set(PROJECT_JOURNAL.CURRENT_STATE, currentState)
                     .returning()
                     .fetchOne()
-                    .map(mapper::map);
+                    .map(mapper);
         } catch (JsonProcessingException e) {
             log.error("Error on processing journal :: {}", projectJournal);
             throw new ProcessingException("Не удалось обработать запись в журнале");
         }
+    }
+
+    @Override
+    public List<ProjectJournal> findByProjectId(final UUID projectId) {
+        return dsl.selectFrom(PROJECT_JOURNAL)
+                .where(PROJECT_JOURNAL.PROJECT_ID.eq(projectId))
+                .orderBy(PROJECT_JOURNAL.UPDATE_DATE.desc())
+                .fetch()
+                .map(mapper);
     }
 }

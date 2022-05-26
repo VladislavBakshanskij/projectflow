@@ -4,9 +4,7 @@ import io.amtech.projectflow.app.Meta;
 import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.error.DataNotFoundException;
-import io.amtech.projectflow.model.project.Project;
-import io.amtech.projectflow.model.project.ProjectStatus;
-import io.amtech.projectflow.model.project.ProjectWithEmployeeDirection;
+import io.amtech.projectflow.model.project.*;
 import io.amtech.projectflow.util.JooqFieldUtil;
 import lombok.RequiredArgsConstructor;
 import org.jooq.*;
@@ -45,10 +43,10 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             .setDescription(record.get(PROJECT.DESCRIPTION))
             .setStatus(record.get(PROJECT.STATUS))
             .setCreateDate(Instant.from(record.get(PROJECT.CREATE_DATE)))
-            .setLead(new ProjectWithEmployeeDirection.Lead()
+            .setLead(new Lead()
                              .setId(record.get(EMPLOYEE.ID))
                              .setName(record.get(EMPLOYEE.NAME)))
-            .setDirection(new ProjectWithEmployeeDirection.Direction()
+            .setDirection(new ProjectDirection()
                                   .setId(record.get(DIRECTION.ID))
                                   .setName(record.get(DIRECTION.NAME)));
 

@@ -15,19 +15,5 @@ public class ProjectWithEmployeeDirection {
     private ProjectStatus status;
     private String description;
     private Lead lead;
-    private Direction direction;
-
-    @Data
-    @Accessors(chain = true)
-    public static class Lead {
-        private UUID id;
-        private String name;
-    }
-
-    @Data
-    @Accessors(chain = true)
-    public static class Direction {
-        private UUID id;
-        private String name;
-    }
+    private ProjectDirection direction;
 }

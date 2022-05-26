@@ -48,6 +48,9 @@ spring:
 
 logging:
   level:
+    io:
+      amtech:
+        projectflow: ${APP_LOG_LEVEL:DEBUG}
     org:
       springframework: ${SPRING_LOG_LEVEL:DEBUG}
       jooq: ${JOOQ_LOG_LEVEL:DEBUG}

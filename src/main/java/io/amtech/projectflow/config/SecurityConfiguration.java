@@ -1,6 +1,6 @@
 package io.amtech.projectflow.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.amtech.projectflow.security.TokenAuthenticationFailureHandler;
 import io.amtech.projectflow.security.TokenAuthenticationManager;
 import io.amtech.projectflow.security.TokenFilter;
 import io.amtech.projectflow.service.token.TokenService;
@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,16 +28,15 @@ import java.util.Collections;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final ObjectMapper mapper;
     private final TokenService tokenService;
     private final UserService userService;
+    private final TokenAuthenticationFailureHandler tokenAuthenticationFailureHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
                 .csrf().disable()
-                .cors().disable()
                 .userDetailsService(userService)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -54,7 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                              "/actuator/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(new TokenFilter(new TokenAuthenticationManager(tokenService), mapper),
+                .addFilterBefore(new TokenFilter(new TokenAuthenticationManager(tokenService), tokenAuthenticationFailureHandler),
                                  UsernamePasswordAuthenticationFilter.class);
     }
 
@@ -79,7 +79,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public FilterRegistrationBean<CorsFilter> cors() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOriginPatterns(Collections.singletonList(CorsConfiguration.ALL));
+        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
         configuration.addAllowedHeader(CorsConfiguration.ALL);
         configuration.addAllowedMethod(CorsConfiguration.ALL);
 
@@ -88,6 +88,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         FilterRegistrationBean<CorsFilter> filterFilterRegistrationBean = new FilterRegistrationBean<>();
         filterFilterRegistrationBean.setFilter(new CorsFilter(source));
+        filterFilterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return filterFilterRegistrationBean;
     }
 

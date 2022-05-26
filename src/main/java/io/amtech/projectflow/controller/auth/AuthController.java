@@ -2,12 +2,12 @@ package io.amtech.projectflow.controller.auth;
 
 import io.amtech.projectflow.dto.request.token.TokenLoginDto;
 import io.amtech.projectflow.dto.request.token.TokenRefreshDto;
+import io.amtech.projectflow.dto.response.token.LogoutDto;
 import io.amtech.projectflow.dto.response.token.TokenDto;
 import io.amtech.projectflow.service.token.TokenGenerator;
 import io.amtech.projectflow.validator.LoginChecker;
 import io.amtech.projectflow.validator.RefreshTokenChecker;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.WebDataBinder;
@@ -44,9 +44,8 @@ public class AuthController {
     }
 
     @PostMapping("logout")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(@AuthenticationPrincipal String token) {
-        tokenGenerator.remove(token);
+    public LogoutDto logout(@AuthenticationPrincipal String token) {
         SecurityContextHolder.getContext().setAuthentication(null);
+        return tokenGenerator.remove(token);
     }
 }

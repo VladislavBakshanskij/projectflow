@@ -10,6 +10,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -24,7 +25,7 @@ public class RedisTokenServiceImpl implements TokenService {
     private static final String ACCESS_TOKEN_KEY = "access:";
     private static final String REFRESH_TOKEN_KEY = "refresh:";
 
-    private final Jackson2JsonRedisSerializer<Token> redisSerializer = new Jackson2JsonRedisSerializer<>(Token.class);
+    private final RedisSerializer<Token> redisSerializer = new Jackson2JsonRedisSerializer<>(Token.class);
     private final RedisConnectionFactory redisConnectionFactory;
     private final TokenProperty property;
 
