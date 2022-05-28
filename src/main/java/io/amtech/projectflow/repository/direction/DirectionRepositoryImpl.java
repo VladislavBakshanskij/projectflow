@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import static io.amtech.projectflow.jooq.tables.Employee.EMPLOYEE;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.MANDATORY)
 public class DirectionRepositoryImpl implements DirectionRepository {
     private static final Field<String> DIRECTION_LEAD_NAME_FIELD = DSL.field(DSL.name("leadName"), String.class);
 

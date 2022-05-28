@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface ProjectCommentRepository {
     List<ProjectComment> findByProjectId(UUID projectId);
+
+    ProjectComment save(ProjectComment commentToSave);
 }

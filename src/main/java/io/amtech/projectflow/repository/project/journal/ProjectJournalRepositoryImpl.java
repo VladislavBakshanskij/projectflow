@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.jooq.JSONB;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -18,9 +20,10 @@ import java.util.UUID;
 
 import static io.amtech.projectflow.jooq.tables.ProjectJournal.PROJECT_JOURNAL;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
-@Slf4j
+@Transactional(propagation = Propagation.MANDATORY)
 public class ProjectJournalRepositoryImpl implements ProjectJournalRepository {
     private final DSLContext dsl;
     private final ProjectJournalRecordMapper mapper;

@@ -7,6 +7,8 @@ import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -19,6 +21,7 @@ import static io.amtech.projectflow.jooq.tables.Milestone.MILESTONE;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.MANDATORY)
 public class MilestoneRepositoryImpl implements MilestoneRepository {
     public static final RecordMapper<Record, Milestone> mapper =
             record -> {

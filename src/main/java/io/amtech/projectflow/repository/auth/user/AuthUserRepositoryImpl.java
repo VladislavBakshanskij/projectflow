@@ -9,12 +9,15 @@ import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import static io.amtech.projectflow.jooq.tables.AuthUser.AUTH_USER;
 import static io.amtech.projectflow.jooq.tables.Employee.EMPLOYEE;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.MANDATORY)
 public class AuthUserRepositoryImpl implements AuthUserRepository {
     private static final RecordMapper<Record, User> mapper = record -> new User()
             .setEmployeeId(record.get(AUTH_USER.EMPLOYEE_ID))

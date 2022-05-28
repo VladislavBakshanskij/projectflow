@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -27,6 +29,7 @@ import static io.amtech.projectflow.util.SearchUtil.TO_DATE_KEY;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.MANDATORY)
 public class ProjectRepositoryImpl implements ProjectRepository {
     public static final RecordMapper<Record, Project> mapper = record -> new Project()
             .setId(record.get(PROJECT.ID))

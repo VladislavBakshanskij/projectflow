@@ -14,6 +14,8 @@ import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ import static io.amtech.projectflow.jooq.tables.Employee.EMPLOYEE;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.MANDATORY)
 public class EmployeeRepositoryImpl implements EmployeeRepository {
     public static final RecordMapper<Record, Employee> mapper = record -> new Employee()
             .setId(record.get(EMPLOYEE.ID))
