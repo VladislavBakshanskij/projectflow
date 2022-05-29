@@ -37,7 +37,8 @@ class MilestoneRepositoryTest extends AbstractIntegrationTest {
                 .setFactFinishDate(now.plus(7, ChronoUnit.DAYS))
                 .setPlannedStartDate(now.minus(30, ChronoUnit.DAYS))
                 .setPlannedFinishDate(now.plus(30, ChronoUnit.DAYS))
-                .setProgressPercent((short) 50);
+                .setProgressPercent((short) 50)
+                .setCreateDate(now);
 
         transactionalUtil.txRun(() -> {
             assertThat(milestoneRepository.save(milestone))

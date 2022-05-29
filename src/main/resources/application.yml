@@ -1,4 +1,5 @@
 server:
+  forward-headers-strategy: NATIVE
   port: ${SERVER_PORT:8080}
   servlet:
     encoding:

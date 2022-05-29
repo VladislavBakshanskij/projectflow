@@ -17,15 +17,22 @@
       "id": "fda0c0f6-b637-4039-a2d6-640aba6b4e46",
       "name": "do site",
       "description": "do site on react",
-      "progress": 0
+      "plannedStartDate": "2021-02-09T11:49:03.839234Z",
+      "plannedFinishDate": "2021-06-09T11:49:03.839234Z",
+      "factStartDate": "2021-03-09T11:49:03.839234Z",
+      "factFinishDate": "2021-06-09T11:49:03.839234Z",
+      "progressPercent": 0
     },
     {
       "id": "ce5ee15c-3afa-4649-9d68-451ad23f4cfd",
       "name": "do site",
       "description": "do site on react",
-      "progress": 0
+      "plannedStartDate": "2021-02-09T11:49:03.839234Z",
+      "plannedFinishDate": "2021-06-09T11:49:03.839234Z",
+      "factStartDate": "2021-03-09T11:49:03.839234Z",
+      "factFinishDate": "2021-06-09T11:49:03.839234Z",
+      "progressPercent": 0
     }
   ],
-  "history": [],
   "comments": []
 }

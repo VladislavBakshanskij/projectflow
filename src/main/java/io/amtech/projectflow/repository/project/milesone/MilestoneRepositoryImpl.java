@@ -71,6 +71,7 @@ public class MilestoneRepositoryImpl implements MilestoneRepository {
                 .set(MILESTONE.PLANNED_FINISH_DATE, OffsetDateTime.ofInstant(milestone.getPlannedFinishDate(), zone))
                 .set(MILESTONE.FACT_START_DATE, factStartDate)
                 .set(MILESTONE.FACT_FINISH_DATE, factFinishDate)
+                .set(MILESTONE.CREATE_DATE, OffsetDateTime.ofInstant(milestone.getCreateDate(), zone))
                 .set(MILESTONE.PROGRESS_PERCENT, milestone.getProgressPercent())
                 .returning()
                 .fetchOne()
@@ -128,7 +129,7 @@ public class MilestoneRepositoryImpl implements MilestoneRepository {
     public List<Milestone> findByProjectId(final UUID projectId) {
         return dsl.selectFrom(MILESTONE)
                 .where(MILESTONE.PROJECT_ID.eq(projectId))
-                .orderBy(MILESTONE.PROGRESS_PERCENT.desc())
+                .orderBy(MILESTONE.CREATE_DATE.asc())
                 .fetch()
                 .map(mapper);
     }

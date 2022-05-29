@@ -17,5 +17,6 @@ public class Milestone {
     private Instant plannedFinishDate;
     private Instant factStartDate;
     private Instant factFinishDate;
+    private Instant createDate;
     private short progressPercent = 0;
 }

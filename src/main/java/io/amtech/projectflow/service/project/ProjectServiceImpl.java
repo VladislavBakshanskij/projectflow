@@ -5,18 +5,18 @@ import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
 import io.amtech.projectflow.dto.response.project.*;
+import io.amtech.projectflow.dto.response.project.milestone.MilestoneDto;
 import io.amtech.projectflow.listener.event.JournalEvent;
 import io.amtech.projectflow.listener.event.ProjectJournalData;
+import io.amtech.projectflow.mapper.project.milestone.MilestoneMapper;
 import io.amtech.projectflow.model.project.Project;
 import io.amtech.projectflow.model.project.ProjectComment;
 import io.amtech.projectflow.model.project.ProjectWithEmployeeDirection;
-import io.amtech.projectflow.model.project.journal.ProjectJournal;
 import io.amtech.projectflow.model.project.milestone.Milestone;
 import io.amtech.projectflow.repository.direction.DirectionRepository;
 import io.amtech.projectflow.repository.employee.EmployeeRepository;
 import io.amtech.projectflow.repository.project.ProjectRepository;
 import io.amtech.projectflow.repository.project.comment.ProjectCommentRepository;
-import io.amtech.projectflow.repository.project.journal.ProjectJournalRepository;
 import io.amtech.projectflow.repository.project.milesone.MilestoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,12 +33,12 @@ import static io.amtech.projectflow.listener.event.JournalEventType.PROJECT;
 @Transactional
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
+    private final MilestoneMapper milestoneMapper;
     private final ProjectRepository projectRepository;
     private final EmployeeRepository employeeRepository;
     private final DirectionRepository directionRepository;
     private final MilestoneRepository milestoneRepository;
     private final ProjectCommentRepository projectCommentRepository;
-    private final ProjectJournalRepository projectJournalRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
@@ -80,7 +80,6 @@ public class ProjectServiceImpl implements ProjectService {
         applicationEventPublisher.publishEvent(new JournalEvent<>(PROJECT, new ProjectJournalData()
                 .setProject(oldStateProject)
                 .setMilestones(milestoneRepository.findByProjectId(id))
-                .setHistory(projectJournalRepository.findByProjectId(id))
                 .setComments(projectCommentRepository.findByProjectId(id))));
     }
 
@@ -128,7 +127,6 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDetailDto getDetail(final UUID id) {
         final ProjectWithEmployeeDirection project = projectRepository.findById(id);
         final List<Milestone> milestones = milestoneRepository.findByProjectId(id);
-        final List<ProjectJournal> projectJournals = projectJournalRepository.findByProjectId(id);
         final List<ProjectComment> comments = projectCommentRepository.findByProjectId(id);
         return new ProjectDetailDto()
                 .setId(project.getId())
@@ -143,7 +141,6 @@ public class ProjectServiceImpl implements ProjectService {
                                       .setId(project.getDirection().getId())
                                       .setName(project.getDirection().getName()))
                 .setMilestones(buildShortMilestoneDto(milestones))
-                .setHistory(buildHistory(projectJournals))
                 .setComments(buildProjectCommentDto(comments));
     }
 
@@ -156,23 +153,10 @@ public class ProjectServiceImpl implements ProjectService {
                 .collect(Collectors.toList());
     }
 
-    private List<ProjectDetailDto.HistoryItemDto> buildHistory(final List<ProjectJournal> projectJournals) {
-        return projectJournals.stream()
-                .map(projectJournal -> new ProjectDetailDto.HistoryItemDto()
-                        .setId(projectJournal.getId())
-                        .setLogin(projectJournal.getLogin())
-                        .setUpdateDate(projectJournal.getUpdateDate()))
-                .collect(Collectors.toList());
-    }
-
-    private List<ProjectDetailDto.ShortMilestoneDto> buildShortMilestoneDto(final List<Milestone> milestones) {
+    private List<MilestoneDto> buildShortMilestoneDto(final List<Milestone> milestones) {
         return milestones
                 .stream()
-                .map(milestone -> new ProjectDetailDto.ShortMilestoneDto()
-                        .setId(milestone.getId())
-                        .setName(milestone.getName())
-                        .setDescription(milestone.getDescription())
-                        .setProgress(milestone.getProgressPercent()))
+                .map(milestoneMapper)
                 .collect(Collectors.toList());
     }
 }

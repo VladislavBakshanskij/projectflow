@@ -39,14 +39,14 @@ class MilestoneControllerTest extends AbstractMvcTest {
     static Stream<Arguments> createSuccessArgs() {
         return Stream.of(
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        readJson("createSuccess/request/positive_case.json"),
-                        readJson("createSuccess/response/positive_case.json")),
+                                    readJson("createSuccess/request/positive_case.json"),
+                                    readJson("createSuccess/response/positive_case.json")),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        readJson("createSuccess/request/positive_case_with_description.json"),
-                        readJson("createSuccess/response/positive_case_with_description.json")),
+                                    readJson("createSuccess/request/positive_case_with_description.json"),
+                                    readJson("createSuccess/response/positive_case_with_description.json")),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        readJson("createSuccess/request/positive_case_without_fact_dates.json"),
-                        readJson("createSuccess/response/positive_case_without_fact_dates.json"))
+                                    readJson("createSuccess/request/positive_case_without_fact_dates.json"),
+                                    readJson("createSuccess/response/positive_case_without_fact_dates.json"))
         );
     }
 
@@ -56,8 +56,8 @@ class MilestoneControllerTest extends AbstractMvcTest {
     @Sql(scripts = "classpath:db/project/milestone/data.sql")
     void createSuccess(final UUID projectId, final String request, final String response) {
         mvc.perform(post(String.format(BASE_URL, projectId))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andExpect(content().json(response, false));
@@ -69,25 +69,25 @@ class MilestoneControllerTest extends AbstractMvcTest {
     static Stream<Arguments> createFailedArgs() {
         return Stream.of(
                 Arguments.arguments(UUID.fromString("95C9C729-5786-4D1E-B6D4-6D25FCD22829"),
-                        readJson("createFailed/request/negative_case_project_not_found.json"),
-                        readJson("createFailed/response/negative_case_project_not_found.json"),
-                        HttpStatus.NOT_FOUND),
+                                    readJson("createFailed/request/negative_case_project_not_found.json"),
+                                    readJson("createFailed/response/negative_case_project_not_found.json"),
+                                    HttpStatus.NOT_FOUND),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        readJson("createFailed/request/negative_case_name_is_null.json"),
-                        readJson("createFailed/response/negative_case_name_is_null.json"),
-                        HttpStatus.BAD_REQUEST),
+                                    readJson("createFailed/request/negative_case_name_is_null.json"),
+                                    readJson("createFailed/response/negative_case_name_is_null.json"),
+                                    HttpStatus.BAD_REQUEST),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        readJson("createFailed/request/negative_case_name_is_empty.json"),
-                        readJson("createFailed/response/negative_case_name_is_empty.json"),
-                        HttpStatus.BAD_REQUEST),
+                                    readJson("createFailed/request/negative_case_name_is_empty.json"),
+                                    readJson("createFailed/response/negative_case_name_is_empty.json"),
+                                    HttpStatus.BAD_REQUEST),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        readJson("createFailed/request/negative_case_description_is_large.json"),
-                        readJson("createFailed/response/negative_case_description_is_large.json"),
-                        HttpStatus.BAD_REQUEST),
+                                    readJson("createFailed/request/negative_case_description_is_large.json"),
+                                    readJson("createFailed/response/negative_case_description_is_large.json"),
+                                    HttpStatus.BAD_REQUEST),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        readJson("createFailed/request/negative_case_all_dates_is_missing.json"),
-                        readJson("createFailed/response/negative_case_all_dates_is_missing.json"),
-                        HttpStatus.BAD_REQUEST)
+                                    readJson("createFailed/request/negative_case_all_dates_is_missing.json"),
+                                    readJson("createFailed/response/negative_case_all_dates_is_missing.json"),
+                                    HttpStatus.BAD_REQUEST)
         );
     }
 
@@ -97,8 +97,8 @@ class MilestoneControllerTest extends AbstractMvcTest {
     @Sql(scripts = "classpath:db/project/milestone/data.sql")
     void createFailed(final UUID projectId, final String request, final String response, final HttpStatus status) {
         mvc.perform(post(String.format(BASE_URL, projectId))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
                 .andExpect(status().is(status.value()))
                 .andExpect(content().json(response, true));
 
@@ -109,11 +109,11 @@ class MilestoneControllerTest extends AbstractMvcTest {
     static Stream<Arguments> getSuccessArgs() {
         return Stream.of(
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.fromString("ce5ee15c-3afa-4649-9d68-451ad23f4cfd"),
-                        readJson("getSuccess/response/positive_case.json")),
+                                    UUID.fromString("ce5ee15c-3afa-4649-9d68-451ad23f4cfd"),
+                                    readJson("getSuccess/response/positive_case.json")),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.fromString("026ae239-66c5-4ac5-b37b-cf6ba3d3b10c"),
-                        readJson("getSuccess/response/positive_case_with_nullable_field.json"))
+                                    UUID.fromString("026ae239-66c5-4ac5-b37b-cf6ba3d3b10c"),
+                                    readJson("getSuccess/response/positive_case_with_nullable_field.json"))
         );
     }
 
@@ -126,7 +126,7 @@ class MilestoneControllerTest extends AbstractMvcTest {
     })
     void getSuccess(final UUID projectId, final UUID milestoneId, final String response) {
         mvc.perform(get(String.format(BASE_URL, projectId) + milestoneId)
-                        .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(response, true));
     }
@@ -134,11 +134,11 @@ class MilestoneControllerTest extends AbstractMvcTest {
     static Stream<Arguments> getFailedArgs() {
         return Stream.of(
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.randomUUID(),
-                        readJson("getFailed/response/negative_case_milestone_not_found.json")),
+                                    UUID.randomUUID(),
+                                    readJson("getFailed/response/negative_case_milestone_not_found.json")),
                 Arguments.arguments(UUID.randomUUID(),
-                        UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
-                        readJson("getFailed/response/negative_case_project_not_found.json"))
+                                    UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
+                                    readJson("getFailed/response/negative_case_project_not_found.json"))
         );
     }
 
@@ -148,7 +148,7 @@ class MilestoneControllerTest extends AbstractMvcTest {
     @Sql(scripts = "classpath:db/project/milestone/data.sql")
     void getFailed(final UUID projectId, final UUID milestoneId, final String response) {
         mvc.perform(get(String.format(BASE_URL, projectId) + milestoneId)
-                        .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(response, true));
     }
@@ -156,8 +156,8 @@ class MilestoneControllerTest extends AbstractMvcTest {
     static Stream<Arguments> updateSuccessArgs() {
         return Stream.of(
                 Arguments.arguments(UUID.fromString("4e7efeef-553f-4996-bc03-1c0925d56946"),
-                        UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
-                        readJson("updateSuccess/request/positive_case_update_name_and_fact_dates.json"))
+                                    UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
+                                    readJson("updateSuccess/request/positive_case_update_name_and_fact_dates.json"))
         );
     }
 
@@ -176,9 +176,9 @@ class MilestoneControllerTest extends AbstractMvcTest {
                 .collect(Collectors.toList()));
 
         mvc.perform(put(String.format(BASE_URL, projectId) + milestoneId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
-                .andExpect(status().isNoContent());
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
+                .andExpect(status().isOk());
 
         assertThat(transactionalUtil.txRun(() -> milestoneRepository.findByIdWithProject(projectId, milestoneId)))
                 .isNotEqualTo(milestoneBeforeUpdate)
@@ -194,25 +194,25 @@ class MilestoneControllerTest extends AbstractMvcTest {
     static Stream<Arguments> updateFailedArgs() {
         return Stream.of(
                 Arguments.arguments(UUID.randomUUID(),
-                        UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
-                        readJson("updateFailed/request/negative_case_project_not_found.json"),
-                        readJson("updateFailed/response/negative_case_project_not_found.json"),
-                        HttpStatus.NOT_FOUND),
+                                    UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
+                                    readJson("updateFailed/request/negative_case_project_not_found.json"),
+                                    readJson("updateFailed/response/negative_case_project_not_found.json"),
+                                    HttpStatus.NOT_FOUND),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.randomUUID(),
-                        readJson("updateFailed/request/negative_case_milestone_not_found.json"),
-                        readJson("updateFailed/response/negative_case_milestone_not_found.json"),
-                        HttpStatus.NOT_FOUND),
+                                    UUID.randomUUID(),
+                                    readJson("updateFailed/request/negative_case_milestone_not_found.json"),
+                                    readJson("updateFailed/response/negative_case_milestone_not_found.json"),
+                                    HttpStatus.NOT_FOUND),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
-                        readJson("updateFailed/request/negative_case_name_is_missing.json"),
-                        readJson("updateFailed/response/negative_case_name_is_missing.json"),
-                        HttpStatus.BAD_REQUEST),
+                                    UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
+                                    readJson("updateFailed/request/negative_case_name_is_missing.json"),
+                                    readJson("updateFailed/response/negative_case_name_is_missing.json"),
+                                    HttpStatus.BAD_REQUEST),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
-                        readJson("updateFailed/request/negative_case_name_more_255_characters.json"),
-                        readJson("updateFailed/response/negative_case_name_more_255_characters.json"),
-                        HttpStatus.BAD_REQUEST)
+                                    UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
+                                    readJson("updateFailed/request/negative_case_name_more_255_characters.json"),
+                                    readJson("updateFailed/response/negative_case_name_more_255_characters.json"),
+                                    HttpStatus.BAD_REQUEST)
         );
     }
 
@@ -226,8 +226,8 @@ class MilestoneControllerTest extends AbstractMvcTest {
                       final String response,
                       final HttpStatus status) {
         mvc.perform(put(String.format(BASE_URL, projectId) + milestoneId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
                 .andExpect(status().is(status.value()))
                 .andExpect(content().json(response, true));
     }
@@ -252,11 +252,11 @@ class MilestoneControllerTest extends AbstractMvcTest {
     static Stream<Arguments> deleteFailedArgs() {
         return Stream.of(
                 Arguments.arguments(UUID.randomUUID(),
-                        UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
-                        readJson("deleteFailed/response/negative_case_project_not_found.json")),
+                                    UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
+                                    readJson("deleteFailed/response/negative_case_project_not_found.json")),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.randomUUID(),
-                        readJson("deleteFailed/response/negative_case_milestone_not_found.json"))
+                                    UUID.randomUUID(),
+                                    readJson("deleteFailed/response/negative_case_milestone_not_found.json"))
         );
     }
 
@@ -273,8 +273,8 @@ class MilestoneControllerTest extends AbstractMvcTest {
     static Stream<Arguments> updateProgressSuccessArgs() {
         return Stream.of(
                 Arguments.arguments(UUID.fromString("4e7efeef-553f-4996-bc03-1c0925d56946"),
-                        UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
-                        readJson("updateProgressSuccess/request/positive_case.json"))
+                                    UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
+                                    readJson("updateProgressSuccess/request/positive_case.json"))
         );
     }
 
@@ -284,33 +284,33 @@ class MilestoneControllerTest extends AbstractMvcTest {
     @Sql(scripts = "classpath:db/project/milestone/data.sql")
     void updateProgressSuccess(final UUID projectId, final UUID milestoneId, final String request) {
         mvc.perform(patch(String.format(BASE_URL, projectId) + milestoneId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
                 .andExpect(status().isNoContent());
     }
 
     static Stream<Arguments> updateProgressFailedArgs() {
         return Stream.of(
                 Arguments.arguments(UUID.randomUUID(),
-                        UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
-                        readJson("updateProgressFailed/request/negative_case_project_not_found.json"),
-                        readJson("updateProgressFailed/response/negative_case_project_not_found.json"),
-                        HttpStatus.NOT_FOUND),
+                                    UUID.fromString("fda0c0f6-b637-4039-a2d6-640aba6b4e46"),
+                                    readJson("updateProgressFailed/request/negative_case_project_not_found.json"),
+                                    readJson("updateProgressFailed/response/negative_case_project_not_found.json"),
+                                    HttpStatus.NOT_FOUND),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.randomUUID(),
-                        readJson("updateProgressFailed/request/negative_case_milestone_not_found.json"),
-                        readJson("updateProgressFailed/response/negative_case_milestone_not_found.json"),
-                        HttpStatus.NOT_FOUND),
+                                    UUID.randomUUID(),
+                                    readJson("updateProgressFailed/request/negative_case_milestone_not_found.json"),
+                                    readJson("updateProgressFailed/response/negative_case_milestone_not_found.json"),
+                                    HttpStatus.NOT_FOUND),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.randomUUID(),
-                        readJson("updateProgressFailed/request/negative_case_progress_less_zero.json"),
-                        readJson("updateProgressFailed/response/negative_case_progress_less_zero.json"),
-                        HttpStatus.BAD_REQUEST),
+                                    UUID.randomUUID(),
+                                    readJson("updateProgressFailed/request/negative_case_progress_less_zero.json"),
+                                    readJson("updateProgressFailed/response/negative_case_progress_less_zero.json"),
+                                    HttpStatus.BAD_REQUEST),
                 Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.randomUUID(),
-                        readJson("updateProgressFailed/request/negative_case_progress_more_100.json"),
-                        readJson("updateProgressFailed/response/negative_case_progress_more_100.json"),
-                        HttpStatus.BAD_REQUEST)
+                                    UUID.randomUUID(),
+                                    readJson("updateProgressFailed/request/negative_case_progress_more_100.json"),
+                                    readJson("updateProgressFailed/response/negative_case_progress_more_100.json"),
+                                    HttpStatus.BAD_REQUEST)
         );
     }
 
@@ -324,8 +324,8 @@ class MilestoneControllerTest extends AbstractMvcTest {
                               final String response,
                               final HttpStatus status) {
         mvc.perform(patch(String.format(BASE_URL, projectId) + milestoneId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
                 .andExpect(status().is(status.value()))
                 .andExpect(content().json(response, true));
     }

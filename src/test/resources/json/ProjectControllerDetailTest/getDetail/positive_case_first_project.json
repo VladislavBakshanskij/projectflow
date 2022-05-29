@@ -17,15 +17,22 @@
       "id": "35b4b5f0-31ac-4cad-83fc-4d996c586fe3",
       "name": "do super feature",
       "description": "do super feature on java",
-      "progress": 0
+      "plannedStartDate": "2021-02-09T11:49:03.839234Z",
+      "plannedFinishDate": "2021-06-09T11:49:03.839234Z",
+      "factStartDate": "2021-03-09T11:49:03.839234Z",
+      "factFinishDate": "2021-06-09T11:49:03.839234Z",
+      "progressPercent": 0
     },
     {
       "id": "026ae239-66c5-4ac5-b37b-cf6ba3d3b10c",
       "name": "do super feature",
       "description": null,
-      "progress": 0
+      "plannedStartDate": "2021-02-09T11:49:03.839234Z",
+      "plannedFinishDate": "2021-06-09T11:49:03.839234Z",
+      "factStartDate": null,
+      "factFinishDate": null,
+      "progressPercent": 0
     }
   ],
-  "history": [],
   "comments": []
 }

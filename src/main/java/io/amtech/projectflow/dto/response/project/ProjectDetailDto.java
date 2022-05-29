@@ -1,5 +1,6 @@
 package io.amtech.projectflow.dto.response.project;
 
+import io.amtech.projectflow.dto.response.project.milestone.MilestoneDto;
 import io.amtech.projectflow.model.project.ProjectStatus;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -19,8 +20,7 @@ public class ProjectDetailDto {
     private ProjectStatus status;
     private LeadDto lead;
     private ProjectDirectionDto direction;
-    private List<ShortMilestoneDto> milestones = new ArrayList<>();
-    private List<HistoryItemDto> history = new ArrayList<>();
+    private List<MilestoneDto> milestones = new ArrayList<>();
     private List<CommentDto> comments = new ArrayList<>();
 
     @Data
@@ -29,22 +29,5 @@ public class ProjectDetailDto {
         private String message;
         private String login;
         private Instant createDate;
-    }
-
-    @Data
-    @Accessors(chain = true)
-    public static class ShortMilestoneDto {
-        private UUID id;
-        private String name;
-        private String description;
-        private short progress;
-    }
-
-    @Data
-    @Accessors(chain = true)
-    public static class HistoryItemDto {
-        private UUID id;
-        private String login;
-        private Instant updateDate;
     }
 }

@@ -92,6 +92,11 @@ public class Milestone extends TableImpl<Record> {
      */
     public final TableField<Record, Short> PROGRESS_PERCENT = createField(DSL.name("progress_percent"), SQLDataType.SMALLINT.nullable(false).defaultValue(DSL.field("0", SQLDataType.SMALLINT)), this, "");
 
+    /**
+     * The column <code>pf.milestone.create_date</code>.
+     */
+    public final TableField<Record, OffsetDateTime> CREATE_DATE = createField(DSL.name("create_date"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
     private Milestone(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }

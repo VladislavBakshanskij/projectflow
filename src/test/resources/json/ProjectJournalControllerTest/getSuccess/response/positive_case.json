@@ -1,4 +1,15 @@
 {
+  "id": "b0dccdfd-7cd6-47d0-a5c5-6aa0379fb394",
+  "projectId": "ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
+  "updateDate": "2021-06-09T11:49:05.839234Z",
   "login": "Igor",
-  "updateDate": "2021-06-09T11:49:05.839234Z"
+  "currentState": {
+    "id": "ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
+    "name": "One",
+    "status": "UNAPPROVED",
+    "create_date": "2021-06-09T11:49:03.839234Z",
+    "description": "message 1",
+    "direction_id": "caaad756-f11a-4635-898d-2861071ec38d",
+    "project_lead_id": "fc9632a7-66b4-4627-846c-a0e65533637c"
+  }
 }
