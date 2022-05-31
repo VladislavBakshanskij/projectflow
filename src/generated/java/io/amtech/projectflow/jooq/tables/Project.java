@@ -21,7 +21,6 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
-import org.jooq.impl.EnumConverter;
 import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -81,7 +80,7 @@ public class Project extends TableImpl<Record> {
     /**
      * The column <code>pf.project.status</code>.
      */
-    public final TableField<Record, io.amtech.projectflow.model.project.ProjectStatus> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(io.amtech.projectflow.jooq.enums.ProjectStatus.class), this, "", new EnumConverter<ProjectStatus, io.amtech.projectflow.model.project.ProjectStatus>(ProjectStatus.class, io.amtech.projectflow.model.project.ProjectStatus.class));
+    public final TableField<Record, ProjectStatus> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(io.amtech.projectflow.jooq.enums.ProjectStatus.class), this, "");
 
     private Project(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);

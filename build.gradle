@@ -69,7 +69,7 @@ task startLiquibaseMigrationInContainer(type: Exec, dependsOn: [startDbContainer
             "--link", "${project.postgres}:postgres",
             "--rm", "-v", "${file("src/main/resources/db/changelog").absolutePath}:/liquibase/changelog",
             "liquibase/liquibase", "update", "--changelog-file", "master-changelog.xml",
-            "--url", "jdbc:postgresql://postgres:5432/projectflow",
+            "--url", "jdbc:postgresql://postgres:5432/projectflow", "--log-level", "debug",
             "--username", "postgres",
             "--password", "pass"
 }

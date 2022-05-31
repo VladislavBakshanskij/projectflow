@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -43,8 +42,7 @@ public class MilestoneServiceImpl implements MilestoneService {
                 .setPlannedFinishDate(dto.getPlannedFinishDate())
                 .setFactStartDate(dto.getFactStartDate())
                 .setFactFinishDate(dto.getFactFinishDate())
-                .setProgressPercent(dto.getProgressPercent())
-                .setCreateDate(Instant.now());
+                .setProgressPercent(dto.getProgressPercent());
         final Milestone saved = milestoneRepository.save(milestoneToSave);
         return milestoneMapper.apply(saved);
     }

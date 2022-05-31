@@ -21,7 +21,6 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
-import org.jooq.impl.EnumConverter;
 import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -71,7 +70,7 @@ public class Employee extends TableImpl<Record> {
     /**
      * The column <code>pf.employee.position</code>.
      */
-    public final TableField<Record, io.amtech.projectflow.model.employee.UserPosition> POSITION = createField(DSL.name("position"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(io.amtech.projectflow.jooq.enums.UserPosition.class), this, "", new EnumConverter<UserPosition, io.amtech.projectflow.model.employee.UserPosition>(UserPosition.class, io.amtech.projectflow.model.employee.UserPosition.class));
+    public final TableField<Record, UserPosition> POSITION = createField(DSL.name("position"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(io.amtech.projectflow.jooq.enums.UserPosition.class), this, "");
 
     /**
      * The column <code>pf.employee.is_fired</code>.

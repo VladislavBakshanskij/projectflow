@@ -21,9 +21,7 @@ public enum UserPosition implements EnumType {
 
     DIRECTION_LEAD("DIRECTION_LEAD"),
 
-    DIRECTOR("DIRECTOR"),
-
-    EMPLOYEE("EMPLOYEE");
+    DIRECTOR("DIRECTOR");
 
     private final String literal;
 

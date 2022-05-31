@@ -10,4 +10,6 @@
     <include file="v1/v1.4-add-simple-employee-role.xml" relativeToChangelogFile="true"/>
     <include file="v1/v1.5-add-tag-for-add-new-role.xml" relativeToChangelogFile="true"/>
     <include file="v1/v1.6-add-create-date-to-milestone.xml" relativeToChangelogFile="true"/>
+    <include file="v1/v1.7-drop-create-date-column-from-milestone.xml" relativeToChangelogFile="true"/>
+    <include file="v1/v1.8-remove-simple-user.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

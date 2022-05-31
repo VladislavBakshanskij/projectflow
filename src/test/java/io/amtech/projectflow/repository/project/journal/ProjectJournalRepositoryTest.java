@@ -58,7 +58,7 @@ class ProjectJournalRepositoryTest extends AbstractIntegrationTest {
                                                     "2021-06-09T11:49:03.839234Z");
                                     assertThat(state.get("status"))
                                             .isNotNull()
-                                            .matches(o -> ProjectStatus.of(o.toString()).equals(ProjectStatus.UNAPPROVED),
+                                            .matches(o -> ProjectStatus.from(o.toString()).equals(ProjectStatus.UNAPPROVED),
                                                     "UNAPPROVED");
                                 });
                     });

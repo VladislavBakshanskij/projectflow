@@ -16,11 +16,11 @@ values ('ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f', 'One', 'fc9632a7-66b4-4627-846c-
         '211ed887-adc4-41bb-a8c4-e41393bd8e69', 'message', '2021-07-09T11:49:03.839234Z', 'ON_PL_PLANNING');
 
 insert into pf.milestone(id, project_id, name, description, planned_start_date, planned_finish_date, fact_start_date,
-                         fact_finish_date, create_date)
+                         fact_finish_date)
 values ('fda0c0f6-b637-4039-a2d6-640aba6b4e46', '4e7efeef-553f-4996-bc03-1c0925d56946', 'do site', 'do site on react',
         '2021-02-09T11:49:03.839234Z', '2021-06-09T11:49:03.839234Z', '2021-03-09T11:49:03.839234Z',
-        '2021-06-09T11:49:03.839234Z', '2021-06-01T11:49:03.839234Z'),
+        '2021-06-09T11:49:03.839234Z'),
        ('35b4b5f0-31ac-4cad-83fc-4d996c586fe3', 'ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f', 'do super feature',
         'do super feature on java',
         '2021-02-09T11:49:03.839234Z', '2021-06-09T11:49:03.839234Z', '2021-03-09T11:49:03.839234Z',
-        '2021-06-09T11:49:03.839234Z', '2021-02-10T11:49:03.839234Z')
+        '2021-06-09T11:49:03.839234Z')

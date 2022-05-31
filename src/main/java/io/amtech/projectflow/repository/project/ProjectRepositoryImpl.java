@@ -35,7 +35,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             .setId(record.get(PROJECT.ID))
             .setName(record.get(PROJECT.NAME))
             .setDescription(record.get(PROJECT.DESCRIPTION))
-            .setStatus(record.get(PROJECT.STATUS))
+            .setStatus(ProjectStatus.from(record.get(PROJECT.STATUS)))
             .setProjectLeadId(record.get(PROJECT.PROJECT_LEAD_ID))
             .setDirectionId(record.get(PROJECT.DIRECTION_ID))
             .setCreateDate(Instant.from(record.get(PROJECT.CREATE_DATE)));
@@ -44,7 +44,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             .setId(record.get(PROJECT.ID))
             .setName(record.get(PROJECT.NAME))
             .setDescription(record.get(PROJECT.DESCRIPTION))
-            .setStatus(record.get(PROJECT.STATUS))
+            .setStatus(ProjectStatus.from(record.get(PROJECT.STATUS)))
             .setCreateDate(Instant.from(record.get(PROJECT.CREATE_DATE)))
             .setLead(new Lead()
                              .setId(record.get(EMPLOYEE.ID))
@@ -95,7 +95,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         return dsl.insertInto(PROJECT)
                 .set(PROJECT.ID, UUID.randomUUID())
                 .set(PROJECT.NAME, project.getName())
-                .set(PROJECT.STATUS, ProjectStatus.UNAPPROVED)
+                .set(PROJECT.STATUS, ProjectStatus.UNAPPROVED.toJooqStatus())
                 .set(PROJECT.CREATE_DATE, OffsetDateTime.now())
                 .set(PROJECT.PROJECT_LEAD_ID, project.getProjectLeadId())
                 .set(PROJECT.DIRECTION_ID, project.getDirectionId())
@@ -120,7 +120,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                                                 value -> PROJECT.DIRECTION_ID.eq(UUID.fromString(value))));
         conditions.add(getConditionFromCriteria(criteria,
                                                 "project_status",
-                                                value -> PROJECT.STATUS.eq(ProjectStatus.of(value))));
+                                                value -> PROJECT.STATUS.eq(ProjectStatus.from(value).toJooqStatus())));
         conditions.add(getConditionFromCriteria(criteria,
                                                 "create_date_" + FROM_DATE_KEY,
                                                 value -> {
@@ -152,7 +152,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .setData(projects);
     }
 
-    private SelectOnConditionStep<Record9<UUID, String, String, OffsetDateTime, ProjectStatus, UUID, String, UUID, String>> getProjectSelect() {
+    private SelectOnConditionStep<Record9<UUID, String, String, OffsetDateTime, io.amtech.projectflow.jooq.enums.ProjectStatus, UUID, String, UUID, String>> getProjectSelect() {
         return dsl.select(PROJECT.ID, PROJECT.NAME, PROJECT.DESCRIPTION, PROJECT.CREATE_DATE,
                           PROJECT.STATUS, EMPLOYEE.ID, EMPLOYEE.NAME, DIRECTION.ID, DIRECTION.NAME)
                 .from(PROJECT)
