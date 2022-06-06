@@ -25,6 +25,11 @@ class ProjectControllerCheckWriteIntoJournalTest extends AbstractProjectMvcTest 
     @Autowired
     private ProjectJournalRecordMapper mapper;
 
+    private static String readJson(final String resource, Object... args) {
+        final String template = readContentFromClassPathResource("json/ProjectControllerCheckWriteIntoJournalTest/" + resource);
+        return String.format(template, args);
+    }
+
     @Test
     @SneakyThrows
     @Sql(scripts = {
@@ -36,9 +41,9 @@ class ProjectControllerCheckWriteIntoJournalTest extends AbstractProjectMvcTest 
         final String response = readJson("createSuccess/response/positive_case.json");
 
         authMvc.perform(post(BASE_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-                        .content(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + getDirectorAccessToken())
+                                .content(request))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.createDate").exists())
@@ -63,9 +68,9 @@ class ProjectControllerCheckWriteIntoJournalTest extends AbstractProjectMvcTest 
         final String request = readJson("updateSuccess/request/update_full_request.json");
         final UUID id = UUID.fromString("4e7efeef-553f-4996-bc03-1c0925d56946");
         authMvc.perform(put(BASE_URL + id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-                        .content(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + getDirectorAccessToken())
+                                .content(request))
                 .andExpect(status().isFound());
 
         transactionalUtil.txRun(() -> {
@@ -75,10 +80,5 @@ class ProjectControllerCheckWriteIntoJournalTest extends AbstractProjectMvcTest 
                         // todo assertions
                     });
         });
-    }
-
-    private static String readJson(final String resource, Object... args) {
-        final String template = readContentFromClassPathResource("json/ProjectControllerCheckWriteIntoJournalTest/" + resource);
-        return String.format(template, args);
     }
 }

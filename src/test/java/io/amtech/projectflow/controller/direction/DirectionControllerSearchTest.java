@@ -27,6 +27,11 @@ class DirectionControllerSearchTest extends AbstractMvcTest {
         );
     }
 
+    private static String readJson(final String path, final Object... args) {
+        final String content = TestUtil.readContentFromClassPathResource("/json/DirectionControllerSearchTest/" + path);
+        return String.format(content, args);
+    }
+
     @ParameterizedTest
     @MethodSource("searchSuccessArgs")
     @SneakyThrows
@@ -35,10 +40,5 @@ class DirectionControllerSearchTest extends AbstractMvcTest {
         mvc.perform(TestUtil.get(BASE_URL + url))
                 .andExpect(status().isOk())
                 .andExpect(content().json(response, true));
-    }
-
-    private static String readJson(final String path, final Object... args) {
-        final String content = TestUtil.readContentFromClassPathResource("/json/DirectionControllerSearchTest/" + path);
-        return String.format(content, args);
     }
 }

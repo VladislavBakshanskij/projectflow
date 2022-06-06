@@ -5,30 +5,46 @@ import io.amtech.projectflow.error.DataNotFoundException;
 import io.amtech.projectflow.error.ProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @RestControllerAdvice
-public class ErrorController {
+public class ErrorController extends ResponseEntityExceptionHandler {
     @ExceptionHandler({DataNotFoundException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleDataNotFoundException(final DataNotFoundException e) {
+    public ResponseEntity<Object> handleDataNotFoundException(final DataNotFoundException e) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        return new ErrorResponse()
+        return createResponse(status, new ErrorResponse()
                 .setCode(status.value())
-                .setMessage(e.getMessage());
+                .setMessage(e.getMessage()));
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+    @ExceptionHandler({AccessDeniedException.class})
+    public ResponseEntity<Object> handleAccessDeniedException(final AccessDeniedException e) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        return createResponse(status, new ErrorResponse()
+                .setCode(status.value())
+                .setMessage(e.getMessage()));
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException e,
+                                                                  final HttpHeaders headers,
+                                                                  final HttpStatus status,
+                                                                  final WebRequest request) {
         ErrorResponse error = new ErrorResponse()
                 .setCode(HttpStatus.BAD_REQUEST.value())
                 .setMessage("Validation error");
@@ -40,39 +56,46 @@ public class ErrorController {
                 error.getErrors().put(er.getCode(), er.getDefaultMessage());
             }
         }
-        return error;
+        return createResponse(HttpStatus.BAD_REQUEST, error);
     }
 
     @ExceptionHandler({AuthenticationException.class})
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorResponse handleSpringAuthException(final AuthenticationException e) {
-        return new ErrorResponse()
+    public ResponseEntity<Object> handleSpringAuthException(final AuthenticationException e) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        return createResponse(status, new ErrorResponse()
                 .setMessage(e.getMessage())
-                .setCode(HttpStatus.UNAUTHORIZED.value());
+                .setCode(status.value()));
     }
 
     @ExceptionHandler({AuthException.class})
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorResponse handleAuthException(final AuthException e) {
-        return new ErrorResponse()
+    public ResponseEntity<Object> handleAuthException(final AuthException e) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        return createResponse(status, new ErrorResponse()
                 .setMessage(e.getMessage())
-                .setCode(HttpStatus.UNAUTHORIZED.value());
+                .setCode(status.value()));
     }
 
     @ExceptionHandler({ProcessingException.class})
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleProcessingException(final ProcessingException e) {
-        return new ErrorResponse()
+    public ResponseEntity<Object> handleProcessingException(final ProcessingException e) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        return createResponse(status, new ErrorResponse()
                 .setMessage(e.getMessage())
-                .setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                .setCode(status.value()));
     }
 
     @ExceptionHandler({Exception.class})
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleException(final Exception e) {
+    public ResponseEntity<Object> handleException(final Exception e) {
         log.error("Not found specific handler for error", e);
-        return new ErrorResponse()
-                .setCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .setMessage(e.getMessage());
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        return createResponse(status, new ErrorResponse()
+                .setCode(status.value())
+                .setMessage(e.getMessage()));
+    }
+
+    private ResponseEntity<Object> createResponse(final HttpStatus status, final ErrorResponse response) {
+        return ResponseEntity.status(status)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_ENCODING, StandardCharsets.UTF_8.name())
+                .body(response);
     }
 }

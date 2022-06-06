@@ -6,11 +6,12 @@ import io.amtech.projectflow.app.SearchCriteriaBuilder;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
 import io.amtech.projectflow.dto.response.project.ProjectDetailDto;
-import io.amtech.projectflow.dto.response.project.ProjectSavedDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
+import io.amtech.projectflow.dto.response.project.ProjectSavedDto;
 import io.amtech.projectflow.service.project.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,6 +30,7 @@ public class ProjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('DIRECTOR')")
     public ProjectSavedDto create(@RequestBody @Valid ProjectCreateDto dto) {
         return projectService.create(dto);
     }

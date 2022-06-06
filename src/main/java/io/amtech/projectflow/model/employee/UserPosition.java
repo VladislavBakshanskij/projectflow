@@ -16,10 +16,6 @@ public enum UserPosition {
     private static final Map<String, UserPosition> USER_POSITION = Arrays.stream(values())
             .collect(Collectors.toMap(UserPosition::name, Function.identity()));
 
-    public io.amtech.projectflow.jooq.enums.UserPosition toJooqStatus() {
-        return io.amtech.projectflow.jooq.enums.UserPosition.valueOf(this.name());
-    }
-
     public static UserPosition from(final io.amtech.projectflow.jooq.enums.UserPosition position) {
         return Optional.ofNullable(position)
                 .map(io.amtech.projectflow.jooq.enums.UserPosition::name)
@@ -35,5 +31,9 @@ public enum UserPosition {
 
     private static UserPosition fromString(final String position) {
         return USER_POSITION.get(position.toUpperCase());
+    }
+
+    public io.amtech.projectflow.jooq.enums.UserPosition toJooqStatus() {
+        return io.amtech.projectflow.jooq.enums.UserPosition.valueOf(this.name());
     }
 }

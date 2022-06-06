@@ -52,7 +52,7 @@ public class DirectionRepositoryImpl implements DirectionRepository {
     @Override
     public DirectionWithLeadName findById(final UUID id) {
         return dsl.select(DIRECTION.ID, DIRECTION.LEAD_ID, DIRECTION.NAME,
-                        EMPLOYEE.NAME.as(DIRECTION_LEAD_NAME_FIELD))
+                          EMPLOYEE.NAME.as(DIRECTION_LEAD_NAME_FIELD))
                 .from(DIRECTION)
                     .leftJoin(EMPLOYEE).on(EMPLOYEE.ID.eq(DIRECTION.LEAD_ID))
                 .where(DIRECTION.ID.eq(id))

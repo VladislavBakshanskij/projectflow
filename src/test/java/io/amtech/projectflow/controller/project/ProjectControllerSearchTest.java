@@ -32,6 +32,11 @@ class ProjectControllerSearchTest extends AbstractProjectMvcTest {
         );
     }
 
+    private static String readJson(final String resource, final Object... args) {
+        final String content = readContentFromClassPathResource("json/ProjectControllerSearchTest/" + resource);
+        return String.format(content, args);
+    }
+
     @ParameterizedTest
     @MethodSource("searchSuccessArgs")
     @SneakyThrows
@@ -51,10 +56,5 @@ class ProjectControllerSearchTest extends AbstractProjectMvcTest {
         mvc.perform(TestUtil.get(BASE_URL + "?status=NOT_FOUND"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(response, true));
-    }
-
-    private static String readJson(final String resource, final Object... args) {
-        final String content = readContentFromClassPathResource("json/ProjectControllerSearchTest/" + resource);
-        return String.format(content, args);
     }
 }

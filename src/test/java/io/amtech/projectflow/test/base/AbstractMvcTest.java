@@ -13,11 +13,10 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 public abstract class AbstractMvcTest extends AbstractIntegrationTest {
-    @Autowired
-    private WebApplicationContext context;
-
     protected MockMvc mvc;
     protected MockMvc authMvc;
+    @Autowired
+    private WebApplicationContext context;
 
     @BeforeEach
     void setUp() {

@@ -15,6 +15,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthControllerTest extends AbstractMvcTest {
     private static final String BASE_URL = "/auth/";
 
+    private static String readJson(final String path, final Object... args) {
+        final String content = TestUtil.readContentFromClassPathResource("/json/AuthControllerTest/" + path);
+        return String.format(content, args);
+    }
+
     @Test
     @SneakyThrows
     @Sql(scripts = "classpath:db/auth/data.sql")
@@ -104,10 +109,5 @@ class AuthControllerTest extends AbstractMvcTest {
                                 .header(AUTHORIZATION, "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andExpect(content().json(response, true));
-    }
-
-    private static String readJson(final String path, final Object... args) {
-        final String content = TestUtil.readContentFromClassPathResource("/json/AuthControllerTest/" + path);
-        return String.format(content, args);
     }
 }

@@ -1,8 +1,8 @@
 package io.amtech.projectflow.repository.employee;
 
 import io.amtech.projectflow.app.PagedData;
-import io.amtech.projectflow.model.employee.Employee;
 import io.amtech.projectflow.app.SearchCriteria;
+import io.amtech.projectflow.model.employee.Employee;
 
 import java.util.UUID;
 

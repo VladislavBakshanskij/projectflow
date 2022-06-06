@@ -20,6 +20,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ProjectJournalControllerTest extends AbstractMvcTest {
     private static final String BASE_URL = "/projects/%s/journals/";
 
+    static Stream<Arguments> getFailedArgs() {
+        return Stream.of(
+                Arguments.arguments(UUID.randomUUID(),
+                                    UUID.fromString("b0dccdfd-7cd6-47d0-a5c5-6aa0379fb394"),
+                                    readJson("getFailed/response/negative_case_project_not_found.json")),
+                Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
+                                    UUID.randomUUID(),
+                                    readJson("getFailed/response/negative_case_journal_not_found.json"))
+        );
+    }
+
+    private static String readJson(final String path, final Object... args) {
+        final String content = readContentFromClassPathResource("/json/ProjectJournalControllerTest/" + path);
+        return String.format(content, args);
+    }
+
     @Test
     @SneakyThrows
     @Sql(scripts = "classpath:db/project/journal/data.sql")
@@ -29,20 +45,9 @@ class ProjectJournalControllerTest extends AbstractMvcTest {
 
         final String response = readJson("getSuccess/response/positive_case.json");
         mvc.perform(get(String.format(BASE_URL, projectId) + journalId)
-                        .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(response, true));
-    }
-
-    static Stream<Arguments> getFailedArgs() {
-        return Stream.of(
-                Arguments.arguments(UUID.randomUUID(),
-                        UUID.fromString("b0dccdfd-7cd6-47d0-a5c5-6aa0379fb394"),
-                        readJson("getFailed/response/negative_case_project_not_found.json")),
-                Arguments.arguments(UUID.fromString("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f"),
-                        UUID.randomUUID(),
-                        readJson("getFailed/response/negative_case_journal_not_found.json"))
-        );
     }
 
     @ParameterizedTest
@@ -51,13 +56,8 @@ class ProjectJournalControllerTest extends AbstractMvcTest {
     @Sql(scripts = "classpath:db/project/journal/data.sql")
     void getFailed(final UUID projectId, final UUID journalId, final String response) {
         mvc.perform(get(String.format(BASE_URL, projectId) + journalId)
-                        .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(response, true));
-    }
-
-    private static String readJson(final String path, final Object... args) {
-        final String content = readContentFromClassPathResource("/json/ProjectJournalControllerTest/" + path);
-        return String.format(content, args);
     }
 }

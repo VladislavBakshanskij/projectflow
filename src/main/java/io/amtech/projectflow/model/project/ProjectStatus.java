@@ -21,11 +21,6 @@ public enum ProjectStatus {
     private static final Map<String, ProjectStatus> STATUSES = Arrays.stream(values())
             .collect(Collectors.toMap(ProjectStatus::name, Function.identity()));
 
-
-    public io.amtech.projectflow.jooq.enums.ProjectStatus toJooqStatus() {
-        return io.amtech.projectflow.jooq.enums.ProjectStatus.valueOf(this.name());
-    }
-
     public static ProjectStatus from(final io.amtech.projectflow.jooq.enums.ProjectStatus status) {
         final io.amtech.projectflow.jooq.enums.ProjectStatus validatedStatus = Objects.requireNonNull(status, "Статус не может быть пустой");
         return from(validatedStatus.name());
@@ -38,5 +33,9 @@ public enum ProjectStatus {
             throw new DataNotFoundException("Статус проекта не найден " + status);
         }
         return projectStatus;
+    }
+
+    public io.amtech.projectflow.jooq.enums.ProjectStatus toJooqStatus() {
+        return io.amtech.projectflow.jooq.enums.ProjectStatus.valueOf(this.name());
     }
 }

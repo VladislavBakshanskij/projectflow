@@ -36,6 +36,23 @@ class CommentControllerTest extends AbstractMvcTest {
         );
     }
 
+    static Stream<Arguments> createFailedArgs() {
+        return Stream.of(
+                Arguments.arguments("ffd2f49a-0000-0000-0000-94d47c05ab5f",
+                                    HttpStatus.NOT_FOUND,
+                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/request/positive_case.json"),
+                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/response/project_not_found.json")),
+                Arguments.arguments("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
+                                    HttpStatus.BAD_REQUEST,
+                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/request/message_is_empty.json"),
+                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/response/message_must_not_be_empty.json")),
+                Arguments.arguments("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
+                                    HttpStatus.BAD_REQUEST,
+                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/request/message_has_length_more_5000.json"),
+                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/response/message_has_length_more_5000.json"))
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("createSuccessArgs")
     @Sql(scripts = {
@@ -70,23 +87,6 @@ class CommentControllerTest extends AbstractMvcTest {
                             .content(request))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().json(response, true));
-    }
-
-    static Stream<Arguments> createFailedArgs() {
-        return Stream.of(
-                Arguments.arguments("ffd2f49a-0000-0000-0000-94d47c05ab5f",
-                                    HttpStatus.NOT_FOUND,
-                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/request/positive_case.json"),
-                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/response/project_not_found.json")),
-                Arguments.arguments("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
-                                    HttpStatus.BAD_REQUEST,
-                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/request/message_is_empty.json"),
-                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/response/message_must_not_be_empty.json")),
-                Arguments.arguments("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
-                                    HttpStatus.BAD_REQUEST,
-                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/request/message_has_length_more_5000.json"),
-                                    readContentFromClassPathResource("/json/CommentControllerTest/createFailed/response/message_has_length_more_5000.json"))
-        );
     }
 
     @ParameterizedTest

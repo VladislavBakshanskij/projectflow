@@ -80,6 +80,5 @@ class EmployeeRepositoryTest extends AbstractIntegrationTest {
                     Assertions.assertThat(em.isFired())
                             .isFalse();
                 });
-        ;
     }
 }

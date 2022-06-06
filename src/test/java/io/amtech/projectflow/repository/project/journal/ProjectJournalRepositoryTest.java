@@ -43,23 +43,23 @@ class ProjectJournalRepositoryTest extends AbstractIntegrationTest {
                                     assertThat(state.get("project_lead_id"))
                                             .isNotNull()
                                             .matches(o -> UUID.fromString(o.toString()).equals(UUID.fromString("fc9632a7-66b4-4627-846c-a0e65533637c")),
-                                                    "fc9632a7-66b4-4627-846c-a0e65533637c");
+                                                     "fc9632a7-66b4-4627-846c-a0e65533637c");
                                     assertThat(state.get("direction_id"))
                                             .isNotNull()
                                             .matches(o -> UUID.fromString(o.toString()).equals(UUID.fromString("caaad756-f11a-4635-898d-2861071ec38d")),
-                                                    "caaad756-f11a-4635-898d-2861071ec38d");
+                                                     "caaad756-f11a-4635-898d-2861071ec38d");
                                     assertThat(state.get("description"))
                                             .isNotNull()
                                             .matches(o -> o.toString().equals("message 1"),
-                                                    "message 1");
+                                                     "message 1");
                                     assertThat(state.get("create_date"))
                                             .isNotNull()
                                             .matches(o -> Instant.parse(o.toString()).equals(Instant.parse("2021-06-09T11:49:03.839234Z")),
-                                                    "2021-06-09T11:49:03.839234Z");
+                                                     "2021-06-09T11:49:03.839234Z");
                                     assertThat(state.get("status"))
                                             .isNotNull()
                                             .matches(o -> ProjectStatus.from(o.toString()).equals(ProjectStatus.UNAPPROVED),
-                                                    "UNAPPROVED");
+                                                     "UNAPPROVED");
                                 });
                     });
         });

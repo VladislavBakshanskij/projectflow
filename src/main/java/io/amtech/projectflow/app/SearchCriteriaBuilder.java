@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class SearchCriteriaBuilder {
     private final int maxLimit;
+    private final Map<String, String> filters = new HashMap<>();
     private Integer limit;
     private Integer offset;
-    private final Map<String, String> filters = new HashMap<>();
     private String order;
 
     public SearchCriteriaBuilder() {

@@ -41,6 +41,54 @@ class EmployeeControllerTest extends AbstractMvcTest {
         );
     }
 
+    static Stream<Arguments> createSuccessArgs() {
+        return Stream.of(
+                Arguments.arguments(readJson("createSuccess/request/positive_case_vlad.json"),
+                                    readJson("createSuccess/response/positive_case_vlad.json")),
+                Arguments.arguments(readJson("createSuccess/request/positive_case_vova.json"),
+                                    readJson("createSuccess/response/positive_case_vova.json"))
+        );
+    }
+
+    static Stream<Arguments> createFailedArgs() {
+        return Stream.of(
+                Arguments.arguments(readJson("createFailed/request/negative_case_name_is_empty.json"),
+                                    readJson("createFailed/response/negative_case_name_is_empty.json")),
+                Arguments.arguments(readJson("createFailed/request/negative_case_email_is_invalid.json"),
+                                    readJson("createFailed/response/negative_case_email_is_invalid.json")),
+                Arguments.arguments(readJson("createFailed/request/negative_case_email_is_invalid_and_user_position_is_null.json"),
+                                    readJson("createFailed/response/negative_case_email_is_invalid_and_user_position_is_null.json"))
+        );
+    }
+
+    static Stream<Arguments> updateSuccessArgs() {
+        return Stream.of(
+                Arguments.arguments(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"),
+                                    readJson("updateSuccess/request/positive_case_email_and_position.json")),
+                Arguments.arguments(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"),
+                                    readJson("updateSuccess/request/positive_case_all.json"))
+        );
+    }
+
+    static Stream<Arguments> updateFailedArgs() {
+        return Stream.of(
+                Arguments.arguments(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"),
+                                    readJson("updateFailed/request/negative_case_name_is_empty.json"),
+                                    readJson("updateFailed/response/negative_case_name_is_empty.json")),
+                Arguments.arguments(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"),
+                                    readJson("updateFailed/request/negative_case_email_is_invalid.json"),
+                                    readJson("updateFailed/response/negative_case_email_is_invalid.json")),
+                Arguments.arguments(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"),
+                                    readJson("updateFailed/request/negative_case_email_is_invalid_and_position_is_null.json"),
+                                    readJson("updateFailed/response/negative_case_email_is_invalid_and_position_is_null.json"))
+        );
+    }
+
+    private static String readJson(final String path, final Object... args) {
+        final String content = TestUtil.readContentFromClassPathResource("json/EmployeeControllerTest/" + path);
+        return String.format(content, args);
+    }
+
     @ParameterizedTest
     @MethodSource("getSuccessArgs")
     @SneakyThrows
@@ -63,15 +111,6 @@ class EmployeeControllerTest extends AbstractMvcTest {
                 .andExpect(content().json(response, true));
     }
 
-    static Stream<Arguments> createSuccessArgs() {
-        return Stream.of(
-                Arguments.arguments(readJson("createSuccess/request/positive_case_vlad.json"),
-                                    readJson("createSuccess/response/positive_case_vlad.json")),
-                Arguments.arguments(readJson("createSuccess/request/positive_case_vova.json"),
-                                    readJson("createSuccess/response/positive_case_vova.json"))
-        );
-    }
-
     @ParameterizedTest
     @MethodSource("createSuccessArgs")
     @SneakyThrows
@@ -84,17 +123,6 @@ class EmployeeControllerTest extends AbstractMvcTest {
 
         Assertions.assertThat(transactionalUtil.txRun(() -> dsl.fetchCount(EMPLOYEE)))
                 .isOne();
-    }
-
-    static Stream<Arguments> createFailedArgs() {
-        return Stream.of(
-                Arguments.arguments(readJson("createFailed/request/negative_case_name_is_empty.json"),
-                                    readJson("createFailed/response/negative_case_name_is_empty.json")),
-                Arguments.arguments(readJson("createFailed/request/negative_case_email_is_invalid.json"),
-                                    readJson("createFailed/response/negative_case_email_is_invalid.json")),
-                Arguments.arguments(readJson("createFailed/request/negative_case_email_is_invalid_and_user_position_is_null.json"),
-                                    readJson("createFailed/response/negative_case_email_is_invalid_and_user_position_is_null.json"))
-        );
     }
 
     @ParameterizedTest
@@ -128,15 +156,6 @@ class EmployeeControllerTest extends AbstractMvcTest {
                 .isOne();
     }
 
-    static Stream<Arguments> updateSuccessArgs() {
-        return Stream.of(
-                Arguments.arguments(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"),
-                                    readJson("updateSuccess/request/positive_case_email_and_position.json")),
-                Arguments.arguments(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"),
-                                    readJson("updateSuccess/request/positive_case_all.json"))
-        );
-    }
-
     @ParameterizedTest
     @MethodSource("updateSuccessArgs")
     @SneakyThrows
@@ -155,20 +174,6 @@ class EmployeeControllerTest extends AbstractMvcTest {
         Assertions.assertThat(employeesBeforeUpdate)
                 .isNotEmpty()
                 .contains(employeesAfterUpdate.toArray(Employee[]::new));
-    }
-
-    static Stream<Arguments> updateFailedArgs() {
-        return Stream.of(
-                Arguments.arguments(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"),
-                                    readJson("updateFailed/request/negative_case_name_is_empty.json"),
-                                    readJson("updateFailed/response/negative_case_name_is_empty.json")),
-                Arguments.arguments(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"),
-                                    readJson("updateFailed/request/negative_case_email_is_invalid.json"),
-                                    readJson("updateFailed/response/negative_case_email_is_invalid.json")),
-                Arguments.arguments(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"),
-                                    readJson("updateFailed/request/negative_case_email_is_invalid_and_position_is_null.json"),
-                                    readJson("updateFailed/response/negative_case_email_is_invalid_and_position_is_null.json"))
-        );
     }
 
     @ParameterizedTest
@@ -190,10 +195,5 @@ class EmployeeControllerTest extends AbstractMvcTest {
         Assertions.assertThat(employeesBeforeUpdate)
                 .isNotEmpty()
                 .contains(employeesAfterUpdate.toArray(Employee[]::new));
-    }
-
-    private static String readJson(final String path, final Object... args) {
-        final String content = TestUtil.readContentFromClassPathResource("json/EmployeeControllerTest/" + path);
-        return String.format(content, args);
     }
 }

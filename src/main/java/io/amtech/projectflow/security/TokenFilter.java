@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 public class TokenFilter extends AbstractAuthenticationProcessingFilter {
+    private static final String TOKEN_TYPE = "bearer ";
+
     public TokenFilter(final AuthenticationManager authenticationManager, final AuthenticationFailureHandler authenticationFailureHandler) {
         super("/**");
         super.setAuthenticationManager(authenticationManager);
@@ -31,10 +33,22 @@ public class TokenFilter extends AbstractAuthenticationProcessingFilter {
             throw new BadCredentialsException("Пользователь не авторизован");
         }
 
-        final String token = authHeader.toLowerCase().replace("bearer ", StringUtils.EMPTY);
+        if (!isBearerTokenType(authHeader)) {
+            throw new BadCredentialsException("Неверный заголовок авторизации");
+        }
+
+        final String token = removeTokenTypeIgnoreCase(authHeader);
         final Authentication authenticate = super.getAuthenticationManager()
                 .authenticate(new UsernamePasswordAuthenticationToken(token, null));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         return authenticate;
+    }
+
+    private String removeTokenTypeIgnoreCase(final String token) {
+        return token.toLowerCase().replace(TOKEN_TYPE, StringUtils.EMPTY);
+    }
+
+    private boolean isBearerTokenType(final String token) {
+        return StringUtils.startsWithIgnoreCase(token, TOKEN_TYPE);
     }
 }

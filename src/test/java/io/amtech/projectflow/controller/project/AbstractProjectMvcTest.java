@@ -11,10 +11,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 public abstract class AbstractProjectMvcTest extends AbstractMvcTest {
     @SneakyThrows
-    protected String getAccessToken() {
+    protected String getDirectorAccessToken() {
+        return getAccessToken("{\"username\": \"user\", \"password\": \"user\"}");
+    }
+
+    @SneakyThrows
+    protected String getProjectLeadAccessToken() {
+        return getAccessToken("{\"username\": \"vlad\", \"password\": \"user\"}");
+    }
+
+    @SneakyThrows
+    private String getAccessToken(final String request) {
         final String response = authMvc.perform(post("/auth/login")
-                        .contentType(APPLICATION_JSON)
-                        .content("{\"username\": \"user\", \"password\": \"user\"}"))
+                                                        .contentType(APPLICATION_JSON)
+                                                        .content(request))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();

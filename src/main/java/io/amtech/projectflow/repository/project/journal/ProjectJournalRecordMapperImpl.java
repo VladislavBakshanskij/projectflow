@@ -27,11 +27,11 @@ public class ProjectJournalRecordMapperImpl implements ProjectJournalRecordMappe
                     .setUpdateDate(record.get(PROJECT_JOURNAL.UPDATE_DATE).toInstant())
                     .setLogin(record.get(PROJECT_JOURNAL.LOGIN))
                     .setCurrentState(objectMapper.readValue(record.get(PROJECT_JOURNAL.CURRENT_STATE).data(),
-                            new TypeReference<>() {
-                            }));
+                                                            new TypeReference<>() {
+                                                            }));
         } catch (JsonProcessingException e) {
             log.error("Error on processing project({}) and journal({})",
-                    record.get(PROJECT_JOURNAL.PROJECT_ID), record.get(PROJECT_JOURNAL.ID));
+                      record.get(PROJECT_JOURNAL.PROJECT_ID), record.get(PROJECT_JOURNAL.ID));
             throw new ProcessingException("Не удалось обработать запись в журнале");
         }
     }

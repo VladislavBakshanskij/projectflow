@@ -36,6 +36,17 @@ class EmployeeControllerSearchTest extends AbstractMvcTest {
         );
     }
 
+    static Stream<Arguments> searchFailArgs() {
+        return Stream.of(Arguments.arguments("?position=MEGA",
+                                             readJson("searchFail/invalid_position_response.json"),
+                                             HttpStatus.NOT_FOUND.value()));
+    }
+
+    private static String readJson(final String path, final Object... args) {
+        final String content = TestUtil.readContentFromClassPathResource("json/EmployeeControllerSearchTest/" + path);
+        return String.format(content, args);
+    }
+
     @ParameterizedTest
     @MethodSource("searchSuccessArgs")
     @SneakyThrows
@@ -49,12 +60,6 @@ class EmployeeControllerSearchTest extends AbstractMvcTest {
                 .andExpect(content().json(response, true));
     }
 
-    static Stream<Arguments> searchFailArgs() {
-        return Stream.of(Arguments.arguments("?position=MEGA",
-                                             readJson("searchFail/invalid_position_response.json"),
-                                             HttpStatus.NOT_FOUND.value()));
-    }
-
     @ParameterizedTest
     @MethodSource("searchFailArgs")
     @SneakyThrows
@@ -66,10 +71,5 @@ class EmployeeControllerSearchTest extends AbstractMvcTest {
         mvc.perform(TestUtil.get(BASE_URL + url))
                 .andExpect(status().is(status))
                 .andExpect(content().json(response, true));
-    }
-
-    private static String readJson(final String path, final Object... args) {
-        final String content = TestUtil.readContentFromClassPathResource("json/EmployeeControllerSearchTest/" + path);
-        return String.format(content, args);
     }
 }

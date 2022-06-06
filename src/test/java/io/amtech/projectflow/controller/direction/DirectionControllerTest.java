@@ -44,8 +44,54 @@ class DirectionControllerTest extends AbstractMvcTest {
     static Stream<Arguments> createSuccessArgs() {
         return Stream.of(
                 Arguments.arguments(readJson("createSuccess/request/positive_case.json"),
-                        readJson("createSuccess/response/positive_case.json"))
+                                    readJson("createSuccess/response/positive_case.json"))
         );
+    }
+
+    static Stream<Arguments> createFailedArgs() {
+        return Stream.of(
+                Arguments.arguments(readJson("createFailed/request/negative_case_name_is_empty.json"),
+                                    readJson("createFailed/response/negative_case_name_is_empty.json"),
+                                    HttpStatus.BAD_REQUEST),
+                Arguments.arguments(readJson("createFailed/request/negative_case_lead_not_found.json"),
+                                    readJson("createFailed/response/negative_case_lead_not_found.json"),
+                                    HttpStatus.NOT_FOUND)
+        );
+    }
+
+    static Stream<Arguments> updateSuccessArgs() {
+        return Stream.of(
+                Arguments.arguments(UUID.fromString("02f27e01-2ac4-4518-9c66-d0b7e2259a6f"),
+                                    readJson("updateSuccess/request/positive_case.json"),
+                                    new DirectionWithLeadName()
+                                            .setName("SOME DIRECTION")
+                                            .setLeadId(UUID.fromString("34ffb834-e0ac-4fab-9900-1993f3b8ad5b"))
+                                            .setLeadName("Vlad")),
+                Arguments.arguments(UUID.fromString("4feef2c8-ca3e-4bdf-baf6-39032f450134"),
+                                    readJson("updateSuccess/request/positive_case_one_field.json"),
+                                    new DirectionWithLeadName()
+                                            .setName("new direction name")
+                                            .setLeadId(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"))
+                                            .setLeadName("Vova"))
+        );
+    }
+
+    static Stream<Arguments> updateFailedArgs() {
+        return Stream.of(
+                Arguments.arguments(UUID.fromString("02f27e01-2ac4-4518-9c66-d0b7e2259a6f"),
+                                    readJson("updateFailed/request/negative_case_name_is_empty.json"),
+                                    readJson("updateFailed/response/negative_case_name_is_empty.json"),
+                                    HttpStatus.BAD_REQUEST),
+                Arguments.arguments(UUID.fromString("02f27e01-2ac4-4518-9c66-d0b7e2259a6f"),
+                                    readJson("updateFailed/request/negative_case_lead_not_found.json"),
+                                    readJson("updateFailed/response/negative_case_lead_not_found.json"),
+                                    HttpStatus.NOT_FOUND)
+        );
+    }
+
+    private static String readJson(final String path, final Object... args) {
+        final String content = TestUtil.readContentFromClassPathResource("/json/DirectionControllerTest/" + path);
+        return String.format(content, args);
     }
 
     @ParameterizedTest
@@ -54,21 +100,10 @@ class DirectionControllerTest extends AbstractMvcTest {
     @Sql(scripts = "classpath:db/direction/data.sql")
     void createSuccess(final String request, final String response) {
         mvc.perform(post(BASE_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(response, false));
-    }
-
-    static Stream<Arguments> createFailedArgs() {
-        return Stream.of(
-                Arguments.arguments(readJson("createFailed/request/negative_case_name_is_empty.json"),
-                        readJson("createFailed/response/negative_case_name_is_empty.json"),
-                        HttpStatus.BAD_REQUEST),
-                Arguments.arguments(readJson("createFailed/request/negative_case_lead_not_found.json"),
-                        readJson("createFailed/response/negative_case_lead_not_found.json"),
-                        HttpStatus.NOT_FOUND)
-        );
     }
 
     @ParameterizedTest
@@ -77,8 +112,8 @@ class DirectionControllerTest extends AbstractMvcTest {
     @Sql(scripts = "classpath:db/direction/data.sql")
     void createFailed(final String request, final String response, final HttpStatus status) {
         mvc.perform(post(BASE_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
                 .andExpect(status().is(status.value()))
                 .andExpect(content().json(response));
     }
@@ -91,7 +126,7 @@ class DirectionControllerTest extends AbstractMvcTest {
         final String response = readJson("getSuccess/response/positive_case.json", id);
 
         mvc.perform(get(BASE_URL + id)
-                        .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(response, false));
     }
@@ -104,26 +139,9 @@ class DirectionControllerTest extends AbstractMvcTest {
         final String response = readJson("getFailed/response/negative_case_direction_not_found.json");
 
         mvc.perform(get(BASE_URL + id)
-                        .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(response, true));
-    }
-
-    static Stream<Arguments> updateSuccessArgs() {
-        return Stream.of(
-                Arguments.arguments(UUID.fromString("02f27e01-2ac4-4518-9c66-d0b7e2259a6f"),
-                        readJson("updateSuccess/request/positive_case.json"),
-                        new DirectionWithLeadName()
-                                .setName("SOME DIRECTION")
-                                .setLeadId(UUID.fromString("34ffb834-e0ac-4fab-9900-1993f3b8ad5b"))
-                                .setLeadName("Vlad")),
-                Arguments.arguments(UUID.fromString("4feef2c8-ca3e-4bdf-baf6-39032f450134"),
-                        readJson("updateSuccess/request/positive_case_one_field.json"),
-                        new DirectionWithLeadName()
-                                .setName("new direction name")
-                                .setLeadId(UUID.fromString("1d97755d-d424-4128-8b78-ca5cb7b015c9"))
-                                .setLeadName("Vova"))
-        );
     }
 
     @ParameterizedTest
@@ -144,8 +162,8 @@ class DirectionControllerTest extends AbstractMvcTest {
                 .collect(Collectors.toList()));
 
         mvc.perform(TestUtil.put(BASE_URL + id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
                 .andExpect(status().isNoContent());
 
         final List<Direction> directionsAfterUpdate = transactionalUtil.txRun(() -> selectDirectionsNotEqualUpdate
@@ -170,19 +188,6 @@ class DirectionControllerTest extends AbstractMvcTest {
                 });
     }
 
-    static Stream<Arguments> updateFailedArgs() {
-        return Stream.of(
-                Arguments.arguments(UUID.fromString("02f27e01-2ac4-4518-9c66-d0b7e2259a6f"),
-                        readJson("updateFailed/request/negative_case_name_is_empty.json"),
-                        readJson("updateFailed/response/negative_case_name_is_empty.json"),
-                        HttpStatus.BAD_REQUEST),
-                Arguments.arguments(UUID.fromString("02f27e01-2ac4-4518-9c66-d0b7e2259a6f"),
-                        readJson("updateFailed/request/negative_case_lead_not_found.json"),
-                        readJson("updateFailed/response/negative_case_lead_not_found.json"),
-                        HttpStatus.NOT_FOUND)
-        );
-    }
-
     @ParameterizedTest
     @MethodSource("updateFailedArgs")
     @SneakyThrows
@@ -201,8 +206,8 @@ class DirectionControllerTest extends AbstractMvcTest {
                 .collect(Collectors.toList()));
 
         mvc.perform(put(BASE_URL + id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
                 .andExpect(status().is(status.value()))
                 .andExpect(content().json(response, true));
 
@@ -234,10 +239,5 @@ class DirectionControllerTest extends AbstractMvcTest {
                 .isFalse();
         Assertions.assertThat(transactionalUtil.txRun(() -> dsl.fetchCount(DIRECTION)))
                 .isOne();
-    }
-
-    private static String readJson(final String path, final Object... args) {
-        final String content = TestUtil.readContentFromClassPathResource("/json/DirectionControllerTest/" + path);
-        return String.format(content, args);
     }
 }
