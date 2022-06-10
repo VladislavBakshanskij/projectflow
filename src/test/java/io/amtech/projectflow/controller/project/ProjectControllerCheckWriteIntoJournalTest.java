@@ -53,7 +53,11 @@ class ProjectControllerCheckWriteIntoJournalTest extends AbstractProjectMvcTest 
             assertThat(dsl.selectFrom(PROJECT_JOURNAL).fetchStream().map(mapper::map))
                     .singleElement()
                     .satisfies(journal -> {
-                        // todo assertions
+                        assertThat(journal.getId()).isNotNull();
+                        assertThat(journal.getProjectId()).isNotNull();
+                        assertThat(journal.getLogin()).isNotBlank().isEqualTo("user");
+                        assertThat(journal.getUpdateDate()).isNotNull();
+                        assertThat(journal.getCurrentState()).isNotNull();
                     });
         });
     }
@@ -77,7 +81,11 @@ class ProjectControllerCheckWriteIntoJournalTest extends AbstractProjectMvcTest 
             assertThat(dsl.selectFrom(PROJECT_JOURNAL).fetchStream().map(mapper::map))
                     .singleElement()
                     .satisfies(journal -> {
-                        // todo assertions
+                        assertThat(journal.getId()).isNotNull();
+                        assertThat(journal.getProjectId()).isNotNull().isEqualTo(id);
+                        assertThat(journal.getLogin()).isNotBlank().isEqualTo("user");
+                        assertThat(journal.getUpdateDate()).isNotNull();
+                        assertThat(journal.getCurrentState()).isNotNull();
                     });
         });
     }

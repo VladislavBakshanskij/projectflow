@@ -12,8 +12,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
-import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 
 @RestController
@@ -34,7 +34,6 @@ public class AuthController {
         binder.addValidators(refreshTokenChecker);
     }
 
-    @PermitAll
     @PostMapping("login")
     public TokenDto login(@Valid @RequestBody TokenLoginDto tokenLoginDto) {
         return tokenGenerator.generate(tokenLoginDto);
@@ -45,9 +44,8 @@ public class AuthController {
         return tokenGenerator.refresh(tokenRefreshDto);
     }
 
-    @PermitAll
     @PostMapping("logout")
-    public LogoutDto logout(@AuthenticationPrincipal String token) {
+    public LogoutDto logout(@ApiIgnore @AuthenticationPrincipal String token) {
         SecurityContextHolder.getContext().setAuthentication(null);
         return tokenGenerator.remove(token);
     }

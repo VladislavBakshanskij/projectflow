@@ -1,5 +1,6 @@
 package io.amtech.projectflow.service.user;
 
+import io.amtech.projectflow.dto.response.user.UserInfoResponse;
 import io.amtech.projectflow.error.AuthException;
 import io.amtech.projectflow.error.DataNotFoundException;
 import io.amtech.projectflow.model.auth.Token;
@@ -7,6 +8,7 @@ import io.amtech.projectflow.model.auth.User;
 import io.amtech.projectflow.model.auth.UserWithEmployee;
 import io.amtech.projectflow.repository.auth.user.AuthUserRepository;
 import io.amtech.projectflow.security.ProjectFlowUserDetails;
+import io.amtech.projectflow.service.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final AuthUserRepository authUserRepository;
+    private final TokenService tokenService;
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
@@ -47,5 +50,14 @@ public class UserServiceImpl implements UserService {
                 .map(UserWithEmployee::getUser)
                 .map(User::getLogin)
                 .orElseThrow(() -> new AuthException("Пользоваеть не авторизован"));
+    }
+
+    @Override
+    public UserInfoResponse getUserInfo(final String token) {
+        final Token userInfoToken = tokenService.getByAccess(token);
+        return new UserInfoResponse()
+                .setId(userInfoToken.getUser().getEmployee().getId())
+                .setRole(userInfoToken.getUser().getEmployee().getUserPosition().name())
+                .setName(userInfoToken.getUser().getUser().getLogin());
     }
 }
