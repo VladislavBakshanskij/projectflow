@@ -6,17 +6,20 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static io.amtech.projectflow.constants.RabbitMQConstants.NOTIFICATION_QUEUE;
 import static io.amtech.projectflow.jooq.tables.Project.PROJECT;
 import static io.amtech.projectflow.test.util.TestUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class ProjectControllerTest extends AbstractProjectMvcTest {
@@ -51,10 +54,10 @@ class ProjectControllerTest extends AbstractProjectMvcTest {
                                     HttpStatus.BAD_REQUEST),
                 Arguments.arguments(readJson("createFailed/request/projectLead_not_found.json"),
                                     readJson("createFailed/response/projectLead_not_found.json"),
-                                    HttpStatus.NOT_FOUND),
+                                    NOT_FOUND),
                 Arguments.arguments(readJson("createFailed/request/direction_not_found.json"),
                                     readJson("createFailed/response/direction_not_found.json"),
-                                    HttpStatus.NOT_FOUND));
+                                    NOT_FOUND));
     }
 
     static Stream<Arguments> updateSuccessArgs() {
@@ -81,15 +84,15 @@ class ProjectControllerTest extends AbstractProjectMvcTest {
                 Arguments.arguments("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
                                     readJson("updateFailed/request/projectLead_not_found.json"),
                                     readJson("updateFailed/response/projectLead_not_found.json"),
-                                    HttpStatus.NOT_FOUND),
+                                    NOT_FOUND),
                 Arguments.arguments("ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
                                     readJson("updateFailed/request/direction_not_found.json"),
                                     readJson("updateFailed/response/direction_not_found.json"),
-                                    HttpStatus.NOT_FOUND),
+                                    NOT_FOUND),
                 Arguments.arguments("787cbb77-f0c7-407f-ad41-b63f0b45b5e3",
                                     readJson("updateFailed/request/project_not_found.json"),
                                     readJson("updateFailed/response/project_not_found.json"),
-                                    HttpStatus.NOT_FOUND));
+                                    NOT_FOUND));
     }
 
     static Stream<Arguments> deleteSuccessArgs() {
@@ -99,16 +102,16 @@ class ProjectControllerTest extends AbstractProjectMvcTest {
     static Stream<Arguments> deleteFailedArgs() {
         return Stream.of(
                 Arguments.arguments("1f6c9f10-6aac-47ec-b378-be96bf5df1c1",
-                                    readJson("deleteFailed/response/first_project_not_found.json"), HttpStatus.NOT_FOUND),
+                                    readJson("deleteFailed/response/first_project_not_found.json"), NOT_FOUND),
                 Arguments.arguments("a2d07d5e-fe34-4b07-b182-76f9362ad489",
-                                    readJson("deleteFailed/response/second_project_not_found.json"), HttpStatus.NOT_FOUND));
+                                    readJson("deleteFailed/response/second_project_not_found.json"), NOT_FOUND));
     }
 
     static Stream<Arguments> getSuccessArgs() {
         return Stream.of(
                 Arguments.arguments("4e7efeef-553f-4996-bc03-1c0925d56946",
                                     readJson("getSuccess/response/positive_case.json"),
-                                    HttpStatus.OK)
+                                    OK)
         );
     }
 
@@ -133,8 +136,8 @@ class ProjectControllerTest extends AbstractProjectMvcTest {
     })
     void createSuccess(final String request, final String response) {
         authMvc.perform(post(BASE_URL)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + getDirectorAccessToken())
+                                .contentType(APPLICATION_JSON)
+                                .header(AUTHORIZATION, "Bearer " + getDirectorAccessToken())
                                 .content(request))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
@@ -144,6 +147,9 @@ class ProjectControllerTest extends AbstractProjectMvcTest {
         transactionalUtil.txRun(() -> {
             assertThat(dsl.fetchCount(PROJECT))
                     .isEqualTo(3);
+
+            assertThatQueueInfo(NOTIFICATION_QUEUE,
+                                queueInformation -> assertThat(queueInformation.getMessageCount()).isNotZero());
         });
     }
 
@@ -156,8 +162,8 @@ class ProjectControllerTest extends AbstractProjectMvcTest {
     })
     void createFailed(final String request, final String response, final HttpStatus status) {
         authMvc.perform(post(BASE_URL)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + getDirectorAccessToken())
+                                .contentType(APPLICATION_JSON)
+                                .header(AUTHORIZATION, "Bearer " + getDirectorAccessToken())
                                 .content(request))
                 .andExpect(status().is(status.value()))
                 .andExpect(content().json(response, true));
@@ -172,10 +178,15 @@ class ProjectControllerTest extends AbstractProjectMvcTest {
     })
     void updateSuccess(final String id, final String request) {
         authMvc.perform(put(String.format(BASE_ID_URL, id))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + getDirectorAccessToken())
+                                .contentType(APPLICATION_JSON)
+                                .header(AUTHORIZATION, "Bearer " + getDirectorAccessToken())
                                 .content(request))
                 .andExpect(status().isFound());
+
+        transactionalUtil.txRun(() -> {
+            assertThatQueueInfo(NOTIFICATION_QUEUE,
+                                queueInformation -> assertThat(queueInformation.getMessageCount()).isNotZero());
+        });
     }
 
     @ParameterizedTest
@@ -187,8 +198,8 @@ class ProjectControllerTest extends AbstractProjectMvcTest {
     })
     void updateFailTest(final String id, final String request, final String response, final HttpStatus status) {
         authMvc.perform(put(String.format(BASE_ID_URL, id))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + getDirectorAccessToken())
+                                .contentType(APPLICATION_JSON)
+                                .header(AUTHORIZATION, "Bearer " + getDirectorAccessToken())
                                 .content(request))
                 .andExpect(status().is(status.value()))
                 .andExpect(content().json(response, true));

@@ -67,4 +67,9 @@ public class ProjectJournalRepositoryImpl implements ProjectJournalRepository {
                 .fetch()
                 .map(mapper);
     }
+
+    @Override
+    public boolean existsByProject(final UUID projectId) {
+        return dsl.fetchExists(PROJECT_JOURNAL, PROJECT_JOURNAL.PROJECT_ID.eq(projectId));
+    }
 }
