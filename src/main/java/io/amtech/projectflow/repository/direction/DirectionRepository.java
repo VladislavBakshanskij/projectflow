@@ -19,4 +19,6 @@ public interface DirectionRepository {
     void delete(UUID id);
 
     void checkOnExists(UUID id);
+
+    String findLeadEmail(UUID id);
 }

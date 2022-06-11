@@ -129,4 +129,15 @@ public class DirectionRepositoryImpl implements DirectionRepository {
             throw new DataNotFoundException("Направление не найдено");
         }
     }
+
+    @Override
+    public String findLeadEmail(final UUID id) {
+        return dsl.select(EMPLOYEE.EMAIL)
+                .from(EMPLOYEE)
+                    .leftJoin(DIRECTION).on(DIRECTION.LEAD_ID.eq(EMPLOYEE.ID))
+                .where(DIRECTION.ID.eq(id))
+                .fetchOptional()
+                .map(record -> record.get(EMPLOYEE.EMAIL))
+                .orElseThrow(() -> new DataNotFoundException("Направление не найдено"));
+    }
 }

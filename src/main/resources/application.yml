@@ -15,6 +15,12 @@ app:
     enabled: "${SWAGGER_ENABLED:true}"
     protocols: "${SWAGGER_PROTOCOLS:http,https}"
     not-secured-urls: "${SWAGGER_ALLOWED_URLS:login,refresh}"
+  rabbit-mq:
+    uri: ${RABBIT_URI:}
+    host: ${RABBIT_HOST:localhost}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USERNAME:guest}
+    password: ${RABBIT_PASSWORD:guest}
 
 springfox:
   documentation:
@@ -34,7 +40,7 @@ spring:
     user: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:pass}
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:projectflow}?currentShema=${DB_SCHEMA:pf}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:projectflow}?currentSchema=${DB_SCHEMA:pf}
     password: ${DB_PASSWORD:pass}
     username: ${DB_USERNAME:postgres}
     driver-class-name: org.postgresql.Driver

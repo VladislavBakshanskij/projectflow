@@ -11,4 +11,6 @@ public interface ProjectJournalRepository {
     ProjectJournal save(ProjectJournal projectJournal);
 
     List<ProjectJournal> findByProjectId(UUID projectId);
+
+    boolean existsByProject(UUID projectId);
 }
