@@ -5,14 +5,18 @@ import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.app.SearchCriteriaBuilder;
 import io.amtech.projectflow.dto.request.project.ProjectCreateDto;
 import io.amtech.projectflow.dto.request.project.ProjectUpdateDto;
+import io.amtech.projectflow.dto.response.ProjectDeletedDto;
 import io.amtech.projectflow.dto.response.project.ProjectDetailDto;
 import io.amtech.projectflow.dto.response.project.ProjectDto;
 import io.amtech.projectflow.dto.response.project.ProjectSavedDto;
+import io.amtech.projectflow.dto.response.project.ProjectUpdatedDto;
 import io.amtech.projectflow.service.project.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.time.Instant;
@@ -35,6 +39,13 @@ public class ProjectController {
         return projectService.create(dto);
     }
 
+    @GetMapping("profile")
+    public PagedData<ProjectDto> getProjectForUser(@ApiIgnore @AuthenticationPrincipal String token,
+                                                   @RequestParam(required = false, defaultValue = "100") Integer limit,
+                                                   @RequestParam(required = false, defaultValue = "0") Integer offset) {
+        return projectService.getProjectForUser(token, limit, offset);
+    }
+
     @GetMapping("{id}")
     public ProjectDto get(@PathVariable UUID id) {
         return projectService.get(id);
@@ -46,15 +57,13 @@ public class ProjectController {
     }
 
     @PutMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable UUID id, @RequestBody @Valid ProjectUpdateDto dto) {
-        projectService.update(id, dto);
+    public ProjectUpdatedDto update(@PathVariable UUID id, @RequestBody @Valid ProjectUpdateDto dto) {
+        return projectService.update(id, dto);
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable UUID id) {
-        projectService.delete(id);
+    public ProjectDeletedDto delete(@PathVariable UUID id) {
+        return projectService.delete(id);
     }
 
     @GetMapping

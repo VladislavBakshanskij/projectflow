@@ -4,6 +4,8 @@ import io.amtech.projectflow.app.Meta;
 import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.error.DataNotFoundException;
+import io.amtech.projectflow.jooq.tables.Employee;
+import io.amtech.projectflow.model.employee.UserPosition;
 import io.amtech.projectflow.model.project.*;
 import io.amtech.projectflow.util.JooqFieldUtil;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +54,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             .setDirection(new ProjectDirection()
                                   .setId(record.get(DIRECTION.ID))
                                   .setName(record.get(DIRECTION.NAME)));
+
+    private static final Employee DIRECTION_LEAD_ALIAS = EMPLOYEE.as("direction_lead");
 
     private final DSLContext dsl;
 
@@ -152,12 +156,68 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .setData(projects);
     }
 
-    private SelectOnConditionStep<Record9<UUID, String, String, OffsetDateTime, io.amtech.projectflow.jooq.enums.ProjectStatus, UUID, String, UUID, String>> getProjectSelect() {
+    @Override
+    public PagedData<ProjectWithEmployeeDirection> searchForDirector(final SearchCriteria searchCriteria) {
+        List<ProjectWithEmployeeDirection> projects = getProjectSelect()
+                .orderBy(PROJECT.CREATE_DATE.desc())
+                .limit(searchCriteria.getLimit())
+                .offset(searchCriteria.getOffset())
+                .fetch()
+                .map(mapperWithEmployeeDirection);
+        final int totalPages = dsl.fetchCount(PROJECT) / searchCriteria.getLimit();
+        return new PagedData<ProjectWithEmployeeDirection>()
+                .setMeta(new Meta()
+                                 .setLimit(searchCriteria.getLimit())
+                                 .setOffset(searchCriteria.getOffset())
+                                 .setTotalPages(totalPages))
+                .setData(projects);
+    }
+
+    @Override
+    public PagedData<ProjectWithEmployeeDirection> searchForPosition(final SearchCriteria searchCriteria) {
+        final UUID userId = searchCriteria.getCriteriaValue("user")
+                .map(UUID::fromString)
+                .orElseThrow(() -> new DataNotFoundException("Пользователь не задан"));
+        final UserPosition userPosition = searchCriteria.getCriteriaValue("position")
+                .map(UserPosition::from)
+                .orElseThrow(() -> new DataNotFoundException("Роль не задана"));
+
+        List<Condition> conditions;
+        if (userPosition == UserPosition.DIRECTION_LEAD) {
+            conditions = List.of(DIRECTION_LEAD_ALIAS.ID.eq(userId),
+                                 DIRECTION_LEAD_ALIAS.POSITION.eq(userPosition.toJooqPosition()));
+        } else {
+            conditions = List.of(EMPLOYEE.ID.eq(userId),
+                                 EMPLOYEE.POSITION.eq(userPosition.toJooqPosition()));
+        }
+
+        final SelectConditionStep<Record9<UUID, String, String, OffsetDateTime, io.amtech.projectflow.jooq.enums.ProjectStatus, UUID, String, UUID, String>>
+                projectSelect = getProjectSelect().where(conditions);
+
+        final List<ProjectWithEmployeeDirection> projects = projectSelect
+                .orderBy(PROJECT.CREATE_DATE.desc())
+                .limit(searchCriteria.getLimit())
+                .offset(searchCriteria.getOffset())
+                .fetch()
+                .map(mapperWithEmployeeDirection);
+
+        final int totalPages = dsl.fetchCount(projectSelect) / searchCriteria.getLimit();
+        return new PagedData<ProjectWithEmployeeDirection>()
+                .setMeta(new Meta()
+                                 .setLimit(searchCriteria.getLimit())
+                                 .setOffset(searchCriteria.getOffset())
+                                 .setTotalPages(totalPages))
+                .setData(projects);
+    }
+
+    private SelectOnConditionStep<Record9<UUID, String, String, OffsetDateTime,
+            io.amtech.projectflow.jooq.enums.ProjectStatus, UUID, String, UUID, String>> getProjectSelect() {
         return dsl.select(PROJECT.ID, PROJECT.NAME, PROJECT.DESCRIPTION, PROJECT.CREATE_DATE,
                           PROJECT.STATUS, EMPLOYEE.ID, EMPLOYEE.NAME, DIRECTION.ID, DIRECTION.NAME)
                 .from(PROJECT)
                 .leftJoin(EMPLOYEE).on(EMPLOYEE.ID.eq(PROJECT.PROJECT_LEAD_ID))
-                .leftJoin(DIRECTION).on(DIRECTION.ID.eq(PROJECT.DIRECTION_ID));
+                .leftJoin(DIRECTION).on(DIRECTION.ID.eq(PROJECT.DIRECTION_ID))
+                .leftJoin(EMPLOYEE.as(DIRECTION_LEAD_ALIAS)).on(DIRECTION_LEAD_ALIAS.ID.eq(DIRECTION.LEAD_ID));
     }
 
     private Condition getConditionFromCriteria(final SearchCriteria criteria,

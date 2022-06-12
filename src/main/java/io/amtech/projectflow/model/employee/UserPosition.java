@@ -33,7 +33,7 @@ public enum UserPosition {
         return USER_POSITION.get(position.toUpperCase());
     }
 
-    public io.amtech.projectflow.jooq.enums.UserPosition toJooqStatus() {
+    public io.amtech.projectflow.jooq.enums.UserPosition toJooqPosition() {
         return io.amtech.projectflow.jooq.enums.UserPosition.valueOf(this.name());
     }
 }

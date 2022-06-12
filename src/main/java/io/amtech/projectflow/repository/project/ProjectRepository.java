@@ -19,4 +19,8 @@ public interface ProjectRepository {
     Project save(Project project);
 
     PagedData<ProjectWithEmployeeDirection> search(SearchCriteria criteria);
+
+    PagedData<ProjectWithEmployeeDirection> searchForDirector(SearchCriteria searchCriteria);
+
+    PagedData<ProjectWithEmployeeDirection> searchForPosition(SearchCriteria searchCriteria);
 }

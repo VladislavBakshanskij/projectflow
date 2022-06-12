@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "limit": 100,
+    "offset": 0,
+    "totalPages": 0
+  },
+  "data": [
+    {
+      "id": "4e7efeef-553f-4996-bc03-1c0925d56946",
+      "name": "Three",
+      "description": "message",
+      "createDate": "2021-07-09T11:49:03.839234Z",
+      "projectStatus": "ON_PL_PLANNING",
+      "lead": {
+        "id": "fc9632a7-66b4-4627-846c-a0e65533637c",
+        "name": "Oliblib"
+      },
+      "direction": {
+        "id": "211ed887-adc4-41bb-a8c4-e41393bd8e69",
+        "name": "Nat"
+      }
+    },
+    {
+      "id": "ffd2f49a-5e5c-4df2-acfe-94d47c05ab5f",
+      "name": "One",
+      "description": "message 1",
+      "createDate": "2021-06-09T11:49:03.839234Z",
+      "projectStatus": "UNAPPROVED",
+      "lead": {
+        "id": "fc9632a7-66b4-4627-846c-a0e65533637c",
+        "name": "Oliblib"
+      },
+      "direction": {
+        "id": "caaad756-f11a-4635-898d-2861071ec38d",
+        "name": "Vasya"
+      }
+    }
+  ]
+}

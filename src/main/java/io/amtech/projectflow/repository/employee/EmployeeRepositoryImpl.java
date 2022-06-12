@@ -55,7 +55,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 .set(EMPLOYEE.IS_FIRED, e.isFired())
                 .set(EMPLOYEE.NAME, e.getName())
                 .set(EMPLOYEE.PHONE, e.getPhone())
-                .set(EMPLOYEE.POSITION, e.getUserPosition().toJooqStatus())
+                .set(EMPLOYEE.POSITION, e.getUserPosition().toJooqPosition())
                 .returning()
                 .fetchOne()
                 .map(mapper);
@@ -92,7 +92,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         conditions.add(getConditionFromCriteria(searchCriteria, "email",
                                                 value -> DSL.lower(EMPLOYEE.EMAIL).like(("%" + value + "%").toLowerCase())));
         conditions.add(getConditionFromCriteria(searchCriteria, "position",
-                                                value -> EMPLOYEE.POSITION.eq(UserPosition.from(value).toJooqStatus())));
+                                                value -> EMPLOYEE.POSITION.eq(UserPosition.from(value).toJooqPosition())));
 
         List<Employee> employees = dsl.selectFrom(EMPLOYEE)
                 .where(conditions)

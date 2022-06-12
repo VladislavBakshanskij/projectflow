@@ -75,7 +75,7 @@ class ProjectControllerCheckWriteIntoJournalTest extends AbstractProjectMvcTest 
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + getDirectorAccessToken())
                                 .content(request))
-                .andExpect(status().isFound());
+                .andExpect(status().isOk());
 
         transactionalUtil.txRun(() -> {
             assertThat(dsl.selectFrom(PROJECT_JOURNAL).fetchStream().map(mapper::map))

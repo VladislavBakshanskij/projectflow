@@ -181,7 +181,7 @@ class ProjectControllerTest extends AbstractProjectMvcTest {
                                 .contentType(APPLICATION_JSON)
                                 .header(AUTHORIZATION, "Bearer " + getDirectorAccessToken())
                                 .content(request))
-                .andExpect(status().isFound());
+                .andExpect(status().isOk());
 
         transactionalUtil.txRun(() -> {
             assertThatQueueInfo(NOTIFICATION_QUEUE,
@@ -211,7 +211,7 @@ class ProjectControllerTest extends AbstractProjectMvcTest {
     @Sql("classpath:db/project/data.sql")
     void deleteSuccess(final String id) {
         mvc.perform(delete(String.format(BASE_ID_URL, id)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
 
         assertThat(transactionalUtil.txRun(() -> dsl.fetchExists(PROJECT, PROJECT.ID.eq(UUID.fromString(id)))))
                 .isFalse();
