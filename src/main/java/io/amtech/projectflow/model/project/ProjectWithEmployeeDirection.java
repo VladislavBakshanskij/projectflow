@@ -16,4 +16,15 @@ public class ProjectWithEmployeeDirection {
     private String description;
     private Lead lead;
     private ProjectDirection direction;
+
+    public Project toSimpleProject() {
+        return new Project()
+                .setId(id)
+                .setName(name)
+                .setDescription(description)
+                .setCreateDate(createDate)
+                .setStatus(status)
+                .setProjectLeadId(lead.getId())
+                .setDirectionId(direction.getId());
+    }
 }

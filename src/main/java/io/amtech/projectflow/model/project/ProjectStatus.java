@@ -1,7 +1,6 @@
 package io.amtech.projectflow.model.project;
 
 import io.amtech.projectflow.error.DataNotFoundException;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public enum ProjectStatus {
     UNAPPROVED,
     ON_PL_PLANNING,

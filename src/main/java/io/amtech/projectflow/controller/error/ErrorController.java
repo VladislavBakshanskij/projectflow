@@ -1,8 +1,6 @@
 package io.amtech.projectflow.controller.error;
 
-import io.amtech.projectflow.error.AuthException;
-import io.amtech.projectflow.error.DataNotFoundException;
-import io.amtech.projectflow.error.ProcessingException;
+import io.amtech.projectflow.error.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.http.HttpHeaders;
@@ -57,6 +55,22 @@ public class ErrorController extends ResponseEntityExceptionHandler {
             }
         }
         return createResponse(HttpStatus.BAD_REQUEST, error);
+    }
+
+    @ExceptionHandler({ForbiddenException.class})
+    public ResponseEntity<Object> handleForbiddenException(ForbiddenException e) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        return createResponse(status, new ErrorResponse()
+                .setCode(status.value())
+                .setMessage(e.getMessage()));
+    }
+
+    @ExceptionHandler({FinalStatusException.class})
+    public ResponseEntity<Object> handleFinalStatusException(FinalStatusException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return createResponse(status, new ErrorResponse()
+                .setCode(status.value())
+                .setMessage(e.getMessage()));
     }
 
     @ExceptionHandler({AuthenticationException.class})
