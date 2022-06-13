@@ -3,6 +3,7 @@ package io.amtech.projectflow.repository.project;
 import io.amtech.projectflow.app.PagedData;
 import io.amtech.projectflow.app.SearchCriteria;
 import io.amtech.projectflow.model.project.Project;
+import io.amtech.projectflow.model.project.ProjectStatus;
 import io.amtech.projectflow.model.project.ProjectWithEmployeeDirection;
 
 import java.util.UUID;
@@ -15,6 +16,8 @@ public interface ProjectRepository {
     ProjectWithEmployeeDirection findById(UUID id);
 
     void update(UUID id, Project project);
+
+    void updateStatus(UUID id, ProjectStatus status);
 
     Project save(Project project);
 

@@ -28,6 +28,7 @@ import static io.amtech.projectflow.jooq.tables.Employee.EMPLOYEE;
 import static io.amtech.projectflow.jooq.tables.Project.PROJECT;
 import static io.amtech.projectflow.util.SearchUtil.FROM_DATE_KEY;
 import static io.amtech.projectflow.util.SearchUtil.TO_DATE_KEY;
+import static java.util.Objects.requireNonNull;
 
 @Repository
 @RequiredArgsConstructor
@@ -90,6 +91,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .set(PROJECT.PROJECT_LEAD_ID, project.getProjectLeadId())
                 .set(PROJECT.DIRECTION_ID, project.getDirectionId())
                 .set(PROJECT.DESCRIPTION, project.getDescription())
+                .where(PROJECT.ID.eq(id))
+                .execute();
+    }
+
+    @Override
+    public void updateStatus(final UUID id, final ProjectStatus status) {
+        dsl.update(PROJECT)
+                .set(PROJECT.STATUS, requireNonNull(status).toJooqStatus())
                 .where(PROJECT.ID.eq(id))
                 .execute();
     }
