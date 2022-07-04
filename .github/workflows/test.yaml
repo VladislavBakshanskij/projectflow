@@ -1,0 +1,32 @@
+---
+name: "Run tests"
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: init jvm
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          cache: '.gradle'
+
+      - name: Run tests
+        run: ./gradlew clean test -i
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        with:
+          files: "build/test-results/test/TEST-*.xml"
