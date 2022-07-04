@@ -21,7 +21,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-          cache: '.gradle'
+          cache: 'gradle'
 
       - name: Run tests
         run: ./gradlew clean test -i
